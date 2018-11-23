@@ -22,7 +22,10 @@ Will read ID3 data, including chapters, from MP3 files.
 
   s.swift_version = '4.0'
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.10'
+  s.watchos.deployment_target = '4.0'
+  
+  # Commented out since pod lib lint won't work
+  #  s.osx.deployment_target = '10.10'
 
   s.source_files = 'OutcastID3/Classes/**/*'
 end
