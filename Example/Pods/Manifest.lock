@@ -1,0 +1,16 @@
+PODS:
+  - OutcastID3 (0.1.0)
+
+DEPENDENCIES:
+  - OutcastID3 (from `../`)
+
+EXTERNAL SOURCES:
+  OutcastID3:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  OutcastID3: f7d40b1da8b51bd54b947caa5971a35024d87f45
+
+PODFILE CHECKSUM: aec452337aa3a14f955a774a342cec624c1fdd54
+
+COCOAPODS: 1.5.3
