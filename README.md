@@ -9,7 +9,7 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
-```
+```swift
 let url = Bundle.main.url(forResource: "MyFile", withExtension: "mp3")!
 
 do {
@@ -43,8 +43,6 @@ catch {
 }
 ```
 
-## Requirements
-
 ## Installation
 
 OutcastID3 is available through [CocoaPods](https://cocoapods.org). To install
@@ -56,7 +54,7 @@ pod 'OutcastID3'
 
 ## Author
 
-HendX, quentin@crunchybagel.com
+Crunchy Bagel, hello@crunchybagel.com
 
 ## License
 
