@@ -9,6 +9,40 @@
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+```
+let url = Bundle.main.url(forResource: "MyFile", withExtension: "mp3")!
+
+do {
+    let mp3 = try MP3File(localUrl: url)
+    let tag = try x.parseID3Tag()
+
+    let version = tag.version
+
+    for rawFrame in tag.rawFrames {
+        guard let frame = rawFrame.frame else {
+            continue
+        }
+
+        switch frame {
+        case let f as StringFrame:
+            switch f.type {
+                case .albumTitle:
+                    print("Album Title: \(f.str)")
+                default:
+                    break
+            }
+        case let f as ChapterFrame:
+            break
+        default:
+            break
+        }
+    }
+}
+catch {
+
+}
+```
+
 ## Requirements
 
 ## Installation

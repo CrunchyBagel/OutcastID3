@@ -17,7 +17,7 @@ class ViewController: UIViewController {
         if let url = Bundle.main.url(forResource: "test", withExtension: "mp3") {
             do {
                 let x = try MP3File(localUrl: url)
-                
+
                 let tag = try x.parseID3Tag()
                 
                 let version = tag.version
@@ -32,11 +32,11 @@ class ViewController: UIViewController {
                         switch f.type {
                         case .albumTitle:
                             print("Album Title: \(f.str)")
-                            break
+
                         default:
                             break
                         }
-                        break
+
                     case let f as ChapterFrame:
                         break
                     default:
