@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'OutcastID3_Example' do
+  pod 'OutcastID3', :path => '../'
+
+  target 'OutcastID3_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
