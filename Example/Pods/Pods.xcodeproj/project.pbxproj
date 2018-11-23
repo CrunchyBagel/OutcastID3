@@ -11,11 +11,11 @@
 		1287D8AEC4A9047AB3B2873F4D78CA98 /* OutcastID3-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DADB16AAA53C584FDD423A291377D9F /* OutcastID3-dummy.m */; };
 		13B46C16450002DBD44FD98EE41D0C49 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		34625AA09D5BD976A79C488740ED5C5C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
-		667B7A4821A810D1004DFBD9 /* MP3File+ID3Tag+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A4521A810D0004DFBD9 /* MP3File+ID3Tag+Version.swift */; };
-		667B7A4921A810D1004DFBD9 /* MP3File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A4621A810D1004DFBD9 /* MP3File.swift */; };
-		667B7A4A21A810D1004DFBD9 /* RawFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A4721A810D1004DFBD9 /* RawFrame.swift */; };
-		667B7A4E21A810EB004DFBD9 /* ChapterFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A4C21A810EB004DFBD9 /* ChapterFrame.swift */; };
-		667B7A4F21A810EB004DFBD9 /* StringFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A4D21A810EB004DFBD9 /* StringFrame.swift */; };
+		667B7A5521A81271004DFBD9 /* MP3File+ID3Tag+Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A5021A81270004DFBD9 /* MP3File+ID3Tag+Version.swift */; };
+		667B7A5621A81271004DFBD9 /* MP3File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A5121A81270004DFBD9 /* MP3File.swift */; };
+		667B7A5721A81271004DFBD9 /* StringFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A5221A81270004DFBD9 /* StringFrame.swift */; };
+		667B7A5821A81271004DFBD9 /* ChapterFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A5321A81270004DFBD9 /* ChapterFrame.swift */; };
+		667B7A5921A81271004DFBD9 /* RawFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 667B7A5421A81270004DFBD9 /* RawFrame.swift */; };
 		6D8AA8052F8E1FE681ED5ACD8C6EF6AA /* OutcastID3-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9427783D8CDFD64B6C48E24ECC8EAC89 /* OutcastID3-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8200430B7ADD9CD6F85F8DBA0EAD611C /* Pods-OutcastID3_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F6C6146E1E98131F4A0E61E3724AFFF3 /* Pods-OutcastID3_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9162C50380320716D61E47C0AF36B324 /* Pods-OutcastID3_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8E7DCEE69AD979A08DFBA7723AACFB0E /* Pods-OutcastID3_Example-dummy.m */; };
@@ -55,11 +55,11 @@
 		5912C36341D8DD1A07296038FA96232D /* Pods-OutcastID3_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OutcastID3_Tests-dummy.m"; sourceTree = "<group>"; };
 		5A35DDDB04EE124CBAB529666BF1BADB /* Pods-OutcastID3_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OutcastID3_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		667B7A4521A810D0004DFBD9 /* MP3File+ID3Tag+Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MP3File+ID3Tag+Version.swift"; sourceTree = "<group>"; };
-		667B7A4621A810D1004DFBD9 /* MP3File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MP3File.swift; sourceTree = "<group>"; };
-		667B7A4721A810D1004DFBD9 /* RawFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RawFrame.swift; sourceTree = "<group>"; };
-		667B7A4C21A810EB004DFBD9 /* ChapterFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChapterFrame.swift; sourceTree = "<group>"; };
-		667B7A4D21A810EB004DFBD9 /* StringFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringFrame.swift; sourceTree = "<group>"; };
+		667B7A5021A81270004DFBD9 /* MP3File+ID3Tag+Version.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MP3File+ID3Tag+Version.swift"; path = "OutcastID3/Classes/MP3File+ID3Tag+Version.swift"; sourceTree = "<group>"; };
+		667B7A5121A81270004DFBD9 /* MP3File.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MP3File.swift; path = OutcastID3/Classes/MP3File.swift; sourceTree = "<group>"; };
+		667B7A5221A81270004DFBD9 /* StringFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFrame.swift; path = OutcastID3/Classes/StringFrame.swift; sourceTree = "<group>"; };
+		667B7A5321A81270004DFBD9 /* ChapterFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChapterFrame.swift; path = OutcastID3/Classes/ChapterFrame.swift; sourceTree = "<group>"; };
+		667B7A5421A81270004DFBD9 /* RawFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RawFrame.swift; path = OutcastID3/Classes/RawFrame.swift; sourceTree = "<group>"; };
 		70EC1D32B374D8B43DED5EA2DB24EC71 /* Pods_OutcastID3_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutcastID3_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		739B8CBC36CE7749E24D3D76039D7751 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		777096FB3684041B35E152C7AB1704C9 /* Pods-OutcastID3_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OutcastID3_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -161,11 +161,11 @@
 		B5E46A8360E0714C96EA22CC76D555F8 /* OutcastID3 */ = {
 			isa = PBXGroup;
 			children = (
-				667B7A4621A810D1004DFBD9 /* MP3File.swift */,
-				667B7A4521A810D0004DFBD9 /* MP3File+ID3Tag+Version.swift */,
-				667B7A4721A810D1004DFBD9 /* RawFrame.swift */,
-				667B7A4C21A810EB004DFBD9 /* ChapterFrame.swift */,
-				667B7A4D21A810EB004DFBD9 /* StringFrame.swift */,
+				667B7A5321A81270004DFBD9 /* ChapterFrame.swift */,
+				667B7A5121A81270004DFBD9 /* MP3File.swift */,
+				667B7A5421A81270004DFBD9 /* RawFrame.swift */,
+				667B7A5021A81270004DFBD9 /* MP3File+ID3Tag+Version.swift */,
+				667B7A5221A81270004DFBD9 /* StringFrame.swift */,
 				88339D8142248E3A8F47572FDA0B097E /* Pod */,
 				F91CE73E494613A8442B606BDDE3D634 /* Support Files */,
 			);
@@ -368,12 +368,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				667B7A4921A810D1004DFBD9 /* MP3File.swift in Sources */,
-				667B7A4E21A810EB004DFBD9 /* ChapterFrame.swift in Sources */,
+				667B7A5621A81271004DFBD9 /* MP3File.swift in Sources */,
+				667B7A5821A81271004DFBD9 /* ChapterFrame.swift in Sources */,
+				667B7A5721A81271004DFBD9 /* StringFrame.swift in Sources */,
+				667B7A5921A81271004DFBD9 /* RawFrame.swift in Sources */,
 				1287D8AEC4A9047AB3B2873F4D78CA98 /* OutcastID3-dummy.m in Sources */,
-				667B7A4A21A810D1004DFBD9 /* RawFrame.swift in Sources */,
-				667B7A4F21A810EB004DFBD9 /* StringFrame.swift in Sources */,
-				667B7A4821A810D1004DFBD9 /* MP3File+ID3Tag+Version.swift in Sources */,
+				667B7A5521A81271004DFBD9 /* MP3File+ID3Tag+Version.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

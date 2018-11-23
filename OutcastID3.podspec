@@ -28,7 +28,9 @@ Will read ID3 data, including chapters, from MP3 files.
   s.source           = { :git => 'https://github.com/CrunchyBagel/OutcastID3.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
+  s.swift_version = '4.0'
   s.ios.deployment_target = '8.0'
+  s.osx.deployment_target = '10.10'
 
   s.source_files = 'OutcastID3/Classes/**/*'
   
