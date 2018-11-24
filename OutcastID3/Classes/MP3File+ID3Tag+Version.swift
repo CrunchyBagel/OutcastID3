@@ -22,10 +22,6 @@ extension MP3File.ID3Tag {
             }
         }
         
-        var encodingSizeInBytes: Int {
-            return 1
-        }
-        
         var tagHeaderSizeInBytes: Int {
             return 10
         }

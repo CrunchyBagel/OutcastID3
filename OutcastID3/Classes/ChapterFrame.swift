@@ -18,9 +18,30 @@ public struct ChapterFrame: Frame {
     public let subFrames: [RawFrame]
     
     public var debugDescription: String {
-        let str = subFrames.compactMap { $0.frame?.debugDescription }
         
-        return "elementId=\(String(describing: elementId)), startTime=\(startTime), endTime=\(endTime), startByteOffset=\(String(describing: startByteOffset)), endByteOffset=\(String(describing: endByteOffset)) subFrames: \(str)"
+        var parts: [String] = []
+        
+        if let str = self.elementId {
+            parts.append("elementId=\(str)")
+        }
+        
+        parts.append("startTime=\(self.startTime)")
+        parts.append("endTime=\(self.endTime)")
+        
+        if let count = self.startByteOffset {
+            parts.append("startByteOffset=\(count)")
+        }
+        
+        if let count = self.endByteOffset {
+            parts.append("startByteOffset=\(count)")
+        }
+        
+        if self.subFrames.count > 0 {
+            let str = subFrames.compactMap { $0.frame?.debugDescription }
+            parts.append("subFrames: \(str)")
+        }
+        
+        return parts.joined(separator: " ")
     }
     
     static func parse(version: MP3File.ID3Tag.Version, data: Data) -> ChapterFrame? {
@@ -29,17 +50,19 @@ public struct ChapterFrame: Frame {
         
         var offset = 10
         
-        var elementIdBytes: [UInt8] = []
+        let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
         
-        var byte: UInt8 = data[offset]
-        
-        while byte != 0x00 {
-            elementIdBytes.append(byte)
-            offset += 1
-            byte = data[offset]
-        }
-        
-        offset += 1
+//        var elementIdBytes: [UInt8] = []
+//
+//        var byte: UInt8 = data[offset]
+//
+//        while byte != 0x00 {
+//            elementIdBytes.append(byte)
+//            offset += 1
+//            byte = data[offset]
+//        }
+//
+//        offset += 1
         
         var startTimeMilliseconds: UInt32 = 0
         d.getBytes(&startTimeMilliseconds, range: NSMakeRange(offset, 4))
@@ -62,7 +85,7 @@ public struct ChapterFrame: Frame {
         offset += 4
         
         let subFrames: [RawFrame]
-        
+
         if offset < data.count {
             let subFramesData = data.subdata(in: offset ..< data.count)
             do {
@@ -71,13 +94,18 @@ public struct ChapterFrame: Frame {
             catch {
                 subFrames = []
             }
+            
+            // TODO: Remove
+            if subFrames.count == 0 {
+                print("Expected subframes but didn't find any")
+            }
         }
         else {
             subFrames = []
         }
         
         return ChapterFrame(
-            elementId: elementIdBytes.toString,
+            elementId: elementId,
             startTime: TimeInterval(startTimeMilliseconds.bigEndian) / 1000,
             endTime: TimeInterval(endTimeMilliseconds.bigEndian) / 1000,
             startByteOffset: startByteOffset == 0xffffffff ? nil : startByteOffset,

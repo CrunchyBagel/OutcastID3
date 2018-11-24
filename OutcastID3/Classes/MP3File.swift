@@ -36,7 +36,7 @@ public extension MP3File {
 
         // Read the tag version. Assumes the tag is at the start of the file
         
-        guard let id3String = data.subdata(in: 0 ..< 3).toString, id3String == "ID3" else {
+        guard let id3String = String(bytes: data.subdata(in: 0 ..< 3), encoding: .utf8), id3String == "ID3" else {
             throw Error.tagNotFound
         }
         
@@ -58,7 +58,8 @@ public extension MP3File {
         
         // Read the tag data bytes
         
-        let tagData = data.subdata(in: version.tagHeaderSizeInBytes ..< Int(tagByteCount))
+        let headerSize = version.tagHeaderSizeInBytes
+        let tagData = data.subdata(in: headerSize ..< Int(tagByteCount))
 
         // Parse the tag data into frames
         
@@ -80,7 +81,8 @@ extension MP3File {
             do {
                 let frameSize = try determineFrameSize(data: data, position: position, version: version)
                 
-                guard position + frameSize < count else {
+                guard position + frameSize <= count else {
+                    print("Frame size too big position=\(position) + frameSize=\(frameSize) = \(position + frameSize), count=\(count)")
                     break
                 }
 
@@ -89,9 +91,10 @@ extension MP3File {
                 let frame = RawFrame(version: version, data: frameData)
                 ret.append(frame)
                 
-                position += frame.data.count
+                position += frameSize// frame.data.count
             }
             catch let e {
+                print("ERROR: \(e)")
                 if throwOnError {
                     throw e
                 }

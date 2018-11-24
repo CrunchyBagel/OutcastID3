@@ -14,13 +14,19 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let url = Bundle.main.url(forResource: "test", withExtension: "mp3") {
+        
+        let urls: [URL] = [
+            Bundle.main.url(forResource: "test", withExtension: "mp3")!,
+        ]
+        
+        for url in urls {
+            print("=======================================")
+            print(url.lastPathComponent)
+            
             do {
                 let x = try MP3File(localUrl: url)
-
-                let tag = try x.parseID3Tag()
                 
-                let version = tag.version
+                let tag = try x.parseID3Tag()
                 
                 for rawFrame in tag.rawFrames {
                     guard let frame = rawFrame.frame else {
@@ -29,15 +35,18 @@ class ViewController: UIViewController {
                     
                     switch frame {
                     case let f as StringFrame:
-                        switch f.type {
-                        case .albumTitle:
-                            print("Album Title: \(f.str)")
-
-                        default:
-                            break
-                        }
-
+                        print("\(f.type.description): \(f.str)")
+                        
+                    case let comment as CommentFrame:
+                        print("COMMENT: \(comment)")
+                        
+                    case let transcription as TranscriptionFrame:
+                        print("TRANSCRIPTION: \(transcription)")
+                        
                     case let f as ChapterFrame:
+                        
+                        print("CHAPTER: \(f)")
+                        
                         break
                     default:
                         break

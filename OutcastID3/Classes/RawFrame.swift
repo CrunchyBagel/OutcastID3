@@ -18,11 +18,15 @@ public struct RawFrame {
     public var frameIdentifier: String? {
         let frameIdentifierSize = version.frameIdentifierSizeInBytes
         let frameIdentifierData = [UInt8](self.data.subdata(in: Range(0...frameIdentifierSize - 1)))
-        return frameIdentifierData.toString
+        return String(bytes: frameIdentifierData, encoding: .utf8)
     }
     
     public var frame: Frame? {
-        switch (self.version, self.frameIdentifier) {
+        guard let frameIdentifier = self.frameIdentifier else {
+            return nil
+        }
+        
+        switch (self.version, frameIdentifier) {
         case (_, "AENC"):
             // TODO:
             break
@@ -32,16 +36,10 @@ public struct RawFrame {
             break
 
         case (_, "CHAP"):
-            if let chapter = ChapterFrame.parse(version: version, data: self.data) {
-                return chapter
-            }
+            return ChapterFrame.parse(version: version, data: self.data)
             
         case (_, "COMM"):
-            //if let str = self.stringFromData {
-                // TODO: Has language and more info
-                //                return StringFrame(type: .comment, str: str)
-            //}
-            break
+            return CommentFrame.parse(version: version, data: self.data)
 
         case (_, "COMR"):
             // TODO:
@@ -128,159 +126,113 @@ public struct RawFrame {
             break
 
         case (_, "TALB"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .albumTitle, str: str)
-            }
+            return StringFrame.parse(type: .albumTitle, version: version, data: self.data)
 
         case (_, "TCON"):
-            // TODO: The 'Content type', which previously was stored as a one byte numeric value only, is now a numeric string
-            break
-            
+            return StringFrame.parse(type: .contentType, version: version, data: self.data)
+
         case (_, "TCOP"):
-            // TODO: The 'Copyright message' frame, which must begin with a year and a space character (making five characters), is intended for the copyright holder of the original sound, not the audio file itself. The absence of this frame means only that the copyright information is unavailable or has been removed, and must not be interpreted to mean that the sound is public domain. Every time this field is displayed the field must be preceded with "Copyright © ".
-            break
-            
+            return StringFrame.parse(type: .copyright, version: version, data: self.data)
+
         case (_, "TDAT"):
-            // TODO: The 'Date' frame is a numeric string in the DDMM format containing the date for the recording. This field is always four characters long.
-            break
+            return StringFrame.parse(type: .date, version: version, data: self.data)
 
         case (_, "TDLY"):
-            // TODO: The 'Playlist delay' defines the numbers of milliseconds of silence between every song in a playlist. The player should use the "ETC" frame, if present, to skip initial silence and silence at the end of the audio to match the 'Playlist delay' time. The time is represented as a numeric string.
-            break
+            return StringFrame.parse(type: .playlistDelay, version: version, data: self.data)
 
         case (_, "TENC"):
-            // TODO: The 'Encoded by' frame contains the name of the person or organisation that encoded the audio file. This field may contain a copyright message, if the audio file also is copyrighted by the encoder.
-            break
-            
+            return StringFrame.parse(type: .encodedBy, version: version, data: self.data)
+
         case (_, "TEXT"):
-            // TODO: The 'Lyricist(s)/Text writer(s)' frame is intended for the writer(s) of the text or lyrics in the recording. They are seperated with the "/" character.
-            break
+            return StringFrame.parse(type: .textWriter, version: version, data: self.data)
 
         case (_, "TFLT"):
-            // TODO: The 'File type' frame indicates which type of audio this tag defines
-            break
+            return StringFrame.parse(type: .fileType, version: version, data: self.data)
 
         case (_, "TIME"):
-            // TODO: The 'Time' frame is a numeric string in the HHMM format containing the time for the recording. This field is always four characters long
-            break
+            return StringFrame.parse(type: .time, version: version, data: self.data)
 
         case (_, "TIT1"):
-            // TODO: The 'Content group description' frame is used if the sound belongs to a larger category of sounds/music. For example, classical music is often sorted in different musical sections (e.g. "Piano Concerto", "Weather - Hurricane")
-            break
+            return StringFrame.parse(type: .contentGroupDescription, version: version, data: self.data)
 
         case (_, "TIT2"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .title, str: str)
-            }
+            return StringFrame.parse(type: .title, version: version, data: self.data)
             
         case (_, "TIT3"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .description, str: str)
-            }
+            return StringFrame.parse(type: .description, version: version, data: self.data)
 
         case (_, "TKEY"):
-            // TODO: The 'Initial key' frame contains the musical key in which the sound starts. It is represented as a string with a maximum length of three characters. The ground keys are represented with "A","B","C","D","E", "F" and "G" and halfkeys represented with "b" and "#". Minor is represented as "m". Example "Cbm". Off key is represented with an "o" only.
-            break
+            return StringFrame.parse(type: .initialKey, version: version, data: self.data)
 
         case (_, "TLAN"):
-            // TODO: The 'Language(s)' frame should contain the languages of the text or lyrics spoken or sung in the audio. The language is represented with three characters according to ISO-639-2. If more than one language is used in the text their language codes should follow according to their usage.
-            break
+            return StringFrame.parse(type: .audioLanguage, version: version, data: self.data)
 
         case (_, "TLEN"):
-            // TODO: The 'Length' frame contains the length of the audiofile in milliseconds, represented as a numeric string.
-            break
+            return StringFrame.parse(type: .length, version: version, data: self.data)
 
         case (_, "TMED"):
-            // TODO: The 'Media type' frame describes from which media the sound originated. This may be a text string or a reference to the predefined media types found in the list below. References are made within "(" and ")" and are optionally followed by a text refinement, e.g. "(MC) with four channels". If a text refinement should begin with a "(" character it should be replaced with "((" in the same way as in the "TCO" frame. Predefined refinements is appended after the media type, e.g. "(CD/A)" or "(VID/PAL/VHS)".
-
-            break
+            return StringFrame.parse(type: .mediaType, version: version, data: self.data)
 
         case (_, "TOAL"):
-            // TODO: The 'Original album/movie/show title' frame is intended for the title of the original recording (or source of sound), if for example the music in the file should be a cover of a previously released song.
-            break
+            return StringFrame.parse(type: .originalTitle, version: version, data: self.data)
 
         case (_, "TOFN"):
-            // TODO: The 'Original filename' frame contains the preferred filename for the file, since some media doesn't allow the desired length of the filename. The filename is case sensitive and includes its suffix.
-            break
+            return StringFrame.parse(type: .originalFilename, version: version, data: self.data)
 
         case (_, "TOLY"):
-            // TODO: The 'Original lyricist(s)/text writer(s)' frame is intended for the text writer(s) of the original recording, if for example the music in the file should be a cover of a previously released song. The text writers are seperated with the "/" character.
-            break
+            return StringFrame.parse(type: .originalTextWriter, version: version, data: self.data)
 
         case (_, "TOPE"):
-            // TODO: The 'Original artist(s)/performer(s)' frame is intended for the performer(s) of the original recording, if for example the music in the file should be a cover of a previously released song. The performers are seperated with the "/" character.
-            break
+            return StringFrame.parse(type: .originalArtistPerformer, version: version, data: self.data)
 
         case (_, "TORY"):
-            // TODO: The 'Original release year' frame is intended for the year when the original recording, if for example the music in the file should be a cover of a previously released song, was released. The field is formatted as in the "TYER" frame.
-
-            break
+            return StringFrame.parse(type: .originalReleaseYear, version: version, data: self.data)
 
         case (_, "TOWN"):
-            // TODO: The 'File owner/licensee' frame contains the name of the owner or licensee of the file and it's contents.
-            break
+            return StringFrame.parse(type: .fileOwner, version: version, data: self.data)
 
         case (_, "TPE1"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .leadArtist, str: str)
-            }
+            return StringFrame.parse(type: .leadArtist, version: version, data: self.data)
 
         case (_, "TPE2"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .band, str: str)
-            }
+            return StringFrame.parse(type: .band, version: version, data: self.data)
 
         case (_, "TPE3"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .conductor, str: str)
-            }
+            return StringFrame.parse(type: .conductor, version: version, data: self.data)
 
         case (_, "TPE4"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .interpretedBy, str: str)
-            }
+            return StringFrame.parse(type: .interpretedBy, version: version, data: self.data)
 
         case (_, "TPE5"):
-            // TODO: The 'Part of a set' frame is a numeric string that describes which part of a set the audio came from. This frame is used if the source described in the "TALB" frame is divided into several mediums, e.g. a double CD. The value may be extended with a "/" character and a numeric string containing the total number of parts in the set. E.g. "1/2".
-            break
+            return StringFrame.parse(type: .partOfASet, version: version, data: self.data)
 
         case (_, "TPUB"):
-            if let str = self.stringFromData {
-                return StringFrame(type: .publisher, str: str)
-            }
+            return StringFrame.parse(type: .publisher, version: version, data: self.data)
 
         case (_, "TRCK"):
-            // TODO: The 'Track number/Position in set' frame is a numeric string containing the order number of the audio-file on its original recording. This may be extended with a "/" character and a numeric string containing the total numer of tracks/elements on the original recording. E.g. "4/9".
-
-            break
+            return StringFrame.parse(type: .track, version: version, data: self.data)
 
         case (_, "TRDA"):
-            // TODO: The 'Recording dates' frame is a intended to be used as complement to the "TYER", "TDAT" and "TIME" frames. E.g. "4th-7th June, 12th June" in combination with the "TYER" frame.
-            break
-            
+            return StringFrame.parse(type: .recordingDate, version: version, data: self.data)
+
         case (_, "TRSN"):
-            // TODO: The 'Internet radio station name' frame contains the name of the internet radio station from which the audio is streamed.
-            break
-            
+            return StringFrame.parse(type: .internetRadioStationName, version: version, data: self.data)
+
         case (_, "TRSO"):
-            // TODO: The 'Internet radio station owner' frame contains the name of the owner of the internet radio station from which the audio is streamed.
+            return StringFrame.parse(type: .internetRadioStationOwner, version: version, data: self.data)
             break
             
         case (_, "TSIZ"):
-            // TODO: The 'Size' frame contains the size of the audiofile in bytes, excluding the ID3v2 tag, represented as a numeric string.
-            break
-            
+            return StringFrame.parse(type: .fileSizeInBytes, version: version, data: self.data)
+
         case (_, "TSRC"):
-            // TODO: The 'ISRC' frame should contain the International Standard Recording Code (ISRC) (12 characters).
-            break
+            return StringFrame.parse(type: .internationalStandardRecordingCode, version: version, data: self.data)
             
         case (_, "TSSE"):
-            // TODO: The 'Software/Hardware and settings used for encoding' frame includes the used audio encoder and its settings when the file was encoded. Hardware refers to hardware encoders, not the computer on which a program was run.
-            break
+            return StringFrame.parse(type: .encodingSettings, version: version, data: self.data)
             
         case (_, "TYER"):
-            // TODO: The 'Year' frame is a numeric string with a year of the recording. This frames is always four characters long (until the year 10000).
-            break
+            return StringFrame.parse(type: .year, version: version, data: self.data)
 
         case (_, "TXXX"):
             // TODO:
@@ -295,81 +247,51 @@ public struct RawFrame {
             break
 
         case (_, "USLT"):
-            // TODO: Unsynchronised lyrics/text
-            break
+            return TranscriptionFrame.parse(version: version, data: self.data)
 
         case (_, "WCOM"):
-            // TODO: The 'Commercial information' frame is a URL pointing at a webpage with information such as where the album can be bought. There may be more than one "WCOM" frame in a tag, but not with the same content.
-            break
+            return UrlFrame.parse(type: .commercialInformation, version: version, data: self.data)
 
         case (_, "WCOP"):
-            // TODO: The 'Copyright/Legal information' frame is a URL pointing at a webpage where the terms of use and ownership of the file is described.
-            break
+            return UrlFrame.parse(type: .copyrightLegalInformation, version: version, data: self.data)
             
         case (_, "WOAF"):
-            // TODO: The 'Official audio file webpage' frame is a URL pointing at a file specific webpage.
-            break
+            return UrlFrame.parse(type: .officialAudioFileWebpage, version: version, data: self.data)
             
         case (_, "WOAR"):
-            // TODO: The 'Official artist/performer webpage' frame is a URL pointing at the artists official webpage. There may be more than one "WOAR" frame in a tag if the audio contains more than one performer, but not with the same content.
-            break
+            return UrlFrame.parse(type: .officialArtistPerformerWebpage, version: version, data: self.data)
             
         case (_, "WOAS"):
-            // TODO: The 'Official audio source webpage' frame is a URL pointing at the official webpage for the source of the audio file, e.g. a movie.
-            break
+            return UrlFrame.parse(type: .officialAudioSourceWebpage, version: version, data: self.data)
             
         case (_, "WORS"):
-            // TODO: The 'Official internet radio station homepage' contains a URL pointing at the homepage of the internet radio station.
-            break
+            return UrlFrame.parse(type: .officialInternetRadioStationWebpage, version: version, data: self.data)
             
         case (_, "WPAY"):
-            // TODO: The 'Payment' frame is a URL pointing at a webpage that will handle the process of paying for this file.
-            break
+            return UrlFrame.parse(type: .payment, version: version, data: self.data)
 
         case (_, "WPUB"):
-            // TODO: The 'Publishers official webpage' frame is a URL pointing at the official wepage for the publisher
-            break
+            return UrlFrame.parse(type: .officialPublisherWebpage, version: version, data: self.data)
 
         case (_, "WXXX"):
-            // TODO:
-            break
+            return UserUrlFrame.parse(version: version, data: self.data)
 
         default:
-//            print("Unhandled frame ID: \(self.frameIdentifier)")
             break
             
         }
         
+        print("Unhandled frame ID: \(frameIdentifier)")
         return nil
     }
 }
 
-extension RawFrame {
-    var stringFromData: String? {
-        let frameContentRangeStart = self.version.frameHeaderSizeInBytes + self.version.encodingSizeInBytes
-        let frameContent = self.data.subdata(in: frameContentRangeStart ..< self.data.count)
-        
-        guard let encoding = self.stringEncoding else {
-            return nil
-        }
-        
-        guard let str = String(data: frameContent, encoding: encoding) else {
-            return nil
-        }
-        
-        return str.trimmingCharacters(in: CharacterSet(charactersIn: "\0"))
-    }
+extension String.Encoding {
+    static func fromEncodingByte(byte: UInt8, version: MP3File.ID3Tag.Version) -> String.Encoding {
 
-    var stringEncoding: String.Encoding? {
-        let encodingBytePosition = self.version.encodingPositionInBytes
-        
-        guard encodingBytePosition < self.data.count else {
-            return nil
-        }
-        
         let encoding: String.Encoding
         
-        switch self.data[encodingBytePosition] {
+        switch byte {
         case 0x01: encoding = .utf16
         case 0x03: encoding = .utf8
         default: encoding = .isoLatin1
@@ -380,17 +302,60 @@ extension RawFrame {
         case (_, .utf8): return .isoLatin1
         default: return encoding
         }
-    }
 
+    }
 }
 
 public protocol Frame: CustomDebugStringConvertible {
     
 }
 
-extension Collection where Element == UInt8 {
-    var toString: String? {
-        return String(bytes: self, encoding: .utf8)
-        //        return self.reduce("") { $0 + String(Character(UnicodeScalar($1))) }
+// TODO: Remove?
+//extension Collection where Element == UInt8 {
+//    func toString(encoding: String.Encoding) -> String? {
+//        return String(bytes: self, encoding: encoding)
+//    }
+//}
+
+extension Data {
+    func readString(offset: inout Int, encoding: String.Encoding) -> String? {
+        // unicode strings are terminated by \0\0, while latin terminated by \0
+        
+        var bytes: [UInt8] = []
+
+        switch encoding {
+        case .utf8, .utf16:
+            let startingOffset = offset
+            
+            while offset < self.count {
+                let byte = self[offset]
+                
+                if byte == 0x0 && offset > startingOffset {
+                    if self[offset - 1] == 0x0 {
+                        bytes.removeLast()
+                        break
+                    }
+                }
+                
+                bytes.append(byte)
+                offset += 1
+            }
+            
+            offset += 1
+            
+        case _:
+            var byte: UInt8 = self[offset]
+            
+            while byte != 0x00 {
+                bytes.append(byte)
+                offset += 1
+                byte = self[offset]
+            }
+            
+            offset += 1
+
+        }
+        
+        return String(bytes: bytes, encoding: encoding)
     }
 }
