@@ -43,11 +43,12 @@ class ViewController: UIViewController {
                     case let transcription as TranscriptionFrame:
                         print("TRANSCRIPTION: \(transcription)")
                         
+                    case let picture as PictureFrame:
+                        print("PICTURE: \(picture)")
+
                     case let f as ChapterFrame:
-                        
                         print("CHAPTER: \(f)")
-                        
-                        break
+
                     default:
                         break
                     }

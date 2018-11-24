@@ -32,8 +32,7 @@ public struct RawFrame {
             break
             
         case (_, "APIC"):
-            // TODO: Picture
-            break
+            return PictureFrame.parse(version: version, data: self.data)
 
         case (_, "CHAP"):
             return ChapterFrame.parse(version: version, data: self.data)
@@ -220,7 +219,6 @@ public struct RawFrame {
 
         case (_, "TRSO"):
             return StringFrame.parse(type: .internetRadioStationOwner, version: version, data: self.data)
-            break
             
         case (_, "TSIZ"):
             return StringFrame.parse(type: .fileSizeInBytes, version: version, data: self.data)
