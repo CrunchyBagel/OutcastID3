@@ -1,0 +1,151 @@
+//
+//  StringFrame.swift
+//  Chapters
+//
+//  Created by Quentin Zervaas on 23/11/18.
+//  Copyright © 2018 Crunchy Bagel Pty Ltd. All rights reserved.
+//
+
+import Foundation
+
+public struct StringFrame: Frame {
+    public enum StringType: String, Codable {
+        case albumTitle                         = "TALB"
+        case contentType                        = "TCON"
+        case copyright                          = "TCOP"
+        case date                               = "TDAT"
+        case playlistDelay                      = "TDLY"
+        case encodedBy                          = "TENC"
+        case textWriter                         = "TEXT"
+        case fileType                           = "TFLT"
+        case time                               = "TIME"
+        case contentGroupDescription            = "TIT1"
+        case title                              = "TIT2"
+        case description                        = "TIT3"
+        case initialKey                         = "TKEY"
+        case audioLanguage                      = "TLAN"
+        case length                             = "TLEN"
+        case mediaType                          = "TMED"
+        case originalTitle                      = "TOAL"
+        case originalFilename                   = "TOFN"
+        case originalTextWriter                 = "TOLY"
+        case originalArtistPerformer            = "TOPE"
+        case originalReleaseYear                = "TORY"
+        case fileOwner                          = "TOWN"
+        case leadArtist                         = "TPE1"
+        case band                               = "TPE2"
+        case conductor                          = "TPE3"
+        case interpretedBy                      = "TPE4"
+        case partOfASet                         = "TPE5"
+        case publisher                          = "TPUB"
+        case track                              = "TRCK"
+        case recordingDate                      = "TRDA"
+        case internetRadioStationName           = "TRSN"
+        case internetRadioStationOwner          = "TRSO"
+        case fileSizeInBytes                    = "TSIZ"
+        case internationalStandardRecordingCode = "TSRC"
+        case encodingSettings                   = "TSSE"
+        case year                               = "TYER"
+        
+        public var description: String {
+            switch self {
+                
+            case .title:
+                return "Title"
+            case .description:
+                return "Description"
+            case .albumTitle:
+                return "Album Title"
+            case .leadArtist:
+                return "Lead Artist"
+            case .band:
+                return "Band"
+            case .conductor:
+                return "Conductor"
+            case .interpretedBy:
+                return "Interpreted By"
+            case .publisher:
+                return "Publisher"
+            case .length:
+                return "Length"
+            case .year:
+                return "Year"
+            case .encodedBy:
+                return "Encoded By"
+            case .contentType:
+                return "Content Type"
+            case .copyright:
+                return "Copyright"
+            case .date:
+                return "Date"
+            case .playlistDelay:
+                return "Playlist Delay"
+            case .textWriter:
+                return "Text Writer"
+            case .fileType:
+                return "File Type"
+            case .time:
+                return "Time"
+            case .contentGroupDescription:
+                return "Content Group Description"
+            case .initialKey:
+                return "Initial Key"
+            case .audioLanguage:
+                return "Audio Language"
+            case .mediaType:
+                return "Media Type"
+            case .originalTitle:
+                return "Original Title"
+            case .originalFilename:
+                return "Original Filename"
+            case .originalTextWriter:
+                return "Original Text Writer"
+            case .originalArtistPerformer:
+                return "Original Artist Performer"
+            case .originalReleaseYear:
+                return "Original Release Year"
+            case .fileOwner:
+                return "File Owner"
+            case .partOfASet:
+                return "Part Of A Set"
+            case .track:
+                return "Track"
+            case .recordingDate:
+                return "Recording Date"
+            case .internetRadioStationName:
+                return "Internet Radio Station Name"
+            case .internetRadioStationOwner:
+                return "Internet Radio Station Owner"
+            case .fileSizeInBytes:
+                return "File Size In Bytes"
+            case .internationalStandardRecordingCode:
+                return "International Standard Recording Code (ISRC)"
+            case .encodingSettings:
+                return "Encoding Settings"
+            }
+        }
+    }
+    
+    public let type: StringType
+    public let str: String
+    
+    public var debugDescription: String {
+        return "str=\(str)"
+    }
+    
+    static func parse(type: StringType, version: MP3File.ID3Tag.Version, data: Data) -> StringFrame? {
+
+        var frameContentRangeStart = version.frameHeaderSizeInBytes
+        
+        let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
+        frameContentRangeStart += 1
+        
+        let frameContent = data.subdata(in: frameContentRangeStart ..< data.count)
+        
+        guard let str = String(data: frameContent, encoding: encoding) else {
+            return nil
+        }
+        
+        return StringFrame(type: type, str: str)
+    }
+}
