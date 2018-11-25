@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 public struct PictureFrame: Frame {
     enum CodingKeys: String, CodingKey {
