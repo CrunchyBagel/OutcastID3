@@ -21,7 +21,7 @@ public struct PictureFrame: Frame {
         case decodingError
     }
 
-    enum PictureType: UInt8, Codable {
+    public enum PictureType: UInt8, Codable {
         case other              = 0x00
         case fileIcon32x32Png   = 0x01
         case fileIconOther      = 0x02
@@ -93,13 +93,13 @@ public struct PictureFrame: Frame {
         }
     }
     
-    let mimeType: String
-    let pictureType: PictureType
-    let pictureDescription: String?
-    let picture: UIImage
+    public let mimeType: String
+    public let pictureType: PictureType
+    public let pictureDescription: String?
+    public let picture: UIImage
     
     public var debugDescription: String {
-        return "mimeType=\(self.mimeType) pictureType=\(self.pictureType.description) pictureDescription=\(self.pictureDescription) picture=\(self.picture)"
+        return "mimeType=\(self.mimeType) pictureType=\(self.pictureType.description) pictureDescription=\(String(describing: self.pictureDescription)) picture=\(self.picture)"
     }
 
     static func parse(version: MP3File.ID3Tag.Version, data: Data) -> PictureFrame? {

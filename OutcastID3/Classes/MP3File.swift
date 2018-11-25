@@ -68,7 +68,7 @@ public extension MP3File {
 
         // TODO: ID3v2.1 only uses 3 bytes
         
-        // 4 bytes, each of 7 bytes
+        // 4 bytes, each of 7 bits
         let s1 = UInt32(tagSizeBytes[0] & 0x7f) << 21
         let s2 = UInt32(tagSizeBytes[1] & 0x7f) << 14
         let s3 = UInt32(tagSizeBytes[2] & 0x7f) << 7

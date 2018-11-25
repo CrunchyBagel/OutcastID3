@@ -52,18 +52,6 @@ public struct ChapterFrame: Frame {
         
         let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
         
-//        var elementIdBytes: [UInt8] = []
-//
-//        var byte: UInt8 = data[offset]
-//
-//        while byte != 0x00 {
-//            elementIdBytes.append(byte)
-//            offset += 1
-//            byte = data[offset]
-//        }
-//
-//        offset += 1
-        
         var startTimeMilliseconds: UInt32 = 0
         d.getBytes(&startTimeMilliseconds, range: NSMakeRange(offset, 4))
         
