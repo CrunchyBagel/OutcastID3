@@ -5,6 +5,9 @@
 [![License](https://img.shields.io/cocoapods/l/OutcastID3.svg?style=flat)](https://cocoapods.org/pods/OutcastID3)
 [![Platform](https://img.shields.io/cocoapods/p/OutcastID3.svg?style=flat)](https://cocoapods.org/pods/OutcastID3)
 
+A lightweight Swift library for reading ID3 tags, including chapters.
+
+
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.

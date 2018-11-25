@@ -9,44 +9,43 @@
 import Foundation
 
 public struct StringFrame: Frame {
-    public enum StringType {
-        case title
-        case description
-        case comment
-        case albumTitle
-        case leadArtist
-        case band
-        case conductor
-        case interpretedBy
-        case publisher
-        case length
-        case year
-        case encodedBy
-        case contentType
-        case copyright
-        case date
-        case playlistDelay
-        case textWriter
-        case fileType
-        case time
-        case contentGroupDescription
-        case initialKey
-        case audioLanguage
-        case mediaType
-        case originalTitle
-        case originalFilename
-        case originalTextWriter
-        case originalArtistPerformer
-        case originalReleaseYear
-        case fileOwner
-        case partOfASet
-        case track
-        case recordingDate
-        case internetRadioStationName
-        case internetRadioStationOwner
-        case fileSizeInBytes
-        case internationalStandardRecordingCode
-        case encodingSettings
+    public enum StringType: String, Codable {
+        case albumTitle                         = "TALB"
+        case contentType                        = "TCON"
+        case copyright                          = "TCOP"
+        case date                               = "TDAT"
+        case playlistDelay                      = "TDLY"
+        case encodedBy                          = "TENC"
+        case textWriter                         = "TEXT"
+        case fileType                           = "TFLT"
+        case time                               = "TIME"
+        case contentGroupDescription            = "TIT1"
+        case title                              = "TIT2"
+        case description                        = "TIT3"
+        case initialKey                         = "TKEY"
+        case audioLanguage                      = "TLAN"
+        case length                             = "TLEN"
+        case mediaType                          = "TMED"
+        case originalTitle                      = "TOAL"
+        case originalFilename                   = "TOFN"
+        case originalTextWriter                 = "TOLY"
+        case originalArtistPerformer            = "TOPE"
+        case originalReleaseYear                = "TORY"
+        case fileOwner                          = "TOWN"
+        case leadArtist                         = "TPE1"
+        case band                               = "TPE2"
+        case conductor                          = "TPE3"
+        case interpretedBy                      = "TPE4"
+        case partOfASet                         = "TPE5"
+        case publisher                          = "TPUB"
+        case track                              = "TRCK"
+        case recordingDate                      = "TRDA"
+        case internetRadioStationName           = "TRSN"
+        case internetRadioStationOwner          = "TRSO"
+        case fileSizeInBytes                    = "TSIZ"
+        case internationalStandardRecordingCode = "TSRC"
+        case encodingSettings                   = "TSSE"
+        case year                               = "TYER"
         
         public var description: String {
             switch self {
@@ -55,8 +54,6 @@ public struct StringFrame: Frame {
                 return "Title"
             case .description:
                 return "Description"
-            case .comment:
-                return "Comment"
             case .albumTitle:
                 return "Album Title"
             case .leadArtist:

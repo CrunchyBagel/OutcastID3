@@ -94,11 +94,6 @@ public struct ChapterFrame: Frame {
             catch {
                 subFrames = []
             }
-            
-            // TODO: Remove
-            if subFrames.count == 0 {
-                print("Expected subframes but didn't find any")
-            }
         }
         else {
             subFrames = []

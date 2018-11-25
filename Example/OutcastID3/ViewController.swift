@@ -27,7 +27,7 @@ class ViewController: UIViewController {
                 let x = try MP3File(localUrl: url)
                 
                 let tag = try x.parseID3Tag()
-                
+
                 for rawFrame in tag.rawFrames {
                     guard let frame = rawFrame.frame else {
                         continue
@@ -54,8 +54,8 @@ class ViewController: UIViewController {
                     }
                 }
             }
-            catch {
-                
+            catch let e {
+                print("Error: \(e)")
             }
         }
     }

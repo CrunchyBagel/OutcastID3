@@ -11,7 +11,7 @@ import Foundation
 // http://id3.org/id3v2.3.0
 // http://id3.org/id3v2-chapters-1.0
 
-public struct RawFrame {
+public struct RawFrame: Codable {
     public let version: MP3File.ID3Tag.Version
     public let data: Data
     
@@ -25,6 +25,20 @@ public struct RawFrame {
         guard let frameIdentifier = self.frameIdentifier else {
             return nil
         }
+        
+        // Check for the basic string types
+        
+        if let stringType = StringFrame.StringType(rawValue: frameIdentifier) {
+            return StringFrame.parse(type: stringType, version: version, data: self.data)
+        }
+        
+        // Check for the basic URL types
+        
+        if let urlType = UrlFrame.UrlType(rawValue: frameIdentifier) {
+            return UrlFrame.parse(type: urlType, version: version, data: self.data)
+        }
+
+        // Check for the remaining types
         
         switch (self.version, frameIdentifier) {
         case (_, "AENC"):
@@ -124,114 +138,6 @@ public struct RawFrame {
             // TODO:
             break
 
-        case (_, "TALB"):
-            return StringFrame.parse(type: .albumTitle, version: version, data: self.data)
-
-        case (_, "TCON"):
-            return StringFrame.parse(type: .contentType, version: version, data: self.data)
-
-        case (_, "TCOP"):
-            return StringFrame.parse(type: .copyright, version: version, data: self.data)
-
-        case (_, "TDAT"):
-            return StringFrame.parse(type: .date, version: version, data: self.data)
-
-        case (_, "TDLY"):
-            return StringFrame.parse(type: .playlistDelay, version: version, data: self.data)
-
-        case (_, "TENC"):
-            return StringFrame.parse(type: .encodedBy, version: version, data: self.data)
-
-        case (_, "TEXT"):
-            return StringFrame.parse(type: .textWriter, version: version, data: self.data)
-
-        case (_, "TFLT"):
-            return StringFrame.parse(type: .fileType, version: version, data: self.data)
-
-        case (_, "TIME"):
-            return StringFrame.parse(type: .time, version: version, data: self.data)
-
-        case (_, "TIT1"):
-            return StringFrame.parse(type: .contentGroupDescription, version: version, data: self.data)
-
-        case (_, "TIT2"):
-            return StringFrame.parse(type: .title, version: version, data: self.data)
-            
-        case (_, "TIT3"):
-            return StringFrame.parse(type: .description, version: version, data: self.data)
-
-        case (_, "TKEY"):
-            return StringFrame.parse(type: .initialKey, version: version, data: self.data)
-
-        case (_, "TLAN"):
-            return StringFrame.parse(type: .audioLanguage, version: version, data: self.data)
-
-        case (_, "TLEN"):
-            return StringFrame.parse(type: .length, version: version, data: self.data)
-
-        case (_, "TMED"):
-            return StringFrame.parse(type: .mediaType, version: version, data: self.data)
-
-        case (_, "TOAL"):
-            return StringFrame.parse(type: .originalTitle, version: version, data: self.data)
-
-        case (_, "TOFN"):
-            return StringFrame.parse(type: .originalFilename, version: version, data: self.data)
-
-        case (_, "TOLY"):
-            return StringFrame.parse(type: .originalTextWriter, version: version, data: self.data)
-
-        case (_, "TOPE"):
-            return StringFrame.parse(type: .originalArtistPerformer, version: version, data: self.data)
-
-        case (_, "TORY"):
-            return StringFrame.parse(type: .originalReleaseYear, version: version, data: self.data)
-
-        case (_, "TOWN"):
-            return StringFrame.parse(type: .fileOwner, version: version, data: self.data)
-
-        case (_, "TPE1"):
-            return StringFrame.parse(type: .leadArtist, version: version, data: self.data)
-
-        case (_, "TPE2"):
-            return StringFrame.parse(type: .band, version: version, data: self.data)
-
-        case (_, "TPE3"):
-            return StringFrame.parse(type: .conductor, version: version, data: self.data)
-
-        case (_, "TPE4"):
-            return StringFrame.parse(type: .interpretedBy, version: version, data: self.data)
-
-        case (_, "TPE5"):
-            return StringFrame.parse(type: .partOfASet, version: version, data: self.data)
-
-        case (_, "TPUB"):
-            return StringFrame.parse(type: .publisher, version: version, data: self.data)
-
-        case (_, "TRCK"):
-            return StringFrame.parse(type: .track, version: version, data: self.data)
-
-        case (_, "TRDA"):
-            return StringFrame.parse(type: .recordingDate, version: version, data: self.data)
-
-        case (_, "TRSN"):
-            return StringFrame.parse(type: .internetRadioStationName, version: version, data: self.data)
-
-        case (_, "TRSO"):
-            return StringFrame.parse(type: .internetRadioStationOwner, version: version, data: self.data)
-            
-        case (_, "TSIZ"):
-            return StringFrame.parse(type: .fileSizeInBytes, version: version, data: self.data)
-
-        case (_, "TSRC"):
-            return StringFrame.parse(type: .internationalStandardRecordingCode, version: version, data: self.data)
-            
-        case (_, "TSSE"):
-            return StringFrame.parse(type: .encodingSettings, version: version, data: self.data)
-            
-        case (_, "TYER"):
-            return StringFrame.parse(type: .year, version: version, data: self.data)
-
         case (_, "TXXX"):
             // TODO:
             break
@@ -247,30 +153,6 @@ public struct RawFrame {
         case (_, "USLT"):
             return TranscriptionFrame.parse(version: version, data: self.data)
 
-        case (_, "WCOM"):
-            return UrlFrame.parse(type: .commercialInformation, version: version, data: self.data)
-
-        case (_, "WCOP"):
-            return UrlFrame.parse(type: .copyrightLegalInformation, version: version, data: self.data)
-            
-        case (_, "WOAF"):
-            return UrlFrame.parse(type: .officialAudioFileWebpage, version: version, data: self.data)
-            
-        case (_, "WOAR"):
-            return UrlFrame.parse(type: .officialArtistPerformerWebpage, version: version, data: self.data)
-            
-        case (_, "WOAS"):
-            return UrlFrame.parse(type: .officialAudioSourceWebpage, version: version, data: self.data)
-            
-        case (_, "WORS"):
-            return UrlFrame.parse(type: .officialInternetRadioStationWebpage, version: version, data: self.data)
-            
-        case (_, "WPAY"):
-            return UrlFrame.parse(type: .payment, version: version, data: self.data)
-
-        case (_, "WPUB"):
-            return UrlFrame.parse(type: .officialPublisherWebpage, version: version, data: self.data)
-
         case (_, "WXXX"):
             return UserUrlFrame.parse(version: version, data: self.data)
 
@@ -284,76 +166,7 @@ public struct RawFrame {
     }
 }
 
-extension String.Encoding {
-    static func fromEncodingByte(byte: UInt8, version: MP3File.ID3Tag.Version) -> String.Encoding {
-
-        let encoding: String.Encoding
-        
-        switch byte {
-        case 0x01: encoding = .utf16
-        case 0x03: encoding = .utf8
-        default: encoding = .isoLatin1
-        }
-        
-        switch (version, encoding) {
-        case (.version4, .utf8): return encoding
-        case (_, .utf8): return .isoLatin1
-        default: return encoding
-        }
-
-    }
-}
-
-public protocol Frame: CustomDebugStringConvertible {
+public protocol Frame: Codable, CustomDebugStringConvertible {
     
 }
 
-// TODO: Remove?
-//extension Collection where Element == UInt8 {
-//    func toString(encoding: String.Encoding) -> String? {
-//        return String(bytes: self, encoding: encoding)
-//    }
-//}
-
-extension Data {
-    func readString(offset: inout Int, encoding: String.Encoding) -> String? {
-        // unicode strings are terminated by \0\0, while latin terminated by \0
-        
-        var bytes: [UInt8] = []
-
-        switch encoding {
-        case .utf8, .utf16:
-            let startingOffset = offset
-            
-            while offset < self.count {
-                let byte = self[offset]
-                
-                if byte == 0x0 && offset > startingOffset {
-                    if self[offset - 1] == 0x0 {
-                        bytes.removeLast()
-                        break
-                    }
-                }
-                
-                bytes.append(byte)
-                offset += 1
-            }
-            
-            offset += 1
-            
-        case _:
-            var byte: UInt8 = self[offset]
-            
-            while byte != 0x00 {
-                bytes.append(byte)
-                offset += 1
-                byte = self[offset]
-            }
-            
-            offset += 1
-
-        }
-        
-        return String(bytes: bytes, encoding: encoding)
-    }
-}

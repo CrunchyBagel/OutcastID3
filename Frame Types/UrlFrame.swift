@@ -8,15 +8,15 @@
 import Foundation
 
 public struct UrlFrame: Frame {
-    public enum UrlType {
-        case commercialInformation
-        case copyrightLegalInformation
-        case officialAudioFileWebpage
-        case officialArtistPerformerWebpage
-        case officialAudioSourceWebpage
-        case officialInternetRadioStationWebpage
-        case officialPublisherWebpage
-        case payment
+    public enum UrlType: String, Codable {
+        case commercialInformation               = "WCOM"
+        case copyrightLegalInformation           = "WCOP"
+        case officialAudioFileWebpage            = "WOAF"
+        case officialArtistPerformerWebpage      = "WOAR"
+        case officialAudioSourceWebpage          = "WOAS"
+        case officialInternetRadioStationWebpage = "WORS"
+        case payment                             = "WPAY"
+        case officialPublisherWebpage            = "WPUB"
         
         
         var description: String {
@@ -55,9 +55,9 @@ public struct UrlFrame: Frame {
 
     static func parse(type: UrlType, version: MP3File.ID3Tag.Version, data: Data) -> UrlFrame? {
         
-        var frameContentRangeStart = version.frameHeaderSizeInBytes
+        let offset = version.frameHeaderSizeInBytes
         
-        let frameContent = data.subdata(in: frameContentRangeStart ..< data.count)
+        let frameContent = data.subdata(in: offset ..< data.count)
         
         guard let str = String(data: frameContent, encoding: .isoLatin1) else {
             return nil

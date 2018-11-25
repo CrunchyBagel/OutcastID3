@@ -9,16 +9,16 @@
 import Foundation
 
 extension MP3File.ID3Tag {
-    public enum Version: UInt8 {
-        case version2 = 2
-        case version3 = 3
-        case version4 = 4
+    public enum Version: UInt8, Codable {
+        case v2_2 = 2
+        case v2_3 = 3
+        case v2_4 = 4
         
         var encodingPositionInBytes: Int {
             switch self {
-            case .version2: return 6
-            case .version3: return 10
-            case .version4: return 10
+            case .v2_2: return 6
+            case .v2_3: return 10
+            case .v2_4: return 10
             }
         }
         
@@ -28,17 +28,17 @@ extension MP3File.ID3Tag {
         
         var frameHeaderSizeInBytes: Int {
             switch self {
-            case .version2: return 6
-            case .version3: return 10
-            case .version4: return 10
+            case .v2_2: return 6
+            case .v2_3: return 10
+            case .v2_4: return 10
             }
         }
 
         var frameSizeOffsetInBytes: Int {
             switch self {
-            case .version2: return 3
-            case .version3: return 4
-            case .version4: return 4
+            case .v2_2: return 3
+            case .v2_3: return 4
+            case .v2_4: return 4
             }
         }
         
@@ -48,17 +48,17 @@ extension MP3File.ID3Tag {
         
         var frameSizeMask: UInt32 {
             switch self {
-            case .version2: return 0x00FFFFFF
-            case .version3: return 0xFFFFFFFF
-            case .version4: return 0xFFFFFFFF
+            case .v2_2: return 0x00ffffff
+            case .v2_3: return 0xffffffff
+            case .v2_4: return 0xffffffff
             }
         }
         
         var frameIdentifierSizeInBytes: Int {
             switch self {
-            case .version2: return 3
-            case .version3: return 4
-            case .version4: return 4
+            case .v2_2: return 3
+            case .v2_3: return 4
+            case .v2_4: return 4
             }
         }
     }
