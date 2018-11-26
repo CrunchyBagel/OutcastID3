@@ -30,13 +30,17 @@ class ViewController: UIViewController {
 
                 for rawFrame in tag.rawFrames {
                     guard let frame = rawFrame.frame else {
+                        print("Unrecognised frame: \(String(describing: rawFrame.frameIdentifier))")
                         continue
                     }
                     
                     switch frame {
-                    case let f as StringFrame:
-                        print("\(f.type.description): \(f.str)")
+                    case let s as StringFrame:
+                        print("\(s.type.description): \(s.str)")
                         
+                    case let u as UrlFrame:
+                        print("\(u.type.description): \(u.urlString)")
+
                     case let comment as CommentFrame:
                         print("COMMENT: \(comment)")
                         
@@ -48,6 +52,9 @@ class ViewController: UIViewController {
 
                     case let f as ChapterFrame:
                         print("CHAPTER: \(f)")
+                        
+                    case let toc as TableOfContentsFrame:
+                        print("TOC: \(toc)")
 
                     default:
                         break

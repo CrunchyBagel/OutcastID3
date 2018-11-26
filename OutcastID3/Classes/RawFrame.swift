@@ -59,8 +59,7 @@ public struct RawFrame: Codable {
             break
 
         case (_, "CTOC"):
-            // TODO: Chapter table of contents
-            break
+            return TableOfContentsFrame.parse(version: version, data: self.data)
 
         case (_, "ENCR"):
             // TODO:
@@ -161,7 +160,6 @@ public struct RawFrame: Codable {
             
         }
         
-        print("Unhandled frame ID: \(frameIdentifier)")
         return nil
     }
 }

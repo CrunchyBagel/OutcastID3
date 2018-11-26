@@ -18,8 +18,7 @@ public struct UrlFrame: Frame {
         case payment                             = "WPAY"
         case officialPublisherWebpage            = "WPUB"
         
-        
-        var description: String {
+        public var description: String {
             switch self {
                 
             case .commercialInformation:
