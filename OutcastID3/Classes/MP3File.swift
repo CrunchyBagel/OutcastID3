@@ -9,9 +9,9 @@
 import Foundation
 
 public class MP3File {
-    public struct ID3Tag: Codable {
+    public struct ID3Tag {
         public let version: Version
-        public let rawFrames: [RawFrame]
+        public let frames: [Frame]
     }
 
     public enum Error: Swift.Error {
@@ -83,9 +83,11 @@ public extension MP3File {
         
         let rawFrames = try MP3File.rawFramesFromData(version: version, data: tagData)
         
+        let frames = rawFrames.compactMap { $0.frame ?? $0 }
+        
         return ID3Tag(
             version: version,
-            rawFrames: rawFrames
+            frames: frames
         )
     }
 }

@@ -22,20 +22,31 @@ do {
     let version = tag.version
 
     for rawFrame in tag.rawFrames {
-        guard let frame = rawFrame.frame else {
-            continue
-        }
-
         switch frame {
-        case let f as StringFrame:
-            switch f.type {
-                case .albumTitle:
-                    print("Album Title: \(f.str)")
-                default:
-                    break
-            }
+        case let s as StringFrame:
+            print("\(s.type.description): \(s.str)")
+            
+        case let u as UrlFrame:
+            print("\(u.type.description): \(u.urlString)")
+
+        case let comment as CommentFrame:
+            print("COMMENT: \(comment)")
+            
+        case let transcription as TranscriptionFrame:
+            print("TRANSCRIPTION: \(transcription)")
+            
+        case let picture as PictureFrame:
+            print("PICTURE: \(picture)")
+
         case let f as ChapterFrame:
-            break
+            print("CHAPTER: \(f)")
+            
+        case let toc as TableOfContentsFrame:
+            print("TOC: \(toc)")
+            
+        case let rawFrame as RawFrame:
+            print("Unrecognised frame: \(String(describing: rawFrame.frameIdentifier))")
+
         default:
             break
         }

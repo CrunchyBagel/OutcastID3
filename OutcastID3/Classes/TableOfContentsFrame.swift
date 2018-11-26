@@ -14,7 +14,7 @@ public struct TableOfContentsFrame: Frame {
     
     public let childElementIds: [String]
 
-    public let subFrames: [RawFrame]
+    public let subFrames: [Frame]
     
     public var debugDescription: String {
         var parts: [String] = []
@@ -28,7 +28,7 @@ public struct TableOfContentsFrame: Frame {
         parts.append("childElementIds=\(self.childElementIds)")
         
         if self.subFrames.count > 0 {
-            let str = subFrames.compactMap { $0.frame?.debugDescription }
+            let str = subFrames.compactMap { $0.debugDescription }
             parts.append("subFrames: \(str)")
         }
         
@@ -59,12 +59,14 @@ public struct TableOfContentsFrame: Frame {
             childElementIds.append(str)
         }
         
-        let subFrames: [RawFrame]
-
+        let subFrames: [Frame]
+        
         if offset < data.count {
-            let subFramesData = data.subdata(in: offset ..< data.count)
             do {
-                subFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
+                let subFramesData = data.subdata(in: offset ..< data.count)
+                let rawFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
+                
+                subFrames = rawFrames.compactMap { $0.frame ?? $0 }
             }
             catch {
                 subFrames = []

@@ -11,16 +11,18 @@ import Foundation
 // http://id3.org/id3v2.3.0
 // http://id3.org/id3v2-chapters-1.0
 
-public struct RawFrame: Codable {
+public struct RawFrame: Frame {
     public let version: MP3File.ID3Tag.Version
     public let data: Data
     
-    public var frameIdentifier: String? {
-        let frameIdentifierSize = version.frameIdentifierSizeInBytes
-        let frameIdentifierData = [UInt8](self.data.subdata(in: Range(0...frameIdentifierSize - 1)))
-        return String(bytes: frameIdentifierData, encoding: .utf8)
+    public var debugDescription: String {
+        return "version=\(self.version.rawValue)"
     }
     
+    public var frameIdentifier: String? {
+        return self.data.frameIdentifier(version: self.version)
+    }
+
     public var frame: Frame? {
         guard let frameIdentifier = self.frameIdentifier else {
             return nil
@@ -164,7 +166,15 @@ public struct RawFrame: Codable {
     }
 }
 
-public protocol Frame: Codable, CustomDebugStringConvertible {
-    
+extension Data {
+    fileprivate func frameIdentifier(version: MP3File.ID3Tag.Version) -> String? {
+        let size = version.frameIdentifierSizeInBytes
+        
+        guard size < self.count else {
+            return nil
+        }
+        
+        let data = [UInt8](self.subdata(in: Range(0...size - 1)))
+        return String(bytes: data, encoding: .isoLatin1)
+    }
 }
-

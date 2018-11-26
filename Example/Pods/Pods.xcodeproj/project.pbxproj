@@ -18,6 +18,7 @@
 		662FF7AC21AA34B900F1B6CC /* UrlFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662FF7A521AA34B900F1B6CC /* UrlFrame.swift */; };
 		662FF7AD21AA34B900F1B6CC /* CommentFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662FF7A621AA34B900F1B6CC /* CommentFrame.swift */; };
 		662FF7AE21AA34B900F1B6CC /* StringFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662FF7A721AA34B900F1B6CC /* StringFrame.swift */; };
+		6680ABA921ACAA7B00F1D081 /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6680ABA821ACAA7B00F1D081 /* Frame.swift */; };
 		66A88DD321ABC61D0063A0A2 /* TableOfContentsFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A88DD221ABC61D0063A0A2 /* TableOfContentsFrame.swift */; };
 		7DF912D5221BC5963A9BE4630CAD1E25 /* OutcastID3-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 22F47F28CC40850FDE6EB5AE5CF35D11 /* OutcastID3-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7EACA90D3A4EF82787AA9816DD383855 /* OutcastID3-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = BE3F54574014E92320A9063C8CE1E290 /* OutcastID3-dummy.m */; };
@@ -73,6 +74,7 @@
 		662FF7A621AA34B900F1B6CC /* CommentFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentFrame.swift; path = OutcastID3/Classes/CommentFrame.swift; sourceTree = "<group>"; };
 		662FF7A721AA34B900F1B6CC /* StringFrame.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringFrame.swift; path = OutcastID3/Classes/StringFrame.swift; sourceTree = "<group>"; };
 		6646A45E99A194F13B61AF91E05F7ADA /* MP3File+ID3Tag+Version.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "MP3File+ID3Tag+Version.swift"; path = "OutcastID3/Classes/MP3File+ID3Tag+Version.swift"; sourceTree = "<group>"; };
+		6680ABA821ACAA7B00F1D081 /* Frame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Frame.swift; path = OutcastID3/Classes/Frame.swift; sourceTree = "<group>"; };
 		66A88DD221ABC61D0063A0A2 /* TableOfContentsFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TableOfContentsFrame.swift; path = OutcastID3/Classes/TableOfContentsFrame.swift; sourceTree = "<group>"; };
 		70EC1D32B374D8B43DED5EA2DB24EC71 /* Pods_OutcastID3_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutcastID3_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		739B8CBC36CE7749E24D3D76039D7751 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				3C5CCF3A08B0F5F3767820DFA944DB9D /* RawFrame.swift */,
 				662FF78E21AA277200F1B6CC /* Data+String.swift */,
 				662FF79021AA279000F1B6CC /* StringEncoding+ID3.swift */,
+				6680ABA821ACAA7B00F1D081 /* Frame.swift */,
 				662FF7A221AA34B900F1B6CC /* ChapterFrame.swift */,
 				66A88DD221ABC61D0063A0A2 /* TableOfContentsFrame.swift */,
 				662FF7A621AA34B900F1B6CC /* CommentFrame.swift */,
@@ -404,6 +407,7 @@
 				7EACA90D3A4EF82787AA9816DD383855 /* OutcastID3-dummy.m in Sources */,
 				662FF7AB21AA34B900F1B6CC /* TranscriptionFrame.swift in Sources */,
 				662FF7AC21AA34B900F1B6CC /* UrlFrame.swift in Sources */,
+				6680ABA921ACAA7B00F1D081 /* Frame.swift in Sources */,
 				A9A7101D050AB1E3199F1D55B03071A6 /* RawFrame.swift in Sources */,
 				662FF7AD21AA34B900F1B6CC /* CommentFrame.swift in Sources */,
 				662FF79121AA279000F1B6CC /* StringEncoding+ID3.swift in Sources */,

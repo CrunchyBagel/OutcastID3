@@ -15,7 +15,7 @@ public struct ChapterFrame: Frame {
     public let startByteOffset: UInt32?
     public let endByteOffset: UInt32?
     
-    public let subFrames: [RawFrame]
+    public let subFrames: [Frame]
     
     public var debugDescription: String {
         
@@ -37,7 +37,7 @@ public struct ChapterFrame: Frame {
         }
         
         if self.subFrames.count > 0 {
-            let str = subFrames.compactMap { $0.frame?.debugDescription }
+            let str = subFrames.compactMap { $0.debugDescription }
             parts.append("subFrames: \(str)")
         }
         
@@ -72,12 +72,14 @@ public struct ChapterFrame: Frame {
         
         offset += 4
         
-        let subFrames: [RawFrame]
+        let subFrames: [Frame]
 
         if offset < data.count {
-            let subFramesData = data.subdata(in: offset ..< data.count)
             do {
-                subFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
+                let subFramesData = data.subdata(in: offset ..< data.count)
+                let rawFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
+                
+                subFrames = rawFrames.compactMap { $0.frame ?? $0 }
             }
             catch {
                 subFrames = []

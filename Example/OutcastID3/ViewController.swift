@@ -28,12 +28,7 @@ class ViewController: UIViewController {
                 
                 let tag = try x.parseID3Tag()
 
-                for rawFrame in tag.rawFrames {
-                    guard let frame = rawFrame.frame else {
-                        print("Unrecognised frame: \(String(describing: rawFrame.frameIdentifier))")
-                        continue
-                    }
-                    
+                for frame in tag.frames {
                     switch frame {
                     case let s as StringFrame:
                         print("\(s.type.description): \(s.str)")
@@ -55,6 +50,9 @@ class ViewController: UIViewController {
                         
                     case let toc as TableOfContentsFrame:
                         print("TOC: \(toc)")
+                        
+                    case let rawFrame as RawFrame:
+                        print("Unrecognised frame: \(String(describing: rawFrame.frameIdentifier))")
 
                     default:
                         break
