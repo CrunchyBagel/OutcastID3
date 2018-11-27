@@ -7,16 +7,16 @@
 
 import UIKit
 
-class FrameBuilder {
+public class FrameBuilder {
 
     private let frameIdentifier: String
     private var content: Data = Data()
 
-    init(frameIdentifier: String) {
+    public init(frameIdentifier: String) {
         self.frameIdentifier = frameIdentifier
     }
     
-    func data() throws -> Data {
+    public func data() throws -> Data {
         guard var ret = self.frameIdentifier.data(using: .isoLatin1) else {
             throw MP3File.WriteError.stringEncodingError
         }
@@ -33,13 +33,13 @@ class FrameBuilder {
     
     /// Add a string in ISO-8859-1 without termination and without encoding byte
     
-    func addString(str: String) throws {
+    public func addString(str: String) throws {
         try self.addString(str: str, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
     }
     
     /// Add a string with encoding byte. Can optionally terminate if necessary
     
-    func addEncodedString(str: String, encoding: String.Encoding, terminate: Bool) throws {
+    public func addEncodedString(str: String, encoding: String.Encoding, terminate: Bool) throws {
         try self.addString(str: str, encoding: encoding, includeEncodingByte: true, terminate: terminate)
     }
     
