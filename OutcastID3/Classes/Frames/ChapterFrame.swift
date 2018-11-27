@@ -11,7 +11,9 @@ import Foundation
 public struct ChapterFrame: Frame {
     static let frameIdentifier = "CHAP"
     
-    public let elementId: String?
+    static let nullValue: UInt32 = 0xFFFFFFFF
+    
+    public let elementId: String
     public let startTime: TimeInterval
     public let endTime: TimeInterval
     public let startByteOffset: UInt32?
@@ -21,14 +23,11 @@ public struct ChapterFrame: Frame {
     
     public var debugDescription: String {
         
-        var parts: [String] = []
-        
-        if let str = self.elementId {
-            parts.append("elementId=\(str)")
-        }
-        
-        parts.append("startTime=\(self.startTime)")
-        parts.append("endTime=\(self.endTime)")
+        var parts: [String] = [
+            "elementId=\(self.elementId)",
+            "startTime=\(self.startTime)",
+            "endTime=\(self.endTime)"
+        ]
         
         if let count = self.startByteOffset {
             parts.append("startByteOffset=\(count)")
@@ -58,8 +57,26 @@ extension ChapterFrame {
             break
         }
         
-//        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
-//        return try fb.data()
+        let fb = FrameBuilder(frameIdentifier: ChapterFrame.frameIdentifier)
+        
+        try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+
+        let startTime = UInt32(self.startTime * 1000)
+        fb.append(data: startTime.bigEndian.toData)
+
+        let endTime = UInt32(self.endTime * 1000)
+        fb.append(data: endTime.bigEndian.toData)
+        
+        let startOffset = self.startByteOffset ?? ChapterFrame.nullValue
+        fb.append(data: startOffset.bigEndian.toData)
+        
+        let endOffset = self.endByteOffset ?? ChapterFrame.nullValue
+        fb.append(data: endOffset.bigEndian.toData)
+
+        for subFrame in self.subFrames {
+            let subFrameData = try subFrame.frameData(version: version)
+            fb.append(data: subFrameData)
+        }
         
         throw MP3File.WriteError.notImplemented
     }
@@ -110,11 +127,11 @@ extension ChapterFrame {
         }
         
         return ChapterFrame(
-            elementId: elementId,
+            elementId: elementId ?? "",
             startTime: TimeInterval(startTimeMilliseconds.bigEndian) / 1000,
             endTime: TimeInterval(endTimeMilliseconds.bigEndian) / 1000,
-            startByteOffset: startByteOffset == 0xffffffff ? nil : startByteOffset,
-            endByteOffset: endByteOffset == 0xffffffff ? nil : endByteOffset,
+            startByteOffset: startByteOffset == ChapterFrame.nullValue ? nil : startByteOffset,
+            endByteOffset: endByteOffset == ChapterFrame.nullValue ? nil : endByteOffset,
             subFrames: subFrames
         )
     }

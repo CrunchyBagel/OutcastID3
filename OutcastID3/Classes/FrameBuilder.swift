@@ -78,3 +78,9 @@ extension UInt32 {
         return withUnsafeBytes(of: self) { Data($0) }
     }
 }
+
+extension UInt16 {
+    var toData: Data {
+        return withUnsafeBytes(of: self) { Data($0) }
+    }
+}

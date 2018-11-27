@@ -10,7 +10,7 @@ import Foundation
 public struct TableOfContentsFrame: Frame {
     static let frameIdentifier = "CTOC"
     
-    public let elementId: String?
+    public let elementId: String
     public let isTopLevel: Bool
     public let isOrdered: Bool
     
@@ -19,15 +19,12 @@ public struct TableOfContentsFrame: Frame {
     public let subFrames: [Frame]
     
     public var debugDescription: String {
-        var parts: [String] = []
-        
-        if let str = self.elementId {
-            parts.append("elementId=\(str)")
-        }
-        
-        parts.append("isTopLevel=\(self.isTopLevel)")
-        parts.append("isOrdered=\(self.isOrdered)")
-        parts.append("childElementIds=\(self.childElementIds)")
+        var parts: [String] = [
+            "elementId=\(self.elementId)",
+            "isTopLevel=\(self.isTopLevel)",
+            "isOrdered=\(self.isOrdered)",
+            "childElementIds=\(self.childElementIds)"
+        ]
         
         if self.subFrames.count > 0 {
             let str = subFrames.compactMap { $0.debugDescription }
@@ -49,10 +46,34 @@ extension TableOfContentsFrame {
             break
         }
         
-//        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
-//        return try fb.data()
+        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
         
-        throw MP3File.WriteError.notImplemented
+        try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        
+        var flags: UInt8 = 0
+        
+        if self.isTopLevel {
+            flags += 0x2
+        }
+        
+        if self.isOrdered {
+            flags += 0x1
+        }
+        
+        fb.append(byte: flags)
+
+        fb.append(byte: UInt8(self.childElementIds.count))
+        
+        for elementId in self.childElementIds {
+            try fb.addString(str: elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        }
+        
+        for subFrame in self.subFrames {
+            let subFrameData = try subFrame.frameData(version: version)
+            fb.append(data: subFrameData)
+        }
+
+        return try fb.data()
     }
 }
 
@@ -97,7 +118,7 @@ extension TableOfContentsFrame {
         }
 
         return TableOfContentsFrame(
-            elementId: elementId,
+            elementId: elementId ?? "",
             isTopLevel: isTopLevel,
             isOrdered: isOrdered,
             childElementIds: childElementIds,
