@@ -8,18 +8,36 @@
 import Foundation
 
 public struct CommentFrame: Frame {
+    static let frameIdentifier = "COMM"
+    
+    public let encoding: String.Encoding
     public let language: String
-    public let commentDescription: String?
-    public let comment: String?
+    public let commentDescription: String
+    public let comment: String
     
     public var debugDescription: String {
-        return "language=\(language) commentDescription=\(commentDescription ?? "nil") comment=\(comment ?? "nil")"
+        return "language=\(language) commentDescription=\(commentDescription) comment=\(comment)"
     }
 }
 
 extension CommentFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
-        throw MP3File.WriteError.notImplemented
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+        let fb = FrameBuilder(frameIdentifier: TranscriptionFrame.frameIdentifier)
+        fb.addStringEncodingByte(encoding: self.encoding)
+        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        try fb.addString(str: self.commentDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
+        try fb.addEncodedString(str: self.comment, encoding: self.encoding, terminate: false)
+        
+        return try fb.data()
     }
 }
 
@@ -48,9 +66,10 @@ extension CommentFrame {
         let comment = String(data: commentData, encoding: encoding)
         
         return CommentFrame(
+            encoding: encoding,
             language: language,
-            commentDescription: commentDescription,
-            comment: comment
+            commentDescription: commentDescription ?? "",
+            comment: comment ?? ""
         )
     }
 

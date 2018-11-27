@@ -64,20 +64,20 @@ extension RawFrame {
             // TODO:
             break
             
-        case (_, "APIC"):
+        case (_, PictureFrame.frameIdentifier):
             return PictureFrame.parse(version: version, data: data)
 
-        case (_, "CHAP"):
+        case (_, ChapterFrame.frameIdentifier):
             return ChapterFrame.parse(version: version, data: data)
             
-        case (_, "COMM"):
+        case (_, CommentFrame.frameIdentifier):
             return CommentFrame.parse(version: version, data: data)
 
         case (_, "COMR"):
             // TODO:
             break
 
-        case (_, "CTOC"):
+        case (_, TableOfContentsFrame.frameIdentifier):
             return TableOfContentsFrame.parse(version: version, data: data)
 
         case (_, "ENCR"):
@@ -168,10 +168,10 @@ extension RawFrame {
             // TODO:
             break
 
-        case (_, "USLT"):
+        case (_, TranscriptionFrame.frameIdentifier):
             return TranscriptionFrame.parse(version: version, data: data)
 
-        case (_, "WXXX"):
+        case (_, UserUrlFrame.frameIdentifier):
             return UserUrlFrame.parse(version: version, data: data)
 
         default:

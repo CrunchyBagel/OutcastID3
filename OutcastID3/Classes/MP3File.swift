@@ -27,13 +27,14 @@ extension MP3File {
         case unsupportedTagVersion
         case notImplemented
         case noFramesFound
+        case encodingError
         case stringEncodingError
     }
     
     // TODO: Complete this
     public func writeID3Tag(tag: ID3Tag) throws {
         
-        var framesData = tag.frames.compactMap { try? $0.frameData(version: tag.version) }
+//        var framesData = tag.frames.compactMap { try? $0.frameData(version: tag.version) }
         
         throw WriteError.noFramesFound
     }

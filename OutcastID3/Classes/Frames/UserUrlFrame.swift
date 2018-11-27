@@ -8,11 +8,14 @@
 import Foundation
 
 public struct UserUrlFrame: Frame {
-    public let urlDescription: String?
+    static let frameIdentifier = "WXXX"
+    
+    public let urlDescriptionEncoding: String.Encoding
+    public let urlDescription: String
     public let urlString: String
     
     public var debugDescription: String {
-        return "urlString=\(urlString) urlDescription=\(urlDescription ?? "nil")"
+        return "urlString=\(urlString) urlDescription=\(urlDescription)"
     }
     
     public var url: URL? {
@@ -22,7 +25,20 @@ public struct UserUrlFrame: Frame {
 
 extension UserUrlFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
-        throw MP3File.WriteError.notImplemented
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+        let fb = FrameBuilder(frameIdentifier: UserUrlFrame.frameIdentifier)
+        try fb.addEncodedString(str: self.urlDescription, encoding: self.urlDescriptionEncoding, terminate: true)
+        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        
+        return try fb.data()
     }
 }
 
@@ -38,13 +54,14 @@ extension UserUrlFrame {
         
         let frameContent = data.subdata(in: frameContentRangeStart ..< data.count)
         
-        guard let str = String(data: frameContent, encoding: .isoLatin1) else {
+        guard let urlString = String(data: frameContent, encoding: .isoLatin1) else {
             return nil
         }
         
         return UserUrlFrame(
-            urlDescription: description,
-            urlString: str
+            urlDescriptionEncoding: encoding,
+            urlDescription: description ?? "",
+            urlString: urlString
         )
     }
 }

@@ -8,6 +8,8 @@
 import Foundation
 
 public struct TableOfContentsFrame: Frame {
+    static let frameIdentifier = "CTOC"
+    
     public let elementId: String?
     public let isTopLevel: Bool
     public let isOrdered: Bool
@@ -38,6 +40,18 @@ public struct TableOfContentsFrame: Frame {
 
 extension TableOfContentsFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+//        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
+//        return try fb.data()
+        
         throw MP3File.WriteError.notImplemented
     }
 }

@@ -9,12 +9,7 @@ import Foundation
 import UIKit
 
 public struct PictureFrame: Frame {
-    enum CodingKeys: String, CodingKey {
-        case mimeType
-        case pictureType
-        case pictureDescription
-        case image
-    }
+    static let frameIdentifier = "APIC"
     
     enum Error: Swift.Error {
         case encodingError
@@ -93,9 +88,10 @@ public struct PictureFrame: Frame {
         }
     }
 
+    public let encoding: String.Encoding
     public let mimeType: String
     public let pictureType: PictureType
-    public let pictureDescription: String?
+    public let pictureDescription: String
     public let picture: UIImage
     
     public var debugDescription: String {
@@ -105,7 +101,32 @@ public struct PictureFrame: Frame {
 
 extension PictureFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
-        throw MP3File.WriteError.notImplemented
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+
+        // TODO: This should use the correct image type according to the mimetype
+        guard let imageData = UIImagePNGRepresentation(self.picture) else {
+            throw MP3File.WriteError.encodingError
+        }
+
+        let fb = FrameBuilder(frameIdentifier: PictureFrame.frameIdentifier)
+        fb.addStringEncodingByte(encoding: self.encoding)
+        try fb.addString(str: self.mimeType, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        
+        fb.append(byte: self.pictureType.rawValue)
+
+        try fb.addString(str: self.pictureDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
+
+
+        fb.append(data: imageData)
+        
+        return try fb.data()
     }
 }
 
@@ -133,15 +154,24 @@ extension PictureFrame {
         }
         
         return PictureFrame(
+            encoding: encoding,
             mimeType: mimeType ?? "",
             pictureType: pictureType,
-            pictureDescription: pictureDescription,
+            pictureDescription: pictureDescription ?? "",
             picture: picture
         )
     }
 }
 
 extension PictureFrame {
+    enum CodingKeys: String, CodingKey {
+        case encoding
+        case mimeType
+        case pictureType
+        case pictureDescription
+        case image
+    }
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -150,8 +180,11 @@ extension PictureFrame {
             throw Error.decodingError
         }
         
-        self.picture = image
+        let encodingType = try container.decode(UInt.self, forKey: .encoding)
         
+        self.picture = image
+
+        self.encoding = String.Encoding(rawValue: encodingType)
         self.mimeType = try container.decode(String.self, forKey: .mimeType)
         self.pictureDescription = try container.decode(String.self, forKey: .pictureDescription)
         self.pictureType = try container.decode(PictureType.self, forKey: .pictureType)
@@ -162,7 +195,7 @@ extension PictureFrame {
         
         let data = NSKeyedArchiver.archivedData(withRootObject: self.picture)
         try container.encode(data, forKey: .image)
-        
+        try container.encode(self.encoding.rawValue, forKey: .encoding)
         try container.encode(self.mimeType, forKey: .mimeType)
         try container.encode(self.pictureType, forKey: .pictureType)
         try container.encode(self.pictureDescription, forKey: .pictureDescription)

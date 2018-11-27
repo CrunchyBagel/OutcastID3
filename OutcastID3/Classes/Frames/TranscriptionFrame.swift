@@ -8,18 +8,36 @@
 import Foundation
 
 public struct TranscriptionFrame: Frame {
+    static let frameIdentifier = "USLT"
+
+    public let encoding: String.Encoding
     public let language: String
-    public let lyricsDescription: String?
-    public let lyrics: String?
+    public let lyricsDescription: String
+    public let lyrics: String
     
     public var debugDescription: String {
-        return "language=\(language) lyricsDescription=\(lyricsDescription ?? "nil") lyrics=\(lyrics ?? "nil")"
+        return "language=\(language) lyricsDescription=\(lyricsDescription) lyrics=\(lyrics)"
     }
 }
 
 extension TranscriptionFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
-        throw MP3File.WriteError.notImplemented
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+        let fb = FrameBuilder(frameIdentifier: TranscriptionFrame.frameIdentifier)
+        fb.addStringEncodingByte(encoding: self.encoding)
+        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        try fb.addString(str: self.lyricsDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
+        try fb.addEncodedString(str: self.lyrics, encoding: self.encoding, terminate: false)
+        
+        return try fb.data()
     }
 }
 
@@ -48,10 +66,10 @@ extension TranscriptionFrame {
         let lyrics = String(data: lyricsData, encoding: encoding)
         
         return TranscriptionFrame(
+            encoding: encoding,
             language: language,
-            lyricsDescription: lyricsDescription,
-            lyrics: lyrics
+            lyricsDescription: lyricsDescription ?? "",
+            lyrics: lyrics ?? ""
         )
     }
-    
 }

@@ -55,7 +55,19 @@ public struct UrlFrame: Frame {
 
 extension UrlFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
-        throw MP3File.WriteError.notImplemented
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+        let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
+        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        
+        return try fb.data()
     }
 }
 

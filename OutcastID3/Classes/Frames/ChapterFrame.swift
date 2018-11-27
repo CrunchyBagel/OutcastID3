@@ -9,6 +9,8 @@
 import Foundation
 
 public struct ChapterFrame: Frame {
+    static let frameIdentifier = "CHAP"
+    
     public let elementId: String?
     public let startTime: TimeInterval
     public let endTime: TimeInterval
@@ -47,6 +49,18 @@ public struct ChapterFrame: Frame {
 
 extension ChapterFrame {
     public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+//        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
+//        return try fb.data()
+        
         throw MP3File.WriteError.notImplemented
     }
 }
