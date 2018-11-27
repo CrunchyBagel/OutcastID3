@@ -51,8 +51,28 @@ public struct UrlFrame: Frame {
     public var url: URL? {
         return URL(string: urlString)
     }
+}
 
-    static func parse(type: UrlType, version: MP3File.ID3Tag.Version, data: Data) -> UrlFrame? {
+extension UrlFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension UrlFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+        guard let frameIdentifier = data.frameIdentifier(version: version) else {
+            return nil
+        }
+        
+        guard let urlType = UrlType(rawValue: frameIdentifier) else {
+            return nil
+        }
+        
+        return self.parse(type: urlType, version: version, data: data)
+    }
+
+    public static func parse(type: UrlType, version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         let offset = version.frameHeaderSizeInBytes
         

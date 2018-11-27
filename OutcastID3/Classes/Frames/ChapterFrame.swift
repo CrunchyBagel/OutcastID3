@@ -43,8 +43,16 @@ public struct ChapterFrame: Frame {
         
         return parts.joined(separator: " ")
     }
-    
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> ChapterFrame? {
+}
+
+extension ChapterFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension ChapterFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         let d = data as NSData
         
@@ -77,9 +85,7 @@ public struct ChapterFrame: Frame {
         if offset < data.count {
             do {
                 let subFramesData = data.subdata(in: offset ..< data.count)
-                let rawFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
-                
-                subFrames = rawFrames.compactMap { $0.frame ?? $0 }
+                subFrames = try MP3File.framesFromData(version: version, data: subFramesData)
             }
             catch {
                 subFrames = []

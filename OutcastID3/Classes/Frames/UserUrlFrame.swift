@@ -18,8 +18,16 @@ public struct UserUrlFrame: Frame {
     public var url: URL? {
         return URL(string: urlString)
     }
-    
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> UserUrlFrame? {
+}
+
+extension UserUrlFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension UserUrlFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         

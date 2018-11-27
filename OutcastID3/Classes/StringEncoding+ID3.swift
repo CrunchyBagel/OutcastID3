@@ -25,5 +25,13 @@ extension String.Encoding {
         }
         
     }
+    
+    var encodingByte: UInt8 {
+        switch self {
+        case .utf8: return 0x03
+        case .utf16: return 0x01
+        default: return 0x0
+        }
+    }
 }
 

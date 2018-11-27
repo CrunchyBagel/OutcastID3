@@ -18,50 +18,67 @@ public struct RawFrame: Frame {
     public var debugDescription: String {
         return "version=\(self.version.rawValue)"
     }
-    
+}
+
+extension RawFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        // Since this is raw data, it's likely not compatible with other versions.
+        guard version == self.version else {
+            throw MP3File.WriteError.versionMismatch
+        }
+        
+        return self.data
+    }
+}
+
+extension RawFrame {
     public var frameIdentifier: String? {
         return self.data.frameIdentifier(version: self.version)
     }
 
-    public var frame: Frame? {
-        guard let frameIdentifier = self.frameIdentifier else {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+        return self.parseKnownFrame(version: version, data: data) ?? RawFrame(version: version, data: data)
+    }
+    
+    private static func parseKnownFrame(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+        guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }
         
         // Check for the basic string types
         
         if let stringType = StringFrame.StringType(rawValue: frameIdentifier) {
-            return StringFrame.parse(type: stringType, version: version, data: self.data)
+            return StringFrame.parse(type: stringType, version: version, data: data)
         }
         
         // Check for the basic URL types
         
         if let urlType = UrlFrame.UrlType(rawValue: frameIdentifier) {
-            return UrlFrame.parse(type: urlType, version: version, data: self.data)
+            return UrlFrame.parse(type: urlType, version: version, data: data)
         }
 
         // Check for the remaining types
         
-        switch (self.version, frameIdentifier) {
+        switch (version, frameIdentifier) {
         case (_, "AENC"):
             // TODO:
             break
             
         case (_, "APIC"):
-            return PictureFrame.parse(version: version, data: self.data)
+            return PictureFrame.parse(version: version, data: data)
 
         case (_, "CHAP"):
-            return ChapterFrame.parse(version: version, data: self.data)
+            return ChapterFrame.parse(version: version, data: data)
             
         case (_, "COMM"):
-            return CommentFrame.parse(version: version, data: self.data)
+            return CommentFrame.parse(version: version, data: data)
 
         case (_, "COMR"):
             // TODO:
             break
 
         case (_, "CTOC"):
-            return TableOfContentsFrame.parse(version: version, data: self.data)
+            return TableOfContentsFrame.parse(version: version, data: data)
 
         case (_, "ENCR"):
             // TODO:
@@ -152,10 +169,10 @@ public struct RawFrame: Frame {
             break
 
         case (_, "USLT"):
-            return TranscriptionFrame.parse(version: version, data: self.data)
+            return TranscriptionFrame.parse(version: version, data: data)
 
         case (_, "WXXX"):
-            return UserUrlFrame.parse(version: version, data: self.data)
+            return UserUrlFrame.parse(version: version, data: data)
 
         default:
             break
@@ -167,7 +184,7 @@ public struct RawFrame: Frame {
 }
 
 extension Data {
-    fileprivate func frameIdentifier(version: MP3File.ID3Tag.Version) -> String? {
+    func frameIdentifier(version: MP3File.ID3Tag.Version) -> String? {
         let size = version.frameIdentifierSizeInBytes
         
         guard size < self.count else {

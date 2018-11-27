@@ -92,7 +92,7 @@ public struct PictureFrame: Frame {
             }
         }
     }
-    
+
     public let mimeType: String
     public let pictureType: PictureType
     public let pictureDescription: String?
@@ -101,8 +101,16 @@ public struct PictureFrame: Frame {
     public var debugDescription: String {
         return "mimeType=\(self.mimeType) pictureType=\(self.pictureType.description) pictureDescription=\(String(describing: self.pictureDescription)) picture=\(self.picture)"
     }
+}
 
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> PictureFrame? {
+extension PictureFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension PictureFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         

@@ -15,8 +15,16 @@ public struct TranscriptionFrame: Frame {
     public var debugDescription: String {
         return "language=\(language) lyricsDescription=\(lyricsDescription ?? "nil") lyrics=\(lyrics ?? "nil")"
     }
-    
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> TranscriptionFrame? {
+}
+
+extension TranscriptionFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension TranscriptionFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         

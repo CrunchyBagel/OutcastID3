@@ -14,15 +14,6 @@ public class MP3File {
         public let frames: [Frame]
     }
 
-    public enum Error: Swift.Error {
-        case tagNotFound
-        case tagVersionNotFound
-        case tagSizeNotFound
-        case unsupportedTagVersion
-        case corruptedFile
-        case corruptedHeader
-    }
-    
     let localUrl: URL
 
     public init(localUrl: URL) throws {
@@ -30,10 +21,37 @@ public class MP3File {
     }
 }
 
+extension MP3File {
+    public enum WriteError: Swift.Error {
+        case versionMismatch
+        case unsupportedTagVersion
+        case notImplemented
+        case noFramesFound
+        case stringEncodingError
+    }
+    
+    // TODO: Complete this
+    public func writeID3Tag(tag: ID3Tag) throws {
+        
+        var framesData = tag.frames.compactMap { try? $0.frameData(version: tag.version) }
+        
+        throw WriteError.noFramesFound
+    }
+}
+
 public extension MP3File {
+    public enum ReadError: Swift.Error {
+        case tagNotFound
+        case tagVersionNotFound
+        case tagSizeNotFound
+        case unsupportedTagVersion
+        case corruptedFile
+        case corruptedHeader
+    }
+
     // TODO: Not handling extended header properly?
     
-    func parseID3Tag() throws -> ID3Tag {
+    func readID3Tag() throws -> ID3Tag {
         let fileHandle = try FileHandle(forReadingFrom: self.localUrl)
         
         defer {
@@ -47,15 +65,15 @@ public extension MP3File {
         let id3String = String(bytes: fileHandle.readData(ofLength: 3), encoding: .isoLatin1)
         
         guard id3String == "ID3" else {
-            throw Error.tagNotFound
+            throw ReadError.tagNotFound
         }
         
         guard let versionNumber = fileHandle.readData(ofLength: 1).first else {
-            throw Error.corruptedHeader
+            throw ReadError.corruptedHeader
         }
         
         guard let version = ID3Tag.Version(rawValue: versionNumber) else {
-            throw Error.tagVersionNotFound
+            throw ReadError.tagVersionNotFound
         }
         
         fileHandle.seek(toFileOffset: 6)
@@ -63,7 +81,7 @@ public extension MP3File {
         let tagSizeBytes = fileHandle.readData(ofLength: 4)
         
         guard tagSizeBytes.count == 4 else {
-            throw Error.tagSizeNotFound
+            throw ReadError.tagSizeNotFound
         }
 
         // TODO: ID3v2.1 only uses 3 bytes
@@ -81,9 +99,7 @@ public extension MP3File {
         
         // Parse the tag data into frames
         
-        let rawFrames = try MP3File.rawFramesFromData(version: version, data: tagData)
-        
-        let frames = rawFrames.compactMap { $0.frame ?? $0 }
+        let frames = try MP3File.framesFromData(version: version, data: tagData)
         
         return ID3Tag(
             version: version,
@@ -93,8 +109,8 @@ public extension MP3File {
 }
 
 extension MP3File {
-    class func rawFramesFromData(version: MP3File.ID3Tag.Version, data: Data, throwOnError: Bool = false) throws -> [RawFrame] {
-        var ret: [RawFrame] = []
+    class func framesFromData(version: MP3File.ID3Tag.Version, data: Data, throwOnError: Bool = false) throws -> [Frame] {
+        var ret: [Frame] = []
         
         var position = 0
         
@@ -111,8 +127,9 @@ extension MP3File {
 
                 let frameData = data.subdata(in: position ..< position + frameSize)
 
-                let frame = RawFrame(version: version, data: frameData)
-                ret.append(frame)
+                if let frame = RawFrame.parse(version: version, data: frameData) {
+                    ret.append(frame)
+                }
                 
                 position += frameSize// frame.data.count
             }
@@ -136,7 +153,7 @@ extension MP3File {
         let offset = position + version.frameSizeOffsetInBytes
         
         guard offset < data.count else {
-            throw Error.corruptedFile
+            throw ReadError.corruptedFile
         }
         
         var frameSize: UInt32 = 0

@@ -15,8 +15,16 @@ public struct CommentFrame: Frame {
     public var debugDescription: String {
         return "language=\(language) commentDescription=\(commentDescription ?? "nil") comment=\(comment ?? "nil")"
     }
-    
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> CommentFrame? {
+}
+
+extension CommentFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension CommentFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         

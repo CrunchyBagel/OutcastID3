@@ -127,13 +127,46 @@ public struct StringFrame: Frame {
     }
     
     public let type: StringType
+    public let originalEncoding: String.Encoding
     public let str: String
     
     public var debugDescription: String {
         return "str=\(str)"
     }
+}
+
+extension StringFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        switch version {
+        case .v2_2:
+            throw MP3File.WriteError.unsupportedTagVersion
+        case .v2_3:
+            break
+        case .v2_4:
+            break
+        }
+        
+        let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
+        try fb.addEncodedString(str: self.str, encoding: self.originalEncoding, terminate: false)
+        
+        return try fb.data()
+    }
+}
+
+extension StringFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+        guard let frameIdentifier = data.frameIdentifier(version: version) else {
+            return nil
+        }
+        
+        guard let stringType = StringType(rawValue: frameIdentifier) else {
+            return nil
+        }
+        
+        return self.parse(type: stringType, version: version, data: data)
+    }
     
-    static func parse(type: StringType, version: MP3File.ID3Tag.Version, data: Data) -> StringFrame? {
+    public static func parse(type: StringType, version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
 
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
@@ -146,6 +179,6 @@ public struct StringFrame: Frame {
             return nil
         }
         
-        return StringFrame(type: type, str: str)
+        return StringFrame(type: type, originalEncoding: encoding, str: str)
     }
 }

@@ -17,7 +17,7 @@ let url = Bundle.main.url(forResource: "MyFile", withExtension: "mp3")!
 
 do {
     let mp3 = try MP3File(localUrl: url)
-    let tag = try x.parseID3Tag()
+    let tag = try x.readID3Tag()
 
     let version = tag.version
 

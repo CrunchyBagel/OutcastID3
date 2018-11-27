@@ -26,7 +26,7 @@ class ViewController: UIViewController {
             do {
                 let x = try MP3File(localUrl: url)
                 
-                let tag = try x.parseID3Tag()
+                let tag = try x.readID3Tag()
 
                 for frame in tag.frames {
                     switch frame {

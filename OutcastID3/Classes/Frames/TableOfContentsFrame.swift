@@ -34,8 +34,16 @@ public struct TableOfContentsFrame: Frame {
         
         return parts.joined(separator: " ")
     }
-    
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> TableOfContentsFrame? {
+}
+
+extension TableOfContentsFrame {
+    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+        throw MP3File.WriteError.notImplemented
+    }
+}
+
+extension TableOfContentsFrame {
+    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
         var offset = 10
         let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
         
@@ -64,9 +72,7 @@ public struct TableOfContentsFrame: Frame {
         if offset < data.count {
             do {
                 let subFramesData = data.subdata(in: offset ..< data.count)
-                let rawFrames = try MP3File.rawFramesFromData(version: version, data: subFramesData)
-                
-                subFrames = rawFrames.compactMap { $0.frame ?? $0 }
+                subFrames = try MP3File.framesFromData(version: version, data: subFramesData)
             }
             catch {
                 subFrames = []
