@@ -8,10 +8,10 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OutcastID3'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'A simple Swift library to read ID3 tags from MP3s.'
   s.description      = <<-DESC
-Will read ID3 data, including chapters, from MP3 files.
+Read and write MP3 file ID3 data. Includes support for chapters.
                        DESC
 
   s.homepage         = 'https://github.com/CrunchyBagel/OutcastID3'

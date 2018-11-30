@@ -16,7 +16,6 @@ extension OutcastID3.MP3File {
         case stringEncodingError
     }
     
-    // TODO: Complete this
     public func writeID3Tag(tag: OutcastID3.ID3Tag, outputUrl: URL) throws {
         
         switch tag.version {

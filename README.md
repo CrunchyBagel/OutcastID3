@@ -12,6 +12,8 @@ A lightweight Swift library for reading ID3 tags, including chapters.
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
+Read an ID3 tag:
+
 ```swift
 let url = Bundle.main.url(forResource: "MyFile", withExtension: "mp3")!
 
@@ -55,6 +57,29 @@ do {
 catch {
 
 }
+```
+
+Write an ID3 tag:
+
+```swift
+
+let frames: [OutcastID3TagFrame] = [
+    OutcastID3.Frame.StringFrame(type: .title, encoding: .utf8, str: "Tag Writer Test")
+]
+
+let tag = OutcastID3.ID3Tag(
+    version: .v2_4,
+    frames: frames
+)
+
+let inputUrl = Bundle.main.url(forResource: "input", withExtension: "mp3")!
+
+let outputUrl = Bundle.main.url(forResource: "output", withExtension: "mp3")!
+
+let mp3File = try OutcastID3.MP3File(localUrl: inputUrl)
+
+try mp3File.writeID3Tag(tag: tag, outputUrl: outputUrl)
+
 ```
 
 ## Installation
