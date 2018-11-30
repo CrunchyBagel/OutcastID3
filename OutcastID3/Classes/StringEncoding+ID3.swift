@@ -13,8 +13,8 @@ extension String.Encoding {
         let encoding: String.Encoding
         
         switch byte {
-        case 0x01: encoding = .utf16
-        case 0x03: encoding = .utf8
+        case 0x1: encoding = .utf16
+        case 0x3: encoding = .utf8
         default: encoding = .isoLatin1
         }
         
@@ -28,8 +28,8 @@ extension String.Encoding {
     
     var encodingByte: UInt8 {
         switch self {
-        case .utf8: return 0x03
-        case .utf16: return 0x01
+        case .utf8: return 0x3
+        case .utf16: return 0x1
         default: return 0x0
         }
     }
