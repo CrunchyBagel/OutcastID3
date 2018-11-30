@@ -11,50 +11,57 @@ import Foundation
 // http://id3.org/id3v2.3.0
 // http://id3.org/id3v2-chapters-1.0
 
-public struct RawFrame: Frame {
-    public let version: MP3File.ID3Tag.Version
-    public let data: Data
-    
-    public var debugDescription: String {
-        return "version=\(self.version.rawValue)"
+extension OutcastID3.Frame {
+    public struct RawFrame: OutcastID3TagFrame {
+        public let version: OutcastID3.TagVersion
+        public let data: Data
+        
+        public init(version: OutcastID3.TagVersion, data: Data) {
+            self.version = version
+            self.data = data
+        }
+        
+        public var debugDescription: String {
+            return "version=\(self.version.rawValue)"
+        }
     }
 }
 
-extension RawFrame {
-    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+extension OutcastID3.Frame.RawFrame {
+    public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         // Since this is raw data, it's likely not compatible with other versions.
         guard version == self.version else {
-            throw MP3File.WriteError.versionMismatch
+            throw OutcastID3.MP3File.WriteError.versionMismatch
         }
         
         return self.data
     }
 }
 
-extension RawFrame {
+extension OutcastID3.Frame.RawFrame {
     public var frameIdentifier: String? {
         return self.data.frameIdentifier(version: self.version)
     }
 
-    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
-        return self.parseKnownFrame(version: version, data: data) ?? RawFrame(version: version, data: data)
+    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+        return self.parseKnownFrame(version: version, data: data) ?? OutcastID3.Frame.RawFrame(version: version, data: data)
     }
     
-    private static func parseKnownFrame(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+    private static func parseKnownFrame(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }
         
         // Check for the basic string types
         
-        if let stringType = StringFrame.StringType(rawValue: frameIdentifier) {
-            return StringFrame.parse(type: stringType, version: version, data: data)
+        if let stringType = OutcastID3.Frame.StringFrame.StringType(rawValue: frameIdentifier) {
+            return OutcastID3.Frame.StringFrame.parse(type: stringType, version: version, data: data)
         }
         
         // Check for the basic URL types
         
-        if let urlType = UrlFrame.UrlType(rawValue: frameIdentifier) {
-            return UrlFrame.parse(type: urlType, version: version, data: data)
+        if let urlType = OutcastID3.Frame.UrlFrame.UrlType(rawValue: frameIdentifier) {
+            return OutcastID3.Frame.UrlFrame.parse(type: urlType, version: version, data: data)
         }
 
         // Check for the remaining types
@@ -64,21 +71,21 @@ extension RawFrame {
             // TODO:
             break
             
-        case (_, PictureFrame.frameIdentifier):
-            return PictureFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.PictureFrame.frameIdentifier):
+            return OutcastID3.Frame.PictureFrame.parse(version: version, data: data)
 
-        case (_, ChapterFrame.frameIdentifier):
-            return ChapterFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.ChapterFrame.frameIdentifier):
+            return OutcastID3.Frame.ChapterFrame.parse(version: version, data: data)
             
-        case (_, CommentFrame.frameIdentifier):
-            return CommentFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.CommentFrame.frameIdentifier):
+            return OutcastID3.Frame.CommentFrame.parse(version: version, data: data)
 
         case (_, "COMR"):
             // TODO:
             break
 
-        case (_, TableOfContentsFrame.frameIdentifier):
-            return TableOfContentsFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.TableOfContentsFrame.frameIdentifier):
+            return OutcastID3.Frame.TableOfContentsFrame.parse(version: version, data: data)
 
         case (_, "ENCR"):
             // TODO:
@@ -168,11 +175,11 @@ extension RawFrame {
             // TODO:
             break
 
-        case (_, TranscriptionFrame.frameIdentifier):
-            return TranscriptionFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.TranscriptionFrame.frameIdentifier):
+            return OutcastID3.Frame.TranscriptionFrame.parse(version: version, data: data)
 
-        case (_, UserUrlFrame.frameIdentifier):
-            return UserUrlFrame.parse(version: version, data: data)
+        case (_, OutcastID3.Frame.UserUrlFrame.frameIdentifier):
+            return OutcastID3.Frame.UserUrlFrame.parse(version: version, data: data)
 
         default:
             break
@@ -184,7 +191,7 @@ extension RawFrame {
 }
 
 extension Data {
-    func frameIdentifier(version: MP3File.ID3Tag.Version) -> String? {
+    func frameIdentifier(version: OutcastID3.TagVersion) -> String? {
         let size = version.frameIdentifierSizeInBytes
         
         guard size < self.count else {

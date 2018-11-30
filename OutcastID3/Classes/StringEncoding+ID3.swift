@@ -8,7 +8,7 @@
 import Foundation
 
 extension String.Encoding {
-    static func fromEncodingByte(byte: UInt8, version: MP3File.ID3Tag.Version) -> String.Encoding {
+    static func fromEncodingByte(byte: UInt8, version: OutcastID3.TagVersion) -> String.Encoding {
         
         let encoding: String.Encoding
         

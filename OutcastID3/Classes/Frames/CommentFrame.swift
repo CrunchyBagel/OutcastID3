@@ -7,31 +7,39 @@
 
 import Foundation
 
-public struct CommentFrame: Frame {
-    static let frameIdentifier = "COMM"
-    
-    public let encoding: String.Encoding
-    public let language: String
-    public let commentDescription: String
-    public let comment: String
-    
-    public var debugDescription: String {
-        return "language=\(language) commentDescription=\(commentDescription) comment=\(comment)"
+extension OutcastID3.Frame {
+    public struct CommentFrame: OutcastID3TagFrame {
+        static let frameIdentifier = "COMM"
+        
+        public let encoding: String.Encoding
+        public let language: String
+        public let commentDescription: String
+        public let comment: String
+        
+        public init(encoding: String.Encoding, language: String, commentDescription: String, comment: String) {
+            self.encoding = encoding
+            self.language = language
+            self.commentDescription = commentDescription
+            self.comment = comment
+        }
+        public var debugDescription: String {
+            return "language=\(language) commentDescription=\(commentDescription) comment=\(comment)"
+        }
     }
 }
 
-extension CommentFrame {
-    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+extension OutcastID3.Frame.CommentFrame {
+    public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
-            throw MP3File.WriteError.unsupportedTagVersion
+            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
         case .v2_3:
             break
         case .v2_4:
             break
         }
         
-        let fb = FrameBuilder(frameIdentifier: TranscriptionFrame.frameIdentifier)
+        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.TranscriptionFrame.frameIdentifier)
         fb.addStringEncodingByte(encoding: self.encoding)
         try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
         try fb.addString(str: self.commentDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
@@ -41,8 +49,8 @@ extension CommentFrame {
     }
 }
 
-extension CommentFrame {
-    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+extension OutcastID3.Frame.CommentFrame {
+    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
@@ -65,7 +73,7 @@ extension CommentFrame {
         let commentData = data.subdata(in: frameContentRangeStart ..< data.count)
         let comment = String(data: commentData, encoding: encoding)
         
-        return CommentFrame(
+        return OutcastID3.Frame.CommentFrame(
             encoding: encoding,
             language: language,
             commentDescription: commentDescription ?? "",

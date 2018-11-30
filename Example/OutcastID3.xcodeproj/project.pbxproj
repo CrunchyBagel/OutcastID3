@@ -13,6 +13,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		661AB28F21B0AB7F00278891 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 661AB28E21B0AB7E00278891 /* test.mp3 */; };
 		6D8C8F3D60D2774DBB1F6963 /* Pods_OutcastID3_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50B98D35B8F2CDC1C83C5481 /* Pods_OutcastID3_Example.framework */; };
 		A8FC39CA2279277FF194994F /* Pods_OutcastID3_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47C1A196784D49ABEB2F9986 /* Pods_OutcastID3_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -43,6 +44,7 @@
 		607FACE51AFB9204008FA782 /* OutcastID3_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OutcastID3_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		661AB28E21B0AB7E00278891 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		66925FEA8721946A03A66BA1 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		73AB5623D4683D52514C4365 /* Pods-OutcastID3_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OutcastID3_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-OutcastID3_Tests/Pods-OutcastID3_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D5A966F40027CCA71584CD0D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -113,6 +115,7 @@
 		607FACD21AFB9204008FA782 /* Example for OutcastID3 */ = {
 			isa = PBXGroup;
 			children = (
+				661AB28E21B0AB7E00278891 /* test.mp3 */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -247,6 +250,7 @@
 			files = (
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				661AB28F21B0AB7F00278891 /* test.mp3 in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

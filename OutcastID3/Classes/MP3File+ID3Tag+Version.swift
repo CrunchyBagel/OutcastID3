@@ -8,8 +8,8 @@
 
 import Foundation
 
-extension MP3File.ID3Tag {
-    public enum Version: UInt8, Codable {
+extension OutcastID3 {
+    public enum TagVersion: UInt8, Codable {
         case v2_2 = 2
         case v2_3 = 3
         case v2_4 = 4

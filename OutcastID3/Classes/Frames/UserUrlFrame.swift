@@ -7,43 +7,50 @@
 
 import Foundation
 
-public struct UserUrlFrame: Frame {
-    static let frameIdentifier = "WXXX"
-    
-    public let urlDescriptionEncoding: String.Encoding
-    public let urlDescription: String
-    public let urlString: String
-    
-    public var debugDescription: String {
-        return "urlString=\(urlString) urlDescription=\(urlDescription)"
-    }
-    
-    public var url: URL? {
-        return URL(string: urlString)
+extension OutcastID3.Frame {
+    public struct UserUrlFrame: OutcastID3TagFrame {
+        static let frameIdentifier = "WXXX"
+        
+        public let encoding: String.Encoding
+        public let urlDescription: String
+        public let urlString: String
+        
+        public init(encoding: String.Encoding, urlDescription: String, urlString: String) {
+            self.encoding = encoding
+            self.urlDescription = urlDescription
+            self.urlString = urlString
+        }
+        
+        public var debugDescription: String {
+            return "urlString=\(urlString) urlDescription=\(urlDescription)"
+        }
+        
+        public var url: URL? {
+            return URL(string: urlString)
+        }
     }
 }
-
-extension UserUrlFrame {
-    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+extension OutcastID3.Frame.UserUrlFrame {
+    public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
-            throw MP3File.WriteError.unsupportedTagVersion
+            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
         case .v2_3:
             break
         case .v2_4:
             break
         }
         
-        let fb = FrameBuilder(frameIdentifier: UserUrlFrame.frameIdentifier)
-        try fb.addEncodedString(str: self.urlDescription, encoding: self.urlDescriptionEncoding, terminate: true)
+        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.UserUrlFrame.frameIdentifier)
+        try fb.addEncodedString(str: self.urlDescription, encoding: self.encoding, terminate: true)
         try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
         
         return try fb.data()
     }
 }
 
-extension UserUrlFrame {
-    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+extension OutcastID3.Frame.UserUrlFrame {
+    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
@@ -58,8 +65,8 @@ extension UserUrlFrame {
             return nil
         }
         
-        return UserUrlFrame(
-            urlDescriptionEncoding: encoding,
+        return OutcastID3.Frame.UserUrlFrame(
+            encoding: encoding,
             urlDescription: description ?? "",
             urlString: urlString
         )

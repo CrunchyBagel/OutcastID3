@@ -18,7 +18,7 @@ public class FrameBuilder {
     
     public func data() throws -> Data {
         guard var ret = self.frameIdentifier.data(using: .isoLatin1) else {
-            throw MP3File.WriteError.stringEncodingError
+            throw OutcastID3.MP3File.WriteError.stringEncodingError
         }
         
         let frameSize = UInt32(self.content.count)
@@ -52,7 +52,7 @@ public class FrameBuilder {
     
     public func addString(str: String, encoding: String.Encoding, includeEncodingByte: Bool, terminate: Bool) throws {
         guard let strData = str.data(using: encoding) else {
-            throw MP3File.WriteError.stringEncodingError
+            throw OutcastID3.MP3File.WriteError.stringEncodingError
         }
         
         if includeEncodingByte {

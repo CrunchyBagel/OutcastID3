@@ -8,56 +8,67 @@
 
 import Foundation
 
-public struct ChapterFrame: Frame {
-    static let frameIdentifier = "CHAP"
-    
-    static let nullValue: UInt32 = 0xFFFFFFFF
-    
-    public let elementId: String
-    public let startTime: TimeInterval
-    public let endTime: TimeInterval
-    public let startByteOffset: UInt32?
-    public let endByteOffset: UInt32?
-    
-    public let subFrames: [Frame]
-    
-    public var debugDescription: String {
+extension OutcastID3.Frame {
+    public struct ChapterFrame: OutcastID3TagFrame {
+        static let frameIdentifier = "CHAP"
         
-        var parts: [String] = [
-            "elementId=\(self.elementId)",
-            "startTime=\(self.startTime)",
-            "endTime=\(self.endTime)"
-        ]
+        static let nullValue: UInt32 = 0xFFFFFFFF
         
-        if let count = self.startByteOffset {
-            parts.append("startByteOffset=\(count)")
+        public let elementId: String
+        public let startTime: TimeInterval
+        public let endTime: TimeInterval
+        public let startByteOffset: UInt32?
+        public let endByteOffset: UInt32?
+        
+        public let subFrames: [OutcastID3TagFrame]
+        
+        init(elementId: String, startTime: TimeInterval, endTime: TimeInterval, startByteOffset: UInt32?, endByteOffset: UInt32?, subFrames: [OutcastID3TagFrame]) {
+            self.elementId = elementId
+            self.startTime = startTime
+            self.endTime = endTime
+            self.startByteOffset = startByteOffset
+            self.endByteOffset = endByteOffset
+            self.subFrames = subFrames
         }
         
-        if let count = self.endByteOffset {
-            parts.append("startByteOffset=\(count)")
+        public var debugDescription: String {
+            
+            var parts: [String] = [
+                "elementId=\(self.elementId)",
+                "startTime=\(self.startTime)",
+                "endTime=\(self.endTime)"
+            ]
+            
+            if let count = self.startByteOffset {
+                parts.append("startByteOffset=\(count)")
+            }
+            
+            if let count = self.endByteOffset {
+                parts.append("startByteOffset=\(count)")
+            }
+            
+            if self.subFrames.count > 0 {
+                let str = subFrames.compactMap { $0.debugDescription }
+                parts.append("subFrames: \(str)")
+            }
+            
+            return parts.joined(separator: " ")
         }
-        
-        if self.subFrames.count > 0 {
-            let str = subFrames.compactMap { $0.debugDescription }
-            parts.append("subFrames: \(str)")
-        }
-        
-        return parts.joined(separator: " ")
     }
 }
 
-extension ChapterFrame {
-    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+extension OutcastID3.Frame.ChapterFrame {
+    public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
-            throw MP3File.WriteError.unsupportedTagVersion
+            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
         case .v2_3:
             break
         case .v2_4:
             break
         }
         
-        let fb = FrameBuilder(frameIdentifier: ChapterFrame.frameIdentifier)
+        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.ChapterFrame.frameIdentifier)
         
         try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
 
@@ -67,10 +78,10 @@ extension ChapterFrame {
         let endTime = UInt32(self.endTime * 1000)
         fb.append(data: endTime.bigEndian.toData)
         
-        let startOffset = self.startByteOffset ?? ChapterFrame.nullValue
+        let startOffset = self.startByteOffset ?? OutcastID3.Frame.ChapterFrame.nullValue
         fb.append(data: startOffset.bigEndian.toData)
         
-        let endOffset = self.endByteOffset ?? ChapterFrame.nullValue
+        let endOffset = self.endByteOffset ?? OutcastID3.Frame.ChapterFrame.nullValue
         fb.append(data: endOffset.bigEndian.toData)
 
         for subFrame in self.subFrames {
@@ -78,12 +89,12 @@ extension ChapterFrame {
             fb.append(data: subFrameData)
         }
         
-        throw MP3File.WriteError.notImplemented
+        return try fb.data()
     }
 }
 
-extension ChapterFrame {
-    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+extension OutcastID3.Frame.ChapterFrame {
+    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         
         let d = data as NSData
         
@@ -111,12 +122,12 @@ extension ChapterFrame {
         
         offset += 4
         
-        let subFrames: [Frame]
+        let subFrames: [OutcastID3TagFrame]
 
         if offset < data.count {
             do {
                 let subFramesData = data.subdata(in: offset ..< data.count)
-                subFrames = try MP3File.framesFromData(version: version, data: subFramesData)
+                subFrames = try OutcastID3.ID3Tag.framesFromData(version: version, data: subFramesData)
             }
             catch {
                 subFrames = []
@@ -126,12 +137,12 @@ extension ChapterFrame {
             subFrames = []
         }
         
-        return ChapterFrame(
+        return OutcastID3.Frame.ChapterFrame(
             elementId: elementId ?? "",
             startTime: TimeInterval(startTimeMilliseconds.bigEndian) / 1000,
             endTime: TimeInterval(endTimeMilliseconds.bigEndian) / 1000,
-            startByteOffset: startByteOffset == ChapterFrame.nullValue ? nil : startByteOffset,
-            endByteOffset: endByteOffset == ChapterFrame.nullValue ? nil : endByteOffset,
+            startByteOffset: startByteOffset == OutcastID3.Frame.ChapterFrame.nullValue ? nil : startByteOffset,
+            endByteOffset: endByteOffset == OutcastID3.Frame.ChapterFrame.nullValue ? nil : endByteOffset,
             subFrames: subFrames
         )
     }

@@ -7,9 +7,9 @@
 
 import Foundation
 
-public protocol Frame: CustomDebugStringConvertible {
-    static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame?
+public protocol OutcastID3TagFrame: CustomDebugStringConvertible {
+    static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame?
     
     /// Used to build raw data that can be written to an MP3 file
-    func frameData(version: MP3File.ID3Tag.Version) throws -> Data
+    func frameData(version: OutcastID3.TagVersion) throws -> Data
 }

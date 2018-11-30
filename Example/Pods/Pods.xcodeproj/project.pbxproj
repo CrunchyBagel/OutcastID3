@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		120F89CE60616AAA081DCD3760E6058E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		34625AA09D5BD976A79C488740ED5C5C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		661AB29121B0B71600278891 /* MP3File+ReadTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661AB29021B0B71600278891 /* MP3File+ReadTag.swift */; };
+		661AB29321B0B73300278891 /* MP3File+WriteTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 661AB29221B0B73300278891 /* MP3File+WriteTag.swift */; };
 		662FF78F21AA277200F1B6CC /* Data+String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662FF78E21AA277200F1B6CC /* Data+String.swift */; };
 		662FF79121AA279000F1B6CC /* StringEncoding+ID3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662FF79021AA279000F1B6CC /* StringEncoding+ID3.swift */; };
 		6680ABA921ACAA7B00F1D081 /* Frame.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6680ABA821ACAA7B00F1D081 /* Frame.swift */; };
@@ -64,6 +66,8 @@
 		5912C36341D8DD1A07296038FA96232D /* Pods-OutcastID3_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OutcastID3_Tests-dummy.m"; sourceTree = "<group>"; };
 		5A35DDDB04EE124CBAB529666BF1BADB /* Pods-OutcastID3_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OutcastID3_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		661AB29021B0B71600278891 /* MP3File+ReadTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MP3File+ReadTag.swift"; path = "OutcastID3/Classes/MP3File+ReadTag.swift"; sourceTree = "<group>"; };
+		661AB29221B0B73300278891 /* MP3File+WriteTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "MP3File+WriteTag.swift"; path = "OutcastID3/Classes/MP3File+WriteTag.swift"; sourceTree = "<group>"; };
 		662FF78E21AA277200F1B6CC /* Data+String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Data+String.swift"; path = "OutcastID3/Classes/Data+String.swift"; sourceTree = "<group>"; };
 		662FF79021AA279000F1B6CC /* StringEncoding+ID3.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StringEncoding+ID3.swift"; path = "OutcastID3/Classes/StringEncoding+ID3.swift"; sourceTree = "<group>"; };
 		6646A45E99A194F13B61AF91E05F7ADA /* MP3File+ID3Tag+Version.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "MP3File+ID3Tag+Version.swift"; path = "OutcastID3/Classes/MP3File+ID3Tag+Version.swift"; sourceTree = "<group>"; };
@@ -135,6 +139,8 @@
 			children = (
 				6680ABAD21ACFBE900F1D081 /* Frames */,
 				EC6DA71F0C73BB17B37680D87D1FC205 /* MP3File.swift */,
+				661AB29021B0B71600278891 /* MP3File+ReadTag.swift */,
+				661AB29221B0B73300278891 /* MP3File+WriteTag.swift */,
 				6646A45E99A194F13B61AF91E05F7ADA /* MP3File+ID3Tag+Version.swift */,
 				662FF78E21AA277200F1B6CC /* Data+String.swift */,
 				662FF79021AA279000F1B6CC /* StringEncoding+ID3.swift */,
@@ -414,6 +420,7 @@
 				662FF78F21AA277200F1B6CC /* Data+String.swift in Sources */,
 				6680ABB921ACFC0000F1D081 /* UrlFrame.swift in Sources */,
 				6680ABBE21ACFC0000F1D081 /* TableOfContentsFrame.swift in Sources */,
+				661AB29121B0B71600278891 /* MP3File+ReadTag.swift in Sources */,
 				6680ABBD21ACFC0000F1D081 /* CommentFrame.swift in Sources */,
 				6680ABC321AD037900F1D081 /* FrameBuilder.swift in Sources */,
 				B93BDB9A382A6AA8595A3A6557B2F47E /* MP3File.swift in Sources */,
@@ -424,6 +431,7 @@
 				6680ABB721ACFC0000F1D081 /* PictureFrame.swift in Sources */,
 				6680ABBF21ACFC0000F1D081 /* ChapterFrame.swift in Sources */,
 				6680ABBB21ACFC0000F1D081 /* StringFrame.swift in Sources */,
+				661AB29321B0B73300278891 /* MP3File+WriteTag.swift in Sources */,
 				6680ABB821ACFC0000F1D081 /* RawFrame.swift in Sources */,
 				662FF79121AA279000F1B6CC /* StringEncoding+ID3.swift in Sources */,
 			);

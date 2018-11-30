@@ -7,46 +7,56 @@
 
 import Foundation
 
-public struct TableOfContentsFrame: Frame {
-    static let frameIdentifier = "CTOC"
-    
-    public let elementId: String
-    public let isTopLevel: Bool
-    public let isOrdered: Bool
-    
-    public let childElementIds: [String]
-
-    public let subFrames: [Frame]
-    
-    public var debugDescription: String {
-        var parts: [String] = [
-            "elementId=\(self.elementId)",
-            "isTopLevel=\(self.isTopLevel)",
-            "isOrdered=\(self.isOrdered)",
-            "childElementIds=\(self.childElementIds)"
-        ]
+extension OutcastID3.Frame {
+    public struct TableOfContentsFrame: OutcastID3TagFrame {
+        static let frameIdentifier = "CTOC"
         
-        if self.subFrames.count > 0 {
-            let str = subFrames.compactMap { $0.debugDescription }
-            parts.append("subFrames: \(str)")
+        public let elementId: String
+        public let isTopLevel: Bool
+        public let isOrdered: Bool
+        
+        public let childElementIds: [String]
+
+        public let subFrames: [OutcastID3TagFrame]
+        
+        public init(elementId: String, isTopLevel: Bool, isOrdered: Bool, childElementIds: [String], subFrames: [OutcastID3TagFrame]) {
+            self.elementId = elementId
+            self.isTopLevel = isTopLevel
+            self.isOrdered = isOrdered
+            self.childElementIds = childElementIds
+            self.subFrames = subFrames
         }
         
-        return parts.joined(separator: " ")
+        public var debugDescription: String {
+            var parts: [String] = [
+                "elementId=\(self.elementId)",
+                "isTopLevel=\(self.isTopLevel)",
+                "isOrdered=\(self.isOrdered)",
+                "childElementIds=\(self.childElementIds)"
+            ]
+            
+            if self.subFrames.count > 0 {
+                let str = subFrames.compactMap { $0.debugDescription }
+                parts.append("subFrames: \(str)")
+            }
+            
+            return parts.joined(separator: " ")
+        }
     }
 }
 
-extension TableOfContentsFrame {
-    public func frameData(version: MP3File.ID3Tag.Version) throws -> Data {
+extension OutcastID3.Frame.TableOfContentsFrame {
+    public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
-            throw MP3File.WriteError.unsupportedTagVersion
+            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
         case .v2_3:
             break
         case .v2_4:
             break
         }
         
-        let fb = FrameBuilder(frameIdentifier: TableOfContentsFrame.frameIdentifier)
+        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.TableOfContentsFrame.frameIdentifier)
         
         try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
         
@@ -69,16 +79,21 @@ extension TableOfContentsFrame {
         }
         
         for subFrame in self.subFrames {
-            let subFrameData = try subFrame.frameData(version: version)
-            fb.append(data: subFrameData)
+            do {
+                let subFrameData = try subFrame.frameData(version: version)
+                fb.append(data: subFrameData)
+            }
+            catch {
+                print("TOC DATA ERROR: \(error)")
+            }
         }
 
         return try fb.data()
     }
 }
 
-extension TableOfContentsFrame {
-    public static func parse(version: MP3File.ID3Tag.Version, data: Data) -> Frame? {
+extension OutcastID3.Frame.TableOfContentsFrame {
+    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         var offset = 10
         let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
         
@@ -102,12 +117,12 @@ extension TableOfContentsFrame {
             childElementIds.append(str)
         }
         
-        let subFrames: [Frame]
+        let subFrames: [OutcastID3TagFrame]
         
         if offset < data.count {
             do {
                 let subFramesData = data.subdata(in: offset ..< data.count)
-                subFrames = try MP3File.framesFromData(version: version, data: subFramesData)
+                subFrames = try OutcastID3.ID3Tag.framesFromData(version: version, data: subFramesData)
             }
             catch {
                 subFrames = []
@@ -117,7 +132,7 @@ extension TableOfContentsFrame {
             subFrames = []
         }
 
-        return TableOfContentsFrame(
+        return OutcastID3.Frame.TableOfContentsFrame(
             elementId: elementId ?? "",
             isTopLevel: isTopLevel,
             isOrdered: isOrdered,
