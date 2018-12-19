@@ -132,15 +132,16 @@ extension OutcastID3.ID3Tag {
     
     static func determineFrameSize(data: Data, position: Int, version: OutcastID3.TagVersion) throws -> Int {
         
-        let offset = position + version.frameSizeOffsetInBytes
+        let offset    = position + version.frameSizeOffsetInBytes
+        let byteRange = NSMakeRange(offset, version.frameSizeByteCount)
         
-        guard offset < data.count else {
+        guard byteRange.location + byteRange.length < data.count else {
             throw OutcastID3.MP3File.ReadError.corruptedFile
         }
         
         var frameSize: UInt32 = 0
         
-        (data as NSData).getBytes(&frameSize, range: NSMakeRange(offset, version.frameSizeByteCount))
+        (data as NSData).getBytes(&frameSize, range: byteRange)
         
         frameSize = frameSize.bigEndian & version.frameSizeMask
         

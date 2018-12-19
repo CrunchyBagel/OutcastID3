@@ -100,27 +100,34 @@ extension OutcastID3.Frame.ChapterFrame {
         
         var offset = 10
         
+        let intSize = 4 // Hard-coded since it's defined by the spec, not by the size of UInt32
+//        let intSize = MemoryLayout<UInt32>.size
+        
         let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
         
-        var startTimeMilliseconds: UInt32 = 0
-        d.getBytes(&startTimeMilliseconds, range: NSMakeRange(offset, 4))
+        guard offset + intSize * 4 < data.count else {
+            return nil
+        }
         
-        offset += 4
+        var startTimeMilliseconds: UInt32 = 0
+        d.getBytes(&startTimeMilliseconds, range: NSMakeRange(offset, intSize))
+        
+        offset += intSize
         
         var endTimeMilliseconds: UInt32 = 0
-        d.getBytes(&endTimeMilliseconds, range: NSMakeRange(offset, 4))
+        d.getBytes(&endTimeMilliseconds, range: NSMakeRange(offset, intSize))
         
-        offset += 4
+        offset += intSize
         
         var startByteOffset: UInt32 = 0
-        d.getBytes(&startByteOffset, range: NSMakeRange(offset, 4))
+        d.getBytes(&startByteOffset, range: NSMakeRange(offset, intSize))
         
-        offset += 4
+        offset += intSize
         
         var endByteOffset: UInt32 = 0
-        d.getBytes(&endByteOffset, range: NSMakeRange(offset, 4))
+        d.getBytes(&endByteOffset, range: NSMakeRange(offset, intSize))
         
-        offset += 4
+        offset += intSize
         
         let subFrames: [OutcastID3TagFrame]
 
