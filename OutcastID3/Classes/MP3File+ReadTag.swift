@@ -17,7 +17,7 @@ public extension OutcastID3.MP3File {
         case corruptedHeader
     }
     
-    // TODO: Not handling extended header properly?
+    // TODO: Handle extended header properly
     
     func readID3Tag() throws -> TagProperties {
         let fileHandle = try FileHandle(forReadingFrom: self.localUrl)

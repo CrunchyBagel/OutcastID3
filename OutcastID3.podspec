@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OutcastID3'
-  s.version          = '0.4.0'
+  s.version          = '0.5.0'
   s.summary          = 'A simple Swift library to read ID3 tags from MP3s.'
   s.description      = <<-DESC
 Read and write MP3 file ID3 data. Includes support for chapters.
@@ -23,9 +23,7 @@ Read and write MP3 file ID3 data. Includes support for chapters.
   s.swift_version = '4.0'
   s.ios.deployment_target = '8.0'
   s.watchos.deployment_target = '4.0'
-  
-  # Commented out since pod lib lint won't work
-  #  s.osx.deployment_target = '10.10'
+  s.osx.deployment_target = '10.10'
 
   s.source_files = 'OutcastID3/Classes/**/*'
 end

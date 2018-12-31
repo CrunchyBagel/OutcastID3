@@ -5,7 +5,7 @@
 //  Created by Quentin Zervaas on 27/11/18.
 //
 
-import UIKit
+import Foundation
 
 public class FrameBuilder {
 

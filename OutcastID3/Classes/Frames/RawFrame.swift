@@ -47,6 +47,8 @@ extension OutcastID3.Frame.RawFrame {
         return self.parseKnownFrame(version: version, data: data) ?? OutcastID3.Frame.RawFrame(version: version, data: data)
     }
     
+    // TODO: Finish all the unhandled frame types
+    
     private static func parseKnownFrame(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
@@ -68,7 +70,6 @@ extension OutcastID3.Frame.RawFrame {
         
         switch (version, frameIdentifier) {
         case (_, "AENC"):
-            // TODO:
             break
             
         case (_, OutcastID3.Frame.PictureFrame.frameIdentifier):
@@ -81,98 +82,75 @@ extension OutcastID3.Frame.RawFrame {
             return OutcastID3.Frame.CommentFrame.parse(version: version, data: data)
 
         case (_, "COMR"):
-            // TODO:
             break
 
         case (_, OutcastID3.Frame.TableOfContentsFrame.frameIdentifier):
             return OutcastID3.Frame.TableOfContentsFrame.parse(version: version, data: data)
 
         case (_, "ENCR"):
-            // TODO:
             break
 
         case (_, "EQUA"):
-            // TODO:
             break
 
         case (_, "ETCO"):
-            // TODO:
             break
 
         case (_, "GEOB"):
-            // TODO:
             break
 
         case (_, "GRID"):
-            // TODO:
             break
 
         case (_, "IPLS"):
-            // TODO:
             break
 
         case (_, "LINK"):
-            // TODO:
             break
 
         case (_, "MCDI"):
-            // TODO:
             break
 
         case (_, "MLLT"):
-            // TODO:
             break
 
         case (_, "OWNE"):
-            // TODO:
             break
 
         case (_, "PRIV"):
-            // TODO:
             break
 
         case (_, "PCNT"):
-            // TODO:
             break
 
         case (_, "POPM"):
-            // TODO:
             break
 
         case (_, "POSS"):
-            // TODO:
             break
 
         case (_, "RBUF"):
-            // TODO:
             break
 
         case (_, "RVAD"):
-            // TODO:
             break
 
         case (_, "RVRB"):
-            // TODO:
             break
 
         case (_, "SYLT"):
-            // TODO:
             break
 
         case (_, "SYTC"):
-            // TODO:
             break
 
         case (_, "TXXX"):
-            // TODO:
             break
 
         case (_, "UFID"):
-            // TODO:
             break
 
         case (_, "USER"):
-            // TODO:
             break
 
         case (_, OutcastID3.Frame.TranscriptionFrame.frameIdentifier):

@@ -5,12 +5,46 @@
 //  Created by Quentin Zervaas on 24/11/18.
 //
 
+#if os(OSX)
 import Foundation
+#else
 import UIKit
+#endif
 
 extension OutcastID3.Frame {
     public struct PictureFrame: OutcastID3TagFrame {
         static let frameIdentifier = "APIC"
+        
+        public struct Picture: Codable {
+            #if os(OSX)
+            public let image: NSImage
+            #else
+            public let image: UIImage
+            #endif
+
+            init?(data: Data) {
+                #if os(OSX)
+                guard let image = NSImage(data: data) else {
+                    return nil
+                }
+                
+                #else
+                guard let image = UIImage(data: data) else {
+                    return nil
+                }
+                #endif
+                
+                self.image = image
+            }
+            
+            var toPngData: Data? {
+                #if os(OSX)
+                return self.image.pngRepresentation
+                #else
+                return UIImagePNGRepresentation(self.image)
+                #endif
+            }
+        }
         
         enum Error: Swift.Error {
             case encodingError
@@ -93,9 +127,10 @@ extension OutcastID3.Frame {
         public let mimeType: String
         public let pictureType: PictureType
         public let pictureDescription: String
-        public let picture: UIImage
         
-        public init(encoding: String.Encoding, mimeType: String, pictureType: PictureType, pictureDescription: String, picture: UIImage) {
+        public let picture: Picture
+        
+        public init(encoding: String.Encoding, mimeType: String, pictureType: PictureType, pictureDescription: String, picture: Picture) {
             self.encoding = encoding
             self.mimeType = mimeType
             self.pictureType = pictureType
@@ -119,9 +154,11 @@ extension OutcastID3.Frame.PictureFrame {
         case .v2_4:
             break
         }
+        
+        
 
         // TODO: This should use the correct image type according to the mimetype
-        guard let imageData = UIImagePNGRepresentation(self.picture) else {
+        guard let imageData = self.picture.toPngData else {
             throw OutcastID3.MP3File.WriteError.encodingError
         }
 
@@ -159,7 +196,7 @@ extension OutcastID3.Frame.PictureFrame {
         
         let pictureBytes = data.subdata(in: frameContentRangeStart ..< data.count)
         
-        guard let picture = UIImage(data: pictureBytes) else {
+        guard let picture = Picture(data: pictureBytes) else {
             return nil
         }
         
@@ -173,12 +210,8 @@ extension OutcastID3.Frame.PictureFrame {
     }
 }
 
-extension OutcastID3.Frame.PictureFrame {
+extension OutcastID3.Frame.PictureFrame.Picture {
     enum CodingKeys: String, CodingKey {
-        case encoding
-        case mimeType
-        case pictureType
-        case pictureDescription
         case image
     }
 
@@ -186,28 +219,44 @@ extension OutcastID3.Frame.PictureFrame {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let data = try container.decode(Data.self, forKey: CodingKeys.image)
-        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? UIImage else {
-            throw Error.decodingError
+        
+        #if os(OSX)
+        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? NSImage else {
+            throw OutcastID3.Frame.PictureFrame.Error.decodingError
         }
+        #else
+        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? UIImage else {
+            throw OutcastID3.Frame.PictureFrame.Error.decodingError
+        }
+        #endif
         
-        let encodingType = try container.decode(UInt.self, forKey: .encoding)
-        
-        self.picture = image
-
-        self.encoding = String.Encoding(rawValue: encodingType)
-        self.mimeType = try container.decode(String.self, forKey: .mimeType)
-        self.pictureDescription = try container.decode(String.self, forKey: .pictureDescription)
-        self.pictureType = try container.decode(PictureType.self, forKey: .pictureType)
+        self.image = image
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
-        let data = NSKeyedArchiver.archivedData(withRootObject: self.picture)
+        let data = NSKeyedArchiver.archivedData(withRootObject: self.image)
         try container.encode(data, forKey: .image)
-        try container.encode(self.encoding.rawValue, forKey: .encoding)
-        try container.encode(self.mimeType, forKey: .mimeType)
-        try container.encode(self.pictureType, forKey: .pictureType)
-        try container.encode(self.pictureDescription, forKey: .pictureDescription)
     }
 }
+
+#if os(OSX)
+extension NSBitmapImageRep {
+    var pngRepresentation: Data? {
+        return representation(using: .png, properties: [:])
+    }
+}
+
+extension Data {
+    var bitmap: NSBitmapImageRep? {
+        return NSBitmapImageRep(data: self)
+    }
+}
+
+extension NSImage {
+    var pngRepresentation: Data? {
+        return self.tiffRepresentation?.bitmap?.pngRepresentation
+    }
+}
+#endif
