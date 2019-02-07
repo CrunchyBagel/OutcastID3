@@ -60,22 +60,40 @@ public extension OutcastID3.MP3File {
         
         // TODO: ID3v2.1 only uses 3 bytes
         
-        // 4 bytes, each of 7 bits
-        let s1 = UInt32(tagSizeBytes[0] & 0x7f) << 21
-        let s2 = UInt32(tagSizeBytes[1] & 0x7f) << 14
-        let s3 = UInt32(tagSizeBytes[2] & 0x7f) << 7
-        let s4 = UInt32(tagSizeBytes[3] & 0x7f)
-        
-        let tagByteCount = Int(s1 + s2 + s3 + s4)
+        guard let tagByteCount = tagSizeBytes.syncSafeUInt32 else {
+            throw ReadError.tagSizeNotFound
+        }
         
         fileHandle.seek(toFileOffset: UInt64(version.tagHeaderSizeInBytes))
-        let tagData = fileHandle.readData(ofLength: tagByteCount)
+        let tagData = fileHandle.readData(ofLength: Int(tagByteCount))
         
         let endingByteOffset = fileHandle.offsetInFile
         
         // Parse the tag data into frames
         
-        let frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData)
+        let useSynchSafeFrameSize: Bool
+        
+        if version == .v2_4 {
+            useSynchSafeFrameSize = true
+        }
+        else {
+            useSynchSafeFrameSize = false
+        }
+        
+        let frames: [OutcastID3TagFrame]
+        
+        if version == .v2_4 {
+            // Frames may or may not use synch safe frame size, so let's first try without. If that throws, try again with synch safe
+            do {
+                frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: false, throwOnError: true)
+            }
+            catch {
+                frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: true, throwOnError: false)
+            }
+        }
+        else {
+            frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: useSynchSafeFrameSize)
+        }
         
         let tag = OutcastID3.ID3Tag(
             version: version,
@@ -91,7 +109,7 @@ public extension OutcastID3.MP3File {
 }
 
 extension OutcastID3.ID3Tag {
-    static func framesFromData(version: OutcastID3.TagVersion, data: Data, throwOnError: Bool = false) throws -> [OutcastID3TagFrame] {
+    static func framesFromData(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool, throwOnError: Bool = false) throws -> [OutcastID3TagFrame] {
         var ret: [OutcastID3TagFrame] = []
         
         var position = 0
@@ -100,7 +118,7 @@ extension OutcastID3.ID3Tag {
         
         while position < count {
             do {
-                let frameSize = try determineFrameSize(data: data, position: position, version: version)
+                let frameSize = try determineFrameSize(data: data, position: position, version: version, useSynchSafeFrameSize: useSynchSafeFrameSize)
                 
                 guard position + frameSize <= count else {
                     print("Frame size too big position=\(position) + frameSize=\(frameSize) = \(position + frameSize), count=\(count)")
@@ -109,7 +127,7 @@ extension OutcastID3.ID3Tag {
                 
                 let frameData = data.subdata(in: position ..< position + frameSize)
                 
-                if let frame = OutcastID3.Frame.RawFrame.parse(version: version, data: frameData) {
+                if let frame = OutcastID3.Frame.RawFrame.parse(version: version, data: frameData, useSynchSafeFrameSize: useSynchSafeFrameSize) {
                     ret.append(frame)
                 }
                 
@@ -130,21 +148,60 @@ extension OutcastID3.ID3Tag {
     
     /// Determine the size of the frame that begins at the given position
     
-    static func determineFrameSize(data: Data, position: Int, version: OutcastID3.TagVersion) throws -> Int {
+    static func determineFrameSize(data: Data, position: Int, version: OutcastID3.TagVersion, useSynchSafeFrameSize: Bool) throws -> Int {
         
-        let offset    = position + version.frameSizeOffsetInBytes
-        let byteRange = NSMakeRange(offset, version.frameSizeByteCount)
+        let offset = position + version.frameSizeOffsetInBytes
         
-        guard byteRange.location + byteRange.length < data.count else {
+        guard offset < data.count else {
             throw OutcastID3.MP3File.ReadError.corruptedFile
         }
+//        let byteRange = NSMakeRange(offset, version.frameSizeByteCount)
         
-        var frameSize: UInt32 = 0
+//        guard byteRange.location + byteRange.length < data.count else {
+//            throw OutcastID3.MP3File.ReadError.corruptedFile
+//        }
         
-        (data as NSData).getBytes(&frameSize, range: byteRange)
+        let sizeBytes = data.subdata(in: offset ..< offset + version.frameSizeByteCount)
+
+        if useSynchSafeFrameSize {
+            if let size = sizeBytes.syncSafeUInt32, size > 0 {
+                return Int(size) + version.frameHeaderSizeInBytes
+            }
+        }
+        else {
+            if let size = sizeBytes.toUInt32, size > 0 {
+                return Int(size) + version.frameHeaderSizeInBytes
+            }
+        }
         
-        frameSize = frameSize.bigEndian & version.frameSizeMask
+        throw OutcastID3.MP3File.ReadError.corruptedFile
+    }
+}
+
+extension Data {
+    // 4 bytes, each of 7 bits
+    var syncSafeUInt32: UInt32? {
+        guard self.count == 4 else {
+            return nil
+        }
         
-        return Int(frameSize) + version.frameHeaderSizeInBytes
+        let s1 = UInt32(self[0] & 0x7f) << 21
+        let s2 = UInt32(self[1] & 0x7f) << 14
+        let s3 = UInt32(self[2] & 0x7f) << 7
+        let s4 = UInt32(self[3] & 0x7f)
+        
+        return s1 + s2 + s3 + s4
+    }
+    
+    // 4 bytes, each of 7 bits
+    var toUInt32: UInt32? {
+        guard self.count == 4 else {
+            return nil
+        }
+        
+        var val: UInt32 = 0
+        (self as NSData).getBytes(&val, range: NSMakeRange(0, self.count))
+        
+        return val.bigEndian
     }
 }

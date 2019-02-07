@@ -51,7 +51,7 @@ extension OutcastID3.Frame.TranscriptionFrame {
 }
 
 extension OutcastID3.Frame.TranscriptionFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         

@@ -50,13 +50,13 @@ extension OutcastID3.Frame.CommentFrame {
 }
 
 extension OutcastID3.Frame.CommentFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
-        
+
         let languageLength = 3
         let languageBytes = data.subdata(in: frameContentRangeStart ..< frameContentRangeStart + languageLength)
         
@@ -67,11 +67,18 @@ extension OutcastID3.Frame.CommentFrame {
         }
         
         frameContentRangeStart += languageLength
-        
+
         let commentDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding)
+
+        let comment: String?
         
-        let commentData = data.subdata(in: frameContentRangeStart ..< data.count)
-        let comment = String(data: commentData, encoding: encoding)
+        if frameContentRangeStart < data.count {
+            let commentData = data.subdata(in: frameContentRangeStart ..< data.count)
+            comment = String(data: commentData, encoding: encoding)
+        }
+        else {
+            comment = nil
+        }
         
         return OutcastID3.Frame.CommentFrame(
             encoding: encoding,

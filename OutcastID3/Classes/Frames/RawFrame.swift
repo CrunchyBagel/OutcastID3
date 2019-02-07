@@ -43,13 +43,13 @@ extension OutcastID3.Frame.RawFrame {
         return self.data.frameIdentifier(version: self.version)
     }
 
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
-        return self.parseKnownFrame(version: version, data: data) ?? OutcastID3.Frame.RawFrame(version: version, data: data)
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
+        return self.parseKnownFrame(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize) ?? OutcastID3.Frame.RawFrame(version: version, data: data)
     }
     
     // TODO: Finish all the unhandled frame types
     
-    private static func parseKnownFrame(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    private static func parseKnownFrame(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }
@@ -63,7 +63,7 @@ extension OutcastID3.Frame.RawFrame {
         // Check for the basic URL types
         
         if let urlType = OutcastID3.Frame.UrlFrame.UrlType(rawValue: frameIdentifier) {
-            return OutcastID3.Frame.UrlFrame.parse(type: urlType, version: version, data: data)
+            return OutcastID3.Frame.UrlFrame.parse(type: urlType, version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
         }
 
         // Check for the remaining types
@@ -73,19 +73,19 @@ extension OutcastID3.Frame.RawFrame {
             break
             
         case (_, OutcastID3.Frame.PictureFrame.frameIdentifier):
-            return OutcastID3.Frame.PictureFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.PictureFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
 
         case (_, OutcastID3.Frame.ChapterFrame.frameIdentifier):
-            return OutcastID3.Frame.ChapterFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.ChapterFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
             
         case (_, OutcastID3.Frame.CommentFrame.frameIdentifier):
-            return OutcastID3.Frame.CommentFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.CommentFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
 
         case (_, "COMR"):
             break
 
         case (_, OutcastID3.Frame.TableOfContentsFrame.frameIdentifier):
-            return OutcastID3.Frame.TableOfContentsFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.TableOfContentsFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
 
         case (_, "ENCR"):
             break
@@ -154,10 +154,10 @@ extension OutcastID3.Frame.RawFrame {
             break
 
         case (_, OutcastID3.Frame.TranscriptionFrame.frameIdentifier):
-            return OutcastID3.Frame.TranscriptionFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.TranscriptionFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
 
         case (_, OutcastID3.Frame.UserUrlFrame.frameIdentifier):
-            return OutcastID3.Frame.UserUrlFrame.parse(version: version, data: data)
+            return OutcastID3.Frame.UserUrlFrame.parse(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
 
         default:
             break

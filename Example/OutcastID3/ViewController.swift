@@ -29,13 +29,13 @@ class ViewController: UIViewController {
             print("Read test error: \(error)")
         }
         
-        do {
-            print("BEGIN WRITE TEST")
-            try self.writeTest(url: url)
-        }
-        catch {
-            print("Write test error: \(error)")
-        }
+//        do {
+//            print("BEGIN WRITE TEST")
+//            try self.writeTest(url: url)
+//        }
+//        catch {
+//            print("Write test error: \(error)")
+//        }
     }
     
     func readTest(url: URL) throws {

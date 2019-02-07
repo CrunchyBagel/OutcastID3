@@ -94,7 +94,7 @@ extension OutcastID3.Frame.ChapterFrame {
 }
 
 extension OutcastID3.Frame.ChapterFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         let d = data as NSData
         
@@ -134,7 +134,7 @@ extension OutcastID3.Frame.ChapterFrame {
         if offset < data.count {
             do {
                 let subFramesData = data.subdata(in: offset ..< data.count)
-                subFrames = try OutcastID3.ID3Tag.framesFromData(version: version, data: subFramesData)
+                subFrames = try OutcastID3.ID3Tag.framesFromData(version: version, data: subFramesData, useSynchSafeFrameSize: useSynchSafeFrameSize)
             }
             catch {
                 subFrames = []

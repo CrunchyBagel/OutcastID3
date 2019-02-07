@@ -79,7 +79,7 @@ extension OutcastID3.Frame.UrlFrame {
 }
 
 extension OutcastID3.Frame.UrlFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }
@@ -88,10 +88,10 @@ extension OutcastID3.Frame.UrlFrame {
             return nil
         }
         
-        return self.parse(type: urlType, version: version, data: data)
+        return self.parse(type: urlType, version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize)
     }
 
-    public static func parse(type: UrlType, version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(type: UrlType, version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         let offset = version.frameHeaderSizeInBytes
         

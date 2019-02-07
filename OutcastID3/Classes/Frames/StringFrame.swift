@@ -162,7 +162,7 @@ extension OutcastID3.Frame.StringFrame {
 }
 
 extension OutcastID3.Frame.StringFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }

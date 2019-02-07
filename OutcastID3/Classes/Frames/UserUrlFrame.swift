@@ -50,7 +50,7 @@ extension OutcastID3.Frame.UserUrlFrame {
 }
 
 extension OutcastID3.Frame.UserUrlFrame {
-    public static func parse(version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
+    public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
