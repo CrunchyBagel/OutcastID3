@@ -71,15 +71,6 @@ public extension OutcastID3.MP3File {
         
         // Parse the tag data into frames
         
-        let useSynchSafeFrameSize: Bool
-        
-        if version == .v2_4 {
-            useSynchSafeFrameSize = true
-        }
-        else {
-            useSynchSafeFrameSize = false
-        }
-        
         let frames: [OutcastID3TagFrame]
         
         if version == .v2_4 {
@@ -88,11 +79,12 @@ public extension OutcastID3.MP3File {
                 frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: false, throwOnError: true)
             }
             catch {
+                print("Trying again with synch safe frame size")
                 frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: true, throwOnError: false)
             }
         }
         else {
-            frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: useSynchSafeFrameSize)
+            frames = try OutcastID3.ID3Tag.framesFromData(version: version, data: tagData, useSynchSafeFrameSize: false)
         }
         
         let tag = OutcastID3.ID3Tag(
@@ -122,7 +114,12 @@ extension OutcastID3.ID3Tag {
                 
                 guard position + frameSize <= count else {
                     print("Frame size too big position=\(position) + frameSize=\(frameSize) = \(position + frameSize), count=\(count)")
-                    break
+                    if throwOnError {
+                        throw OutcastID3.MP3File.ReadError.corruptedFile
+                    }
+                    else {
+                        break
+                    }
                 }
                 
                 let frameData = data.subdata(in: position ..< position + frameSize)
