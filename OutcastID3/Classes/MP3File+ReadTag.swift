@@ -161,12 +161,12 @@ extension OutcastID3.ID3Tag {
         let sizeBytes = data.subdata(in: offset ..< offset + version.frameSizeByteCount)
 
         if useSynchSafeFrameSize {
-            if let size = sizeBytes.syncSafeUInt32, size > 0 {
+            if let size = sizeBytes.syncSafeUInt32, size > 0, size < Int.max - version.frameHeaderSizeInBytes {
                 return Int(size) + version.frameHeaderSizeInBytes
             }
         }
         else {
-            if let size = sizeBytes.toUInt32, size > 0 {
+            if let size = sizeBytes.toUInt32, size > 0, size < Int.max - version.frameHeaderSizeInBytes {
                 return Int(size) + version.frameHeaderSizeInBytes
             }
         }
