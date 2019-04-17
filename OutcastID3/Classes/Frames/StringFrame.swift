@@ -35,9 +35,10 @@ extension OutcastID3.Frame {
             case fileOwner                          = "TOWN"
             case leadArtist                         = "TPE1"
             case band                               = "TPE2"
+            case composer                           = "TCOM"
             case conductor                          = "TPE3"
             case interpretedBy                      = "TPE4"
-            case partOfASet                         = "TPE5"
+            case partOfASet                         = "TPOS"
             case publisher                          = "TPUB"
             case track                              = "TRCK"
             case recordingDate                      = "TRDA"
@@ -61,6 +62,8 @@ extension OutcastID3.Frame {
                     return "Lead Artist"
                 case .band:
                     return "Band"
+                case .composer:
+                    return "Composer"
                 case .conductor:
                     return "Conductor"
                 case .interpretedBy:
