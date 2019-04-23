@@ -1,5 +1,5 @@
 framework module OutcastID3 {
-  umbrella header "OutcastID3-umbrella.h"
+  umbrella header "OutcastID3-iOS-umbrella.h"
 
   export *
   module * { export * }

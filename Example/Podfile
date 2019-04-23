@@ -9,3 +9,7 @@ target 'OutcastID3_Example' do
     
   end
 end
+
+target 'OutcastID3_Console_Example' do
+    pod 'OutcastID3', :path => '../'
+end

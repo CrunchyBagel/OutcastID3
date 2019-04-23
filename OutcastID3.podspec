@@ -23,7 +23,7 @@ Read and write MP3 file ID3 data. Includes support for chapters.
   s.swift_version = '4.0'
   s.ios.deployment_target = '8.0'
   s.watchos.deployment_target = '4.0'
-  s.osx.deployment_target = '10.10'
+  s.osx.deployment_target = '10.11'
 
   s.source_files = 'OutcastID3/Classes/**/*'
 end

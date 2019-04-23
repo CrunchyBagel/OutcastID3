@@ -37,7 +37,7 @@ extension OutcastID3.Frame {
             }
 
             var toPngData: Data? {
-                return self.image.pngRepresenation
+                return self.image.pngRepresentation
             }
         }
         
@@ -256,7 +256,7 @@ extension NSImage {
 }
 #else
 extension UIImage {
-    var pngRepresenation: Data? {
+    var pngRepresentation: Data? {
         return UIImagePNGRepresentation(self)
     }
 }
