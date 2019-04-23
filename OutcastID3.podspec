@@ -20,7 +20,7 @@ Read and write MP3 file ID3 data. Includes support for chapters.
   s.source           = { :git => 'https://github.com/CrunchyBagel/OutcastID3.git', :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/CrunchyBagel'
 
-  s.swift_version = '4.0'
+  s.swift_versions = '4.0'
   s.ios.deployment_target = '8.0'
   s.watchos.deployment_target = '4.0'
   s.osx.deployment_target = '10.11'
