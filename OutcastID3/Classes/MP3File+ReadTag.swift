@@ -8,7 +8,7 @@
 import Foundation
 
 public extension OutcastID3.MP3File {
-    public enum ReadError: Swift.Error {
+    enum ReadError: Swift.Error {
         case tagNotFound
         case tagVersionNotFound
         case tagSizeNotFound
@@ -30,7 +30,7 @@ public extension OutcastID3.MP3File {
         return try readID3Tag(fileHandle: fileHandle)
     }
     
-    public func readID3Tag(fileHandle: FileHandle) throws -> TagProperties {
+    func readID3Tag(fileHandle: FileHandle) throws -> TagProperties {
         // Assumes the ID3 tag is at the start of the file.
         let startingByteOffset: UInt64 = 0
         

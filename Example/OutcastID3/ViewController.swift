@@ -82,6 +82,19 @@ class ViewController: UIViewController {
         let mp3File = try OutcastID3.MP3File(localUrl: url)
         try mp3File.writeID3Tag(tag: originalTag, outputUrl: testUrl)
         
+        if let image = UIImage(named: "your_image") {
+            let picture = OutcastID3.Frame.PictureFrame.Picture(image: image)
+            
+            let pictureFrame = OutcastID3.Frame.PictureFrame(
+                encoding: .utf8,
+                mimeType: "image/png",
+                pictureType: .coverFront,
+                pictureDescription: "Front cover",
+                picture: picture
+            )
+        }
+        
+        
         let newMp3File = try OutcastID3.MP3File(localUrl: testUrl)
         let newTag = try newMp3File.readID3Tag()
         

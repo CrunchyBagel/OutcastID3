@@ -17,32 +17,27 @@ extension OutcastID3.Frame {
         
         public struct Picture: Codable {
             #if os(OSX)
-            public let image: NSImage
+            public typealias PictureImage = NSImage
             #else
-            public let image: UIImage
+            public typealias PictureImage = UIImage
             #endif
+            
+            public let image: PictureImage
 
-            init?(data: Data) {
-                #if os(OSX)
-                guard let image = NSImage(data: data) else {
-                    return nil
-                }
-                
-                #else
-                guard let image = UIImage(data: data) else {
-                    return nil
-                }
-                #endif
-                
+            public init(image: PictureImage) {
                 self.image = image
             }
             
+            init?(data: Data) {
+                guard let image = PictureImage(data: data) else {
+                    return nil
+                }
+                
+                self.image = image
+            }
+
             var toPngData: Data? {
-                #if os(OSX)
-                return self.image.pngRepresentation
-                #else
-                return UIImagePNGRepresentation(self.image)
-                #endif
+                return self.image.pngRepresenation
             }
         }
         
@@ -257,6 +252,12 @@ extension Data {
 extension NSImage {
     var pngRepresentation: Data? {
         return self.tiffRepresentation?.bitmap?.pngRepresentation
+    }
+}
+#else
+extension UIImage {
+    var pngRepresenation: Data? {
+        return UIImagePNGRepresentation(self)
     }
 }
 #endif
