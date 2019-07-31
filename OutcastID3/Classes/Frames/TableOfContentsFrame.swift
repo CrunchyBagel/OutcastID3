@@ -94,8 +94,12 @@ extension OutcastID3.Frame.TableOfContentsFrame {
 
 extension OutcastID3.Frame.TableOfContentsFrame {
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
+        
+        let encoding: String.Encoding = .isoLatin1
+        let terminator = version.stringTerminator(encoding: encoding)
+        
         var offset = 10
-        let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
+        let elementId = data.readString(offset: &offset, encoding: encoding, terminator: terminator)
         
         let flags = data[offset]
         
@@ -110,7 +114,7 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         var childElementIds: [String] = []
         
         for _ in 0 ..< numEntries {
-            guard let str = data.readString(offset: &offset, encoding: .isoLatin1) else {
+            guard let str = data.readString(offset: &offset, encoding: encoding, terminator: terminator) else {
                 continue
             }
             

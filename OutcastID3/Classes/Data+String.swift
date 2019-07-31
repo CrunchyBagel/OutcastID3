@@ -8,13 +8,18 @@
 import Foundation
 
 extension Data {
-    func readString(offset: inout Int, encoding: String.Encoding) -> String? {
+    enum StringTerminator {
+        case single
+        case double
+    }
+    
+    func readString(offset: inout Int, encoding: String.Encoding, terminator: StringTerminator) -> String? {
         // unicode strings are terminated by \0\0, while latin terminated by \0
         
         var bytes: [UInt8] = []
         
-        switch encoding {
-        case .utf8, .utf16:
+        switch terminator {
+        case .double:
             let startingOffset = offset
             
             while offset < self.count {
@@ -33,7 +38,7 @@ extension Data {
             
             offset += 1
             
-        case _:
+        case .single:
             var byte: UInt8 = self[offset]
             
             while byte != 0x00 {

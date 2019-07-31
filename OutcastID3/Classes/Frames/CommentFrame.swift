@@ -68,7 +68,7 @@ extension OutcastID3.Frame.CommentFrame {
         
         frameContentRangeStart += languageLength
 
-        let commentDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding)
+        let commentDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding, terminator: version.stringTerminator(encoding: encoding))
 
         let comment: String?
         

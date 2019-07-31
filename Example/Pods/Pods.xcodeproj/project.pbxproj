@@ -98,7 +98,7 @@
 		20ECF55FA2ABD29F59ADD99662882970 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		21142131F3FD422BBD88CF4DD77035E6 /* Pods-OutcastID3_Console_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OutcastID3_Console_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		225CA047374133D692E35B5BB0F22887 /* Pods-OutcastID3_Console_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OutcastID3_Console_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		23B78B20D99381684B580687408B0AAC /* OutcastID3.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = OutcastID3.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		23B78B20D99381684B580687408B0AAC /* OutcastID3.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; path = OutcastID3.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		2A2639F1F2D60E4E1E149AD6EA92CD5E /* MP3File+ID3Tag+Version.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "MP3File+ID3Tag+Version.swift"; path = "OutcastID3/Classes/MP3File+ID3Tag+Version.swift"; sourceTree = "<group>"; };
 		2BDA303D7AC2E29E2B9C28F8E7596251 /* ChapterFrame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ChapterFrame.swift; sourceTree = "<group>"; };
 		30E0833F774141EB04DC79D0F4664C87 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -107,7 +107,7 @@
 		375FD935708E21EF49654F0D323A3371 /* Pods-OutcastID3_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-OutcastID3_Tests-umbrella.h"; sourceTree = "<group>"; };
 		3A4090C030ABFF4F6CC69806AC89F64C /* MP3File.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MP3File.swift; path = OutcastID3/Classes/MP3File.swift; sourceTree = "<group>"; };
 		3E174D37C65184497D71ECB3C2DF5CFA /* OutcastID3-macOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; name = "OutcastID3-macOS.modulemap"; path = "../OutcastID3-macOS/OutcastID3-macOS.modulemap"; sourceTree = "<group>"; };
-		425766EA6406C119E81F0F8680D4E53C /* OutcastID3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = OutcastID3.framework; path = "OutcastID3-iOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		425766EA6406C119E81F0F8680D4E53C /* OutcastID3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OutcastID3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45CB2138E4B540E94B5E5CEAD4C5BEF7 /* Pods-OutcastID3_Console_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OutcastID3_Console_Example.release.xcconfig"; sourceTree = "<group>"; };
 		4EC244EF5E589EF1741094E01A91B7C9 /* OutcastID3-iOS-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "OutcastID3-iOS-umbrella.h"; sourceTree = "<group>"; };
 		51F3B6C858AA6951FADFE7C222588400 /* Pods-OutcastID3_Console_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-OutcastID3_Console_Example.modulemap"; sourceTree = "<group>"; };
@@ -128,25 +128,25 @@
 		8B970D0C3F29CBE3105103A3C9CADDAF /* OutcastID3-iOS.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "OutcastID3-iOS.xcconfig"; sourceTree = "<group>"; };
 		8C5C546448BE29118103621825C1AA61 /* FrameBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FrameBuilder.swift; path = OutcastID3/Classes/FrameBuilder.swift; sourceTree = "<group>"; };
 		9B5751F6CD31C1BC682A1FA77C11D06F /* StringEncoding+ID3.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "StringEncoding+ID3.swift"; path = "OutcastID3/Classes/StringEncoding+ID3.swift"; sourceTree = "<group>"; };
-		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A00381EE3816D0B0210292B528FEDAB6 /* RawFrame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RawFrame.swift; sourceTree = "<group>"; };
 		AA64F07D8011B0A17B3DFF436E2FFE3F /* Pods-OutcastID3_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-OutcastID3_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		AB745F940DFD78A7A2ABC94309970765 /* OutcastID3-macOS-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = "OutcastID3-macOS-Info.plist"; path = "../OutcastID3-macOS/OutcastID3-macOS-Info.plist"; sourceTree = "<group>"; };
 		AC9F69DA176909CAC60B897B6BBC9F2E /* Pods-OutcastID3_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OutcastID3_Tests-dummy.m"; sourceTree = "<group>"; };
-		AE2678A5BDF748EC9A5F8508B2F961E3 /* Pods_OutcastID3_Console_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_OutcastID3_Console_Example.framework; path = "Pods-OutcastID3_Console_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2A9CAF51269FC140B8A8186EA434600 /* Pods_OutcastID3_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_OutcastID3_Tests.framework; path = "Pods-OutcastID3_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE2678A5BDF748EC9A5F8508B2F961E3 /* Pods_OutcastID3_Console_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutcastID3_Console_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2A9CAF51269FC140B8A8186EA434600 /* Pods_OutcastID3_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutcastID3_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B40D88FD99C504590FDF2B31FA52C87B /* Pods-OutcastID3_Console_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-OutcastID3_Console_Example-dummy.m"; sourceTree = "<group>"; };
-		C05BD88380D6B04703D074DC5A954AA5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		C26212C2EC3441C58A7AEC1CF22AEAED /* OutcastID3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = OutcastID3.framework; path = "OutcastID3-macOS.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C05BD88380D6B04703D074DC5A954AA5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		C26212C2EC3441C58A7AEC1CF22AEAED /* OutcastID3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OutcastID3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C4AA9FEA8CD820518DCC9A75BBE14823 /* Pods-OutcastID3_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-OutcastID3_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		C84ED0783479BD4ED5672CCDFE14610C /* Pods-OutcastID3_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-OutcastID3_Example-umbrella.h"; sourceTree = "<group>"; };
-		D2BAE4396DA8CFBA27F28B36BC324F16 /* Pods_OutcastID3_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_OutcastID3_Example.framework; path = "Pods-OutcastID3_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D2BAE4396DA8CFBA27F28B36BC324F16 /* Pods_OutcastID3_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_OutcastID3_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA7D8ED6A9B99ED60B7C0E3D904A0AD1 /* OutcastID3-iOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "OutcastID3-iOS.modulemap"; sourceTree = "<group>"; };
 		E16EC6B8F52804F9130919EBB2650870 /* OutcastID3-iOS-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "OutcastID3-iOS-dummy.m"; sourceTree = "<group>"; };
 		E5117D6D2E9118B1C3BBB01A26424D90 /* OutcastID3-macOS.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "OutcastID3-macOS.xcconfig"; path = "../OutcastID3-macOS/OutcastID3-macOS.xcconfig"; sourceTree = "<group>"; };
 		F452370BA1DABC677569819A1353015F /* UserUrlFrame.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = UserUrlFrame.swift; sourceTree = "<group>"; };
 		F67B75E20F0D4393397C3BF58A298023 /* Pods-OutcastID3_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-OutcastID3_Example-frameworks.sh"; sourceTree = "<group>"; };
-		F939D9A4DFAB95AB26B3E70E5CCBF255 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		F939D9A4DFAB95AB26B3E70E5CCBF255 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FE3F2CE32013500DAE9CFD7B5FCC1229 /* Pods-OutcastID3_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-OutcastID3_Tests.modulemap"; sourceTree = "<group>"; };
 		FECA28955A99E06F42149C2B2221321C /* Pods-OutcastID3_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-OutcastID3_Tests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -523,14 +523,15 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0930;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1030;
 			};
 			buildConfigurationList = 4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = CF1408CF629C7361332E53B88F7BD30C;
 			productRefGroup = 74689A231A9B17D52CD06E6B763E01C8 /* Products */;
@@ -719,6 +720,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -785,7 +787,6 @@
 			baseConfigurationReference = 45CB2138E4B540E94B5E5CEAD4C5BEF7 /* Pods-OutcastID3_Console_Example.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -855,7 +856,6 @@
 			baseConfigurationReference = 225CA047374133D692E35B5BB0F22887 /* Pods-OutcastID3_Console_Example.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -956,7 +956,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E5117D6D2E9118B1C3BBB01A26424D90 /* OutcastID3-macOS.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -990,6 +989,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1040,8 +1040,7 @@
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_INSTALLED_PRODUCT = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.2;
 				SYMROOT = "${SRCROOT}/../build";
 			};
@@ -1082,7 +1081,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E5117D6D2E9118B1C3BBB01A26424D90 /* OutcastID3-macOS.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";

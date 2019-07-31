@@ -184,6 +184,10 @@ extension OutcastID3.Frame.StringFrame {
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
         
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+        
         let frameContent = data.subdata(in: frameContentRangeStart ..< data.count)
         
         guard let str = String(data: frameContent, encoding: encoding) else {

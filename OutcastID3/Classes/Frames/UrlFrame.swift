@@ -95,6 +95,10 @@ extension OutcastID3.Frame.UrlFrame {
         
         let offset = version.frameHeaderSizeInBytes
         
+        guard offset < data.count else {
+            return nil
+        }
+        
         let frameContent = data.subdata(in: offset ..< data.count)
         
         guard let str = String(data: frameContent, encoding: .isoLatin1) else {

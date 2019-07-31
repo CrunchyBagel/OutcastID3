@@ -69,7 +69,11 @@ extension OutcastID3.Frame.TranscriptionFrame {
         
         frameContentRangeStart += languageLength
         
-        let lyricsDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding)
+        let lyricsDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding, terminator: version.stringTerminator(encoding: encoding))
+        
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
         
         let lyricsData = data.subdata(in: frameContentRangeStart ..< data.count)
         let lyrics = String(data: lyricsData, encoding: encoding)

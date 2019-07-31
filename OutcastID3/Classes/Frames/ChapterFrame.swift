@@ -103,7 +103,10 @@ extension OutcastID3.Frame.ChapterFrame {
         let intSize = 4 // Hard-coded since it's defined by the spec, not by the size of UInt32
 //        let intSize = MemoryLayout<UInt32>.size
         
-        let elementId = data.readString(offset: &offset, encoding: .isoLatin1)
+        let encoding: String.Encoding = .isoLatin1
+        let terminator = version.stringTerminator(encoding: encoding)
+        
+        let elementId = data.readString(offset: &offset, encoding: encoding, terminator: terminator)
         
         guard offset + intSize * 4 < data.count else {
             return nil

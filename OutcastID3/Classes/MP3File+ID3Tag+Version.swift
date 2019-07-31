@@ -61,6 +61,15 @@ extension OutcastID3 {
             case .v2_4: return 4
             }
         }
+        
+        func stringTerminator(encoding: String.Encoding) -> Data.StringTerminator {
+            switch (self, encoding) {
+            case (_, .utf16): return .double
+            case (.v2_2, .utf8): return .double
+            case (.v2_3, .utf8): return .double
+            default: return .single
+            }
+        }
     }
 }
 

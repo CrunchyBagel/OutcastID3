@@ -57,8 +57,13 @@ extension OutcastID3.Frame.UserUrlFrame {
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
 
-        let description = data.readString(offset: &frameContentRangeStart, encoding: encoding)
         
+        let description = data.readString(offset: &frameContentRangeStart, encoding: encoding, terminator: version.stringTerminator(encoding: encoding))
+        
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let frameContent = data.subdata(in: frameContentRangeStart ..< data.count)
         
         guard let urlString = String(data: frameContent, encoding: .isoLatin1) else {

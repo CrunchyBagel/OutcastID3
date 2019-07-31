@@ -180,14 +180,14 @@ extension OutcastID3.Frame.PictureFrame {
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
         
-        let mimeType = data.readString(offset: &frameContentRangeStart, encoding: .isoLatin1)
+        let mimeType = data.readString(offset: &frameContentRangeStart, encoding: .isoLatin1, terminator: version.stringTerminator(encoding: .isoLatin1))
         
         let pictureTypeByte = data[frameContentRangeStart]
         frameContentRangeStart += 1
         
         let pictureType = PictureType(rawValue: pictureTypeByte) ?? .other
         
-        let pictureDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding)
+        let pictureDescription = data.readString(offset: &frameContentRangeStart, encoding: encoding, terminator: version.stringTerminator(encoding: encoding))
         
         let pictureBytes = data.subdata(in: frameContentRangeStart ..< data.count)
         
