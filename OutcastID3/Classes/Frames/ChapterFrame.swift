@@ -22,7 +22,7 @@ extension OutcastID3.Frame {
         
         public let subFrames: [OutcastID3TagFrame]
         
-        init(elementId: String, startTime: TimeInterval, endTime: TimeInterval, startByteOffset: UInt32?, endByteOffset: UInt32?, subFrames: [OutcastID3TagFrame]) {
+        public init(elementId: String, startTime: TimeInterval, endTime: TimeInterval, startByteOffset: UInt32?, endByteOffset: UInt32?, subFrames: [OutcastID3TagFrame]) {
             self.elementId = elementId
             self.startTime = startTime
             self.endTime = endTime
