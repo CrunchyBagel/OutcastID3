@@ -48,84 +48,102 @@ extension OutcastID3.Frame {
             case internationalStandardRecordingCode = "TSRC"
             case encodingSettings                   = "TSSE"
             case year                               = "TYER"
+            case category                           = "TCAT"
+            case keywords                           = "TKWD"
+            case movementName                       = "MVNM"
+            case movementIndex                      = "MVIN"
+            case movementCount                      = "MVCN"
+            case podcastDescription                 = "TDES"
             
             public var description: String {
                 switch self {
                     
-                case .title:
-                    return "Title"
-                case .description:
-                    return "Description"
-                case .albumTitle:
-                    return "Album Title"
-                case .leadArtist:
-                    return "Lead Artist"
-                case .band:
-                    return "Band"
-                case .composer:
-                    return "Composer"
-                case .conductor:
-                    return "Conductor"
-                case .interpretedBy:
-                    return "Interpreted By"
-                case .publisher:
-                    return "Publisher"
-                case .length:
-                    return "Length"
-                case .year:
-                    return "Year"
-                case .encodedBy:
-                    return "Encoded By"
-                case .contentType:
-                    return "Content Type"
-                case .copyright:
-                    return "Copyright"
-                case .date:
-                    return "Date"
-                case .playlistDelay:
-                    return "Playlist Delay"
-                case .textWriter:
-                    return "Text Writer"
-                case .fileType:
-                    return "File Type"
-                case .time:
-                    return "Time"
-                case .contentGroupDescription:
-                    return "Content Group Description"
-                case .initialKey:
-                    return "Initial Key"
-                case .audioLanguage:
-                    return "Audio Language"
-                case .mediaType:
-                    return "Media Type"
-                case .originalTitle:
-                    return "Original Title"
-                case .originalFilename:
-                    return "Original Filename"
-                case .originalTextWriter:
-                    return "Original Text Writer"
-                case .originalArtistPerformer:
-                    return "Original Artist Performer"
-                case .originalReleaseYear:
-                    return "Original Release Year"
-                case .fileOwner:
-                    return "File Owner"
-                case .partOfASet:
-                    return "Part Of A Set"
-                case .track:
-                    return "Track"
-                case .recordingDate:
-                    return "Recording Date"
-                case .internetRadioStationName:
-                    return "Internet Radio Station Name"
-                case .internetRadioStationOwner:
-                    return "Internet Radio Station Owner"
-                case .fileSizeInBytes:
-                    return "File Size In Bytes"
-                case .internationalStandardRecordingCode:
-                    return "International Standard Recording Code (ISRC)"
-                case .encodingSettings:
-                    return "Encoding Settings"
+                    case .title:
+                        return "Title"
+                    case .description:
+                        return "Description"
+                    case .albumTitle:
+                        return "Album Title"
+                    case .leadArtist:
+                        return "Lead Artist"
+                    case .band:
+                        return "Band"
+                    case .composer:
+                        return "Composer"
+                    case .conductor:
+                        return "Conductor"
+                    case .interpretedBy:
+                        return "Interpreted By"
+                    case .publisher:
+                        return "Publisher"
+                    case .length:
+                        return "Length"
+                    case .year:
+                        return "Year"
+                    case .encodedBy:
+                        return "Encoded By"
+                    case .contentType:
+                        return "Content Type"
+                    case .copyright:
+                        return "Copyright"
+                    case .date:
+                        return "Date"
+                    case .playlistDelay:
+                        return "Playlist Delay"
+                    case .textWriter:
+                        return "Text Writer"
+                    case .fileType:
+                        return "File Type"
+                    case .time:
+                        return "Time"
+                    case .contentGroupDescription:
+                        return "Content Group Description"
+                    case .initialKey:
+                        return "Initial Key"
+                    case .audioLanguage:
+                        return "Audio Language"
+                    case .mediaType:
+                        return "Media Type"
+                    case .originalTitle:
+                        return "Original Title"
+                    case .originalFilename:
+                        return "Original Filename"
+                    case .originalTextWriter:
+                        return "Original Text Writer"
+                    case .originalArtistPerformer:
+                        return "Original Artist Performer"
+                    case .originalReleaseYear:
+                        return "Original Release Year"
+                    case .fileOwner:
+                        return "File Owner"
+                    case .partOfASet:
+                        return "Part Of A Set"
+                    case .track:
+                        return "Track"
+                    case .recordingDate:
+                        return "Recording Date"
+                    case .internetRadioStationName:
+                        return "Internet Radio Station Name"
+                    case .internetRadioStationOwner:
+                        return "Internet Radio Station Owner"
+                    case .fileSizeInBytes:
+                        return "File Size In Bytes"
+                    case .internationalStandardRecordingCode:
+                        return "International Standard Recording Code (ISRC)"
+                    case .encodingSettings:
+                        return "Encoding Settings"
+                    case .category:
+                        return "Podcast Category"
+                    case .keywords:
+                        return "Podcast Keywords"
+                    case .movementName:
+                        return "Movement Name"
+                    case .movementIndex:
+                        return "Movement Index"
+                    case .movementCount:
+                        return "Movement Count"
+                    case .podcastDescription:
+                        return "Podcast Description"
                 }
             }
         }
@@ -149,12 +167,12 @@ extension OutcastID3.Frame {
 extension OutcastID3.Frame.StringFrame {
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
-        case .v2_2:
-            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
-        case .v2_3:
-            break
-        case .v2_4:
-            break
+            case .v2_2:
+                throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
+            case .v2_3:
+                break
+            case .v2_4:
+                break
         }
         
         let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
@@ -178,7 +196,7 @@ extension OutcastID3.Frame.StringFrame {
     }
     
     public static func parse(type: OutcastID3.Frame.StringFrame.StringType, version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
-
+        
         var frameContentRangeStart = version.frameHeaderSizeInBytes
         
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)

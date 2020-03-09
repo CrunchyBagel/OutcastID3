@@ -39,7 +39,7 @@ extension OutcastID3.Frame.CommentFrame {
             break
         }
         
-        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.TranscriptionFrame.frameIdentifier)
+        let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.CommentFrame.frameIdentifier)
         fb.addStringEncodingByte(encoding: self.encoding)
         try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
         try fb.addString(str: self.commentDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
