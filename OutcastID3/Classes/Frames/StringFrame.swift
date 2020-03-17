@@ -159,7 +159,7 @@ extension OutcastID3.Frame {
         }
         
         public var debugDescription: String {
-            return "str=\(str)"
+            return "length=\(str.count) str=\(str)"
         }
     }
 }
@@ -176,7 +176,7 @@ extension OutcastID3.Frame.StringFrame {
         }
         
         let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
-        try fb.addEncodedString(str: self.str, encoding: self.encoding, terminate: false)
+        try fb.addString(str: self.str, encoding: self.encoding, includeEncodingByte: true, terminator: nil)
         
         return try fb.data()
     }

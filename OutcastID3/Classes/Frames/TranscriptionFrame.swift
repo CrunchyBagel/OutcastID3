@@ -24,7 +24,7 @@ extension OutcastID3.Frame {
         }
         
         public var debugDescription: String {
-            return "language=\(language) lyricsDescription=\(lyricsDescription) lyrics=\(lyrics)"
+            return "language=\(language) lyricsDescription=\(lyricsDescription) length=\(lyrics.count) lyrics=\(lyrics)"
         }
     }
 }
@@ -42,9 +42,16 @@ extension OutcastID3.Frame.TranscriptionFrame {
         
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.TranscriptionFrame.frameIdentifier)
         fb.addStringEncodingByte(encoding: self.encoding)
-        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
-        try fb.addString(str: self.lyricsDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
-        try fb.addEncodedString(str: self.lyrics, encoding: self.encoding, terminate: false)
+        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminator: nil)
+        
+        try fb.addString(
+            str: self.lyricsDescription,
+            encoding: self.encoding,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: self.encoding)
+        )
+        
+        try fb.addString(str: self.lyrics, encoding: self.encoding, includeEncodingByte: false, terminator: nil)
         
         return try fb.data()
     }

@@ -72,7 +72,7 @@ extension OutcastID3.Frame.UrlFrame {
         }
         
         let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
-        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminator: nil)
         
         return try fb.data()
     }

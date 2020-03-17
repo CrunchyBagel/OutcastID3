@@ -40,17 +40,11 @@ public class FrameBuilder {
         self.content.append(data)
     }
     
-    /// Add a string with encoding byte. Can optionally terminate if necessary
-    
-    public func addEncodedString(str: String, encoding: String.Encoding, terminate: Bool) throws {
-        try self.addString(str: str, encoding: encoding, includeEncodingByte: true, terminate: terminate)
-    }
-    
     public func addStringEncodingByte(encoding: String.Encoding) {
         self.append(byte: encoding.encodingByte)
     }
     
-    public func addString(str: String, encoding: String.Encoding, includeEncodingByte: Bool, terminate: Bool) throws {
+    public func addString(str: String, encoding: String.Encoding, includeEncodingByte: Bool, terminator: Data.StringTerminator?) throws {
         guard let strData = str.data(using: encoding) else {
             throw OutcastID3.MP3File.WriteError.stringEncodingError
         }
@@ -60,15 +54,9 @@ public class FrameBuilder {
         }
         
         self.content.append(strData)
-
-        if terminate {
-            switch encoding {
-            case .utf8, .utf16:
-                self.content.append(contentsOf: [0x0])
-                self.content.append(contentsOf: [0x0])
-            default:
-                self.content.append(contentsOf: [0x0])
-            }
+        
+        if let terminator = terminator {
+            self.content.append(terminator.data)
         }
     }
 }

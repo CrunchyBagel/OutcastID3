@@ -23,7 +23,7 @@ extension OutcastID3.Frame {
             self.comment = comment
         }
         public var debugDescription: String {
-            return "language=\(language) commentDescription=\(commentDescription) comment=\(comment)"
+            return "language=\(language) commentDescription=\(commentDescription) length=\(comment.count) comment=\(comment)"
         }
     }
 }
@@ -41,9 +41,16 @@ extension OutcastID3.Frame.CommentFrame {
         
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.CommentFrame.frameIdentifier)
         fb.addStringEncodingByte(encoding: self.encoding)
-        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
-        try fb.addString(str: self.commentDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
-        try fb.addEncodedString(str: self.comment, encoding: self.encoding, terminate: false)
+        try fb.addString(str: self.language, encoding: .isoLatin1, includeEncodingByte: false, terminator: nil)
+        
+        try fb.addString(
+            str: self.commentDescription,
+            encoding: self.encoding,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: self.encoding)
+        )
+        
+        try fb.addString(str: self.comment, encoding: self.encoding, includeEncodingByte: false, terminator: nil)
         
         return try fb.data()
     }

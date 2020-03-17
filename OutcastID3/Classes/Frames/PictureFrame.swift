@@ -159,11 +159,22 @@ extension OutcastID3.Frame.PictureFrame {
 
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.PictureFrame.frameIdentifier)
         fb.addStringEncodingByte(encoding: self.encoding)
-        try fb.addString(str: self.mimeType, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        
+        try fb.addString(
+            str: self.mimeType,
+            encoding: .isoLatin1,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: .isoLatin1)
+        )
         
         fb.append(byte: self.pictureType.rawValue)
 
-        try fb.addString(str: self.pictureDescription, encoding: self.encoding, includeEncodingByte: false, terminate: true)
+        try fb.addString(
+            str: self.pictureDescription,
+            encoding: self.encoding,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: self.encoding)
+        )
 
 
         fb.append(data: imageData)

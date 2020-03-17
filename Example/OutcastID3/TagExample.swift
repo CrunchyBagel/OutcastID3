@@ -29,19 +29,36 @@ class TagExample {
         
         let x = try OutcastID3.MP3File(localUrl: url)
         
-        let originalTag = try x.readID3Tag().tag
-        
-        
         let testUrl = baseDir.appendingPathComponent("writeTest.mp3")
         print("Output URL: \(testUrl.path)")
+
+//        let originalTag = try x.readID3Tag().tag
         
         do {
             try FileManager.default.removeItem(at: testUrl)
         }
         catch {}
         
+        let titleFrame = OutcastID3.Frame.StringFrame(
+            type: .title,
+            encoding: .utf8,
+            str: "Tag Writer Test"
+        )
+        
+        let commentFrame = OutcastID3.Frame.CommentFrame(
+            encoding: .utf8, language: "eng",
+            commentDescription: "description",
+            comment: "Comment Test"
+        )
+        
+        let transcriptionFrame = OutcastID3.Frame.TranscriptionFrame(
+            encoding: .utf8, language: "eng",
+            lyricsDescription: "description",
+            lyrics: "Lyrics Test"
+        )
+        
         let frames: [OutcastID3TagFrame] = [
-            OutcastID3.Frame.StringFrame(type: .title, encoding: .utf8, str: "Tag Writer Test")
+            titleFrame, commentFrame, transcriptionFrame
         ]
         
         let tag = OutcastID3.ID3Tag(
@@ -53,21 +70,21 @@ class TagExample {
         //        self.outputTag(tag: tag)
         
         let mp3File = try OutcastID3.MP3File(localUrl: url)
-        try mp3File.writeID3Tag(tag: originalTag, outputUrl: testUrl)
+        try mp3File.writeID3Tag(tag: tag, outputUrl: testUrl)
         
-        let image = OutcastID3.Frame.PictureFrame.Picture.PictureImage(named: "your_image")
-        
-        if let image = image {
-            let picture = OutcastID3.Frame.PictureFrame.Picture(image: image)
-            
-            let pictureFrame = OutcastID3.Frame.PictureFrame(
-                encoding: .utf8,
-                mimeType: "image/png",
-                pictureType: .coverFront,
-                pictureDescription: "Front cover",
-                picture: picture
-            )
-        }
+//        let image = OutcastID3.Frame.PictureFrame.Picture.PictureImage(named: "your_image")
+//
+//        if let image = image {
+//            let picture = OutcastID3.Frame.PictureFrame.Picture(image: image)
+//
+//            let pictureFrame = OutcastID3.Frame.PictureFrame(
+//                encoding: .utf8,
+//                mimeType: "image/png",
+//                pictureType: .coverFront,
+//                pictureDescription: "Front cover",
+//                picture: picture
+//            )
+//        }
         
         
         let newMp3File = try OutcastID3.MP3File(localUrl: testUrl)
@@ -81,22 +98,22 @@ class TagExample {
         for frame in tag.frames {
             switch frame {
             case let s as OutcastID3.Frame.StringFrame:
-                print("\(s.type.description): \(s.str)")
+                print("\(s.type.description): \(s)")
                 
             case let u as OutcastID3.Frame.UrlFrame:
-                print("\(u.type.description): \(u.urlString)")
+                print("\(u.type.description): \(u)")
                 
             case let comment as OutcastID3.Frame.CommentFrame:
-                print("COMMENT: \(comment)")
+                print("Comment: \(comment)")
                 
             case let transcription as OutcastID3.Frame.TranscriptionFrame:
-                print("TRANSCRIPTION: \(transcription)")
+                print("Transcription: \(transcription)")
                 
             case let picture as OutcastID3.Frame.PictureFrame:
-                print("PICTURE: \(picture)")
+                print("Picture: \(picture)")
                 
             case let f as OutcastID3.Frame.ChapterFrame:
-                print("CHAPTER: \(f)")
+                print("Chapter: \(f)")
                 
             case let toc as OutcastID3.Frame.TableOfContentsFrame:
                 print("TOC: \(toc)")

@@ -42,8 +42,15 @@ extension OutcastID3.Frame.UserUrlFrame {
         }
         
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.UserUrlFrame.frameIdentifier)
-        try fb.addEncodedString(str: self.urlDescription, encoding: self.encoding, terminate: true)
-        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminate: false)
+        
+        try fb.addString(
+            str: self.urlDescription,
+            encoding: self.encoding,
+            includeEncodingByte: true,
+            terminator: version.stringTerminator(encoding: self.encoding)
+        )
+        
+        try fb.addString(str: self.urlString, encoding: .isoLatin1, includeEncodingByte: false, terminator: nil)
         
         return try fb.data()
     }

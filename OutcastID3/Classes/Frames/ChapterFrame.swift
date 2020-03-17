@@ -70,7 +70,12 @@ extension OutcastID3.Frame.ChapterFrame {
         
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.ChapterFrame.frameIdentifier)
         
-        try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        try fb.addString(
+            str: self.elementId,
+            encoding: .isoLatin1,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: .isoLatin1)
+        )
 
         let startTime = UInt32(self.startTime * 1000)
         fb.append(data: startTime.bigEndian.toData)

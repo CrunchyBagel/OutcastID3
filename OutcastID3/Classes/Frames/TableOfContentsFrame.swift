@@ -58,7 +58,12 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         
         let fb = FrameBuilder(frameIdentifier: OutcastID3.Frame.TableOfContentsFrame.frameIdentifier)
         
-        try fb.addString(str: self.elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+        try fb.addString(
+            str: self.elementId,
+            encoding: .isoLatin1,
+            includeEncodingByte: false,
+            terminator: version.stringTerminator(encoding: .isoLatin1)
+        )
         
         var flags: UInt8 = 0
         
@@ -75,7 +80,12 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         fb.append(byte: UInt8(self.childElementIds.count))
         
         for elementId in self.childElementIds {
-            try fb.addString(str: elementId, encoding: .isoLatin1, includeEncodingByte: false, terminate: true)
+            try fb.addString(
+                str: elementId,
+                encoding: .isoLatin1,
+                includeEncodingByte: false,
+                terminator: version.stringTerminator(encoding: .isoLatin1)
+            )
         }
         
         for subFrame in self.subFrames {
