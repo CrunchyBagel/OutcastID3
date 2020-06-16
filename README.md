@@ -1,12 +1,24 @@
 # OutcastID3
+A lightweight Swift library for reading and writing ID3 tags, including chapters.
 
-[![CI Status](https://img.shields.io/travis/HendX/OutcastID3.svg?style=flat)](https://travis-ci.org/HendX/OutcastID3)
+## Swift Package Manager
+
+To install via SPM, add the URL https://github.com/CrunchyBagel/OutcastID3 to your project.
+
+
+## CocoaPods
+
+https://cocoapods.org/pods/OutcastID3
+
 [![Version](https://img.shields.io/cocoapods/v/OutcastID3.svg?style=flat)](https://cocoapods.org/pods/OutcastID3)
 [![License](https://img.shields.io/cocoapods/l/OutcastID3.svg?style=flat)](https://cocoapods.org/pods/OutcastID3)
 [![Platform](https://img.shields.io/cocoapods/p/OutcastID3.svg?style=flat)](https://cocoapods.org/pods/OutcastID3)
 
-A lightweight Swift library for reading and writing ID3 tags, including chapters.
+To install via CocoaPods, add the following line to your Podfile:
 
+```ruby
+pod 'OutcastID3'
+```
 
 ## Example
 
@@ -75,15 +87,6 @@ let mp3File = try OutcastID3.MP3File(localUrl: inputUrl)
 
 try mp3File.writeID3Tag(tag: tag, outputUrl: outputUrl)
 
-```
-
-## Installation
-
-OutcastID3 is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
-
-```ruby
-pod 'OutcastID3'
 ```
 
 ## Author
