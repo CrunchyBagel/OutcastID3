@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'OutcastID3'
-  s.version          = '0.6.6'
+  s.version          = '0.7.0'
   s.summary          = 'A simple Swift library to read ID3 tags from MP3s.'
   s.description      = <<-DESC
 Read and write MP3 file ID3 data. Includes support for chapters.
@@ -22,8 +22,9 @@ Read and write MP3 file ID3 data. Includes support for chapters.
 
   s.swift_versions = '5.0'
   s.ios.deployment_target = '8.0'
+  s.tvos.deployment_target = '9.0'
   s.watchos.deployment_target = '4.0'
   s.osx.deployment_target = '10.11'
 
-  s.source_files = 'OutcastID3/Classes/**/*'
+  s.source_files = 'Sources/**/*'
 end
