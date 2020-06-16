@@ -5,10 +5,10 @@
 //  Created by Quentin Zervaas on 24/11/18.
 //
 
-#if os(OSX)
-import Foundation
-#else
+#if canImport(UIKit)
 import UIKit
+#else
+import AppKit
 #endif
 
 extension OutcastID3.Frame {
@@ -16,10 +16,10 @@ extension OutcastID3.Frame {
         static let frameIdentifier = "APIC"
         
         public struct Picture: Codable {
-            #if os(OSX)
-            public typealias PictureImage = NSImage
-            #else
+            #if canImport(UIKit)
             public typealias PictureImage = UIImage
+            #else
+            public typealias PictureImage = NSImage
             #endif
             
             public let image: PictureImage
@@ -225,29 +225,52 @@ extension OutcastID3.Frame.PictureFrame.Picture {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         let data = try container.decode(Data.self, forKey: CodingKeys.image)
-        
-        #if os(OSX)
-        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? NSImage else {
-            throw OutcastID3.Frame.PictureFrame.Error.decodingError
+
+        #if canImport(UIKit)
+        if #available(iOS 11, tvOS 11, macOS 10.15, *) {
+            guard let image = try? NSKeyedUnarchiver.unarchivedObject(ofClass: UIImage.self, from: data) else {
+                throw OutcastID3.Frame.PictureFrame.Error.decodingError
+            }
+
+            self.image = image
+        }
+        else {
+            guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? PictureImage else {
+                throw OutcastID3.Frame.PictureFrame.Error.decodingError
+            }
+
+            self.image = image
         }
         #else
-        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? UIImage else {
+        guard let image = NSKeyedUnarchiver.unarchiveObject(with: data) as? PictureImage else {
             throw OutcastID3.Frame.PictureFrame.Error.decodingError
         }
-        #endif
-        
+
         self.image = image
+        #endif
     }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
-        
-        let data = NSKeyedArchiver.archivedData(withRootObject: self.image)
-        try container.encode(data, forKey: .image)
+
+        if #available(iOS 11, tvOS 11, macOS 10.15, *) {
+            let data = try NSKeyedArchiver.archivedData(withRootObject: self.image, requiringSecureCoding: false)
+            try container.encode(data, forKey: .image)
+        }
+        else {
+            let data = NSKeyedArchiver.archivedData(withRootObject: self.image)
+            try container.encode(data, forKey: .image)
+        }
     }
 }
 
-#if os(OSX)
+#if canImport(UIKit)
+extension UIImage {
+    var pngRepresentation: Data? {
+        return self.pngData()
+    }
+}
+#else
 extension NSBitmapImageRep {
     var pngRepresentation: Data? {
         return representation(using: .png, properties: [:])
@@ -263,12 +286,6 @@ extension Data {
 extension NSImage {
     var pngRepresentation: Data? {
         return self.tiffRepresentation?.bitmap?.pngRepresentation
-    }
-}
-#else
-extension UIImage {
-    var pngRepresentation: Data? {
-        return UIImagePNGRepresentation(self)
     }
 }
 #endif
