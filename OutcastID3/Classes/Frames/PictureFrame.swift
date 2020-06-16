@@ -268,7 +268,7 @@ extension NSImage {
 #else
 extension UIImage {
     var pngRepresentation: Data? {
-        return UIImagePNGRepresentation(self)
+        return self.pngData()
     }
 }
 #endif

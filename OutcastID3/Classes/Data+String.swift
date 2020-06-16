@@ -14,8 +14,8 @@ extension Data {
         
         var data: Data {
             switch self {
-            case .single: return Data(bytes: [ 0x0 ])
-            case .double: return Data(bytes: [ 0x0, 0x0 ])
+            case .single: return Data([ 0x0 ])
+            case .double: return Data([ 0x0, 0x0 ])
             }
         }
     }
