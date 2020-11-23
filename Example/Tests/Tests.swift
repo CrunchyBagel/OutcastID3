@@ -1,3 +1,4 @@
+#if canImport(XCTest)
 import XCTest
 import OutcastID3
 
@@ -26,3 +27,4 @@ class Tests: XCTestCase {
     }
     
 }
+#endif

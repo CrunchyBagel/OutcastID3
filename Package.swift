@@ -7,7 +7,7 @@ let package = Package(
     name: "OutcastID3",
     platforms: [
         .macOS(.v10_11),
-        .iOS(.v8),
+        .iOS(.v9),
         .watchOS(.v4),
         .tvOS(.v9)
     ],
@@ -21,8 +21,8 @@ let package = Package(
         .target(
             name: "OutcastID3",
             dependencies: []),
-        .testTarget(
-            name: "OutcastID3Tests",
-            dependencies: ["OutcastID3"]),
+//        .testTarget(
+//            name: "OutcastID3Tests",
+//            dependencies: ["OutcastID3"]),
     ]
 )
