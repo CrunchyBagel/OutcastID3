@@ -8,16 +8,9 @@
 import Foundation
 
 extension Data {
-    public enum StringTerminator {
+    enum StringTerminator {
         case single
         case double
-        
-        var data: Data {
-            switch self {
-            case .single: return Data([ 0x0 ])
-            case .double: return Data([ 0x0, 0x0 ])
-            }
-        }
     }
     
     func readString(offset: inout Int, encoding: String.Encoding, terminator: StringTerminator) -> String? {
@@ -31,27 +24,28 @@ extension Data {
             
             while offset < self.count {
                 let byte = self[offset]
-                
-                if byte == 0x0 && offset > startingOffset {
-                    if self[offset - 1] == 0x0 {
-                        bytes.removeLast()
-                        break
-                    }
-                }
-                
                 bytes.append(byte)
                 offset += 1
+
+                if byte == 0x0 && offset < self.count && self[offset] == 0x0 {
+                    bytes.removeLast()
+                    break
+                }
             }
             
             offset += 1
             
         case .single:
-            var byte: UInt8 = self[offset]
             
-            while byte != 0x00 {
-                bytes.append(byte)
-                offset += 1
-                byte = self[offset]
+            while offset < self.count {
+                var byte: UInt8 = self[offset]
+
+                if byte != 0x00 {
+                    bytes.append(byte)
+                    offset += 1
+                } else {
+                    break
+                }
             }
             
             offset += 1
