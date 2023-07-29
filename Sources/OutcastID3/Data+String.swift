@@ -8,9 +8,16 @@
 import Foundation
 
 extension Data {
-    enum StringTerminator {
+    public enum StringTerminator {
         case single
         case double
+        
+        var data: Data {
+            switch self {
+            case .single: return Data([ 0x0 ])
+            case .double: return Data([ 0x0, 0x0 ])
+            }
+        }
     }
     
     func readString(offset: inout Int, encoding: String.Encoding, terminator: StringTerminator) -> String? {
