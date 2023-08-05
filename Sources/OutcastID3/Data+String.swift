@@ -31,13 +31,16 @@ extension Data {
             
             while offset < self.count {
                 let byte = self[offset]
+
+                if byte == 0x0 && offset > startingOffset {
+                    if self[offset - 1] == 0x0 {
+                        bytes.removeLast()
+                        break
+                    }
+                }
+
                 bytes.append(byte)
                 offset += 1
-
-                if byte == 0x0 && offset < self.count && self[offset] == 0x0 {
-                    bytes.removeLast()
-                    break
-                }
             }
             
             offset += 1
