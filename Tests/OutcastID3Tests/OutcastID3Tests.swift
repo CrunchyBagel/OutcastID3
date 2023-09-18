@@ -1,5 +1,4 @@
 
-#if canImport(XCTest)
 import XCTest
 @testable import OutcastID3
 
@@ -15,4 +14,3 @@ final class OutcastID3Tests: XCTestCase {
         ("testExample", testExample),
     ]
 }
-#endif
