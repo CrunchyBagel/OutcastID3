@@ -31,14 +31,12 @@ extension Data {
             
             while offset < self.count {
                 let byte = self[offset]
-                
                 if byte == 0x0 && offset > startingOffset {
                     if self[offset - 1] == 0x0 {
                         bytes.removeLast()
                         break
                     }
                 }
-                
                 bytes.append(byte)
                 offset += 1
             }
@@ -46,12 +44,16 @@ extension Data {
             offset += 1
             
         case .single:
-            var byte: UInt8 = self[offset]
             
-            while byte != 0x00 {
-                bytes.append(byte)
-                offset += 1
-                byte = self[offset]
+            while offset < self.count {
+                var byte: UInt8 = self[offset]
+
+                if byte != 0x00 {
+                    bytes.append(byte)
+                    offset += 1
+                } else {
+                    break
+                }
             }
             
             offset += 1
