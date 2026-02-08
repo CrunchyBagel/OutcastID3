@@ -21,8 +21,8 @@ let package = Package(
         .target(
             name: "OutcastID3",
             dependencies: []),
-//        .testTarget(
-//            name: "OutcastID3Tests",
-//            dependencies: ["OutcastID3"]),
+        .testTarget(
+            name: "OutcastID3Tests",
+            dependencies: ["OutcastID3"]),
     ]
 )

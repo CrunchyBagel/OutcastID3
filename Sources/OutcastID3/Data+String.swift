@@ -20,46 +20,41 @@ extension Data {
         }
     }
     
-    func readString(offset: inout Int, encoding: String.Encoding, terminator: StringTerminator) -> String? {
-        // unicode strings are terminated by \0\0, while latin terminated by \0
-        
+    func readString(offset: inout Int,
+                    encoding: String.Encoding,
+                    terminator: StringTerminator) -> String? {
+
         var bytes: [UInt8] = []
-        
+
         switch terminator {
         case .double:
-            let startingOffset = offset
-            
+            let start = offset
+
             while offset < self.count {
                 let byte = self[offset]
-                if byte == 0x0 && offset > startingOffset {
-                    if self[offset - 1] == 0x0 {
-                        bytes.removeLast()
-                        break
-                    }
+
+                if byte == 0x00, offset > start, self[offset - 1] == 0x00 {
+                    if !bytes.isEmpty { bytes.removeLast() }
+                    break
                 }
+
                 bytes.append(byte)
                 offset += 1
             }
-            
-            offset += 1
-            
-        case .single:
-            
-            while offset < self.count {
-                var byte: UInt8 = self[offset]
 
-                if byte != 0x00 {
-                    bytes.append(byte)
-                    offset += 1
-                } else {
-                    break
-                }
+            if offset < self.count { offset += 1 }
+
+        case .single:
+            while offset < self.count {
+                let byte = self[offset]
+                if byte == 0x00 { break }
+                bytes.append(byte)
+                offset += 1
             }
-            
-            offset += 1
-            
+
+            if offset < self.count { offset += 1 }
         }
-        
+
         return String(bytes: bytes, encoding: encoding)
     }
 }
