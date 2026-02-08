@@ -20,11 +20,9 @@ let package = Package(
     targets: [
         .target(
             name: "OutcastID3",
-            dependencies: []
-        ),
+            dependencies: []),
         .testTarget(
             name: "OutcastID3Tests",
-            dependencies: ["OutcastID3"]
-        ),
+            dependencies: ["OutcastID3"]),
     ]
 )
