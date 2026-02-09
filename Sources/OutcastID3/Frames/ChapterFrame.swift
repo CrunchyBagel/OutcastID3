@@ -44,7 +44,7 @@ extension OutcastID3.Frame {
             }
             
             if let count = self.endByteOffset {
-                parts.append("startByteOffset=\(count)")
+                parts.append("endByteOffset=\(count)")
             }
             
             if self.subFrames.count > 0 {
@@ -62,9 +62,7 @@ extension OutcastID3.Frame.ChapterFrame {
         switch version {
         case .v2_2:
             throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
-        case .v2_3:
-            break
-        case .v2_4:
+        case .v2_3, .v2_4:
             break
         }
         
@@ -106,7 +104,6 @@ extension OutcastID3.Frame.ChapterFrame {
         var offset = 10
         
         let intSize = 4 // Hard-coded since it's defined by the spec, not by the size of UInt32
-//        let intSize = MemoryLayout<UInt32>.size
         
         let encoding: String.Encoding = .isoLatin1
         let terminator = version.stringTerminator(encoding: encoding)

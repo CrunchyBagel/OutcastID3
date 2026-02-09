@@ -21,9 +21,7 @@ extension OutcastID3.MP3File {
         switch tag.version {
         case .v2_2:
             throw WriteError.unsupportedTagVersion
-        case .v2_3:
-            break
-        case .v2_4:
+        case .v2_3, .v2_4:
             break
         }
         
@@ -59,8 +57,6 @@ extension OutcastID3.MP3File {
                 framesByteCount += data.count
             }
             catch {
-                print("ERROR: \(error)")
-                print("FRAME: \(frame)")
             }
         }
         

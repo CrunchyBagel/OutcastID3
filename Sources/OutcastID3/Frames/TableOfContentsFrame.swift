@@ -50,9 +50,7 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         switch version {
         case .v2_2:
             throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
-        case .v2_3:
-            break
-        case .v2_4:
+        case .v2_3, .v2_4:
             break
         }
         
@@ -94,7 +92,6 @@ extension OutcastID3.Frame.TableOfContentsFrame {
                 fb.append(data: subFrameData)
             }
             catch {
-                print("TOC DATA ERROR: \(error)")
             }
         }
 

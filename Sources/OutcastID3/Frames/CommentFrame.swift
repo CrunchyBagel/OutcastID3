@@ -33,9 +33,7 @@ extension OutcastID3.Frame.CommentFrame {
         switch version {
         case .v2_2:
             throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
-        case .v2_3:
-            break
-        case .v2_4:
+        case .v2_3, .v2_4:
             break
         }
         
@@ -78,7 +76,6 @@ extension OutcastID3.Frame.CommentFrame {
         
         
         guard let language = String(bytes: languageBytes, encoding: .isoLatin1) else {
-            print("Unable to read language")
             return nil
         }
         

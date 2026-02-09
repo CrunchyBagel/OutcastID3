@@ -167,12 +167,10 @@ extension OutcastID3.Frame {
 extension OutcastID3.Frame.StringFrame {
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
-            case .v2_2:
-                throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
-            case .v2_3:
-                break
-            case .v2_4:
-                break
+        case .v2_2:
+            throw OutcastID3.MP3File.WriteError.unsupportedTagVersion
+        case .v2_3, .v2_4:
+            break
         }
         
         let fb = FrameBuilder(frameIdentifier: self.type.rawValue)
