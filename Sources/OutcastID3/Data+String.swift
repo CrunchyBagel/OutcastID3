@@ -8,6 +8,7 @@
 import Foundation
 
 extension Data {
+    /// Defines whether a null terminator is one byte or two bytes wide.
     public enum StringTerminator {
         case single
         case double

@@ -9,6 +9,7 @@
 import Foundation
 
 extension OutcastID3 {
+    /// The ID3v2 tag version (v2.2, v2.3, or v2.4).
     public enum TagVersion: UInt8, Codable {
         case v2_2 = 2
         case v2_3 = 3

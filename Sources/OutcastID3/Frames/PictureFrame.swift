@@ -12,9 +12,11 @@ import AppKit
 #endif
 
 extension OutcastID3.Frame {
+    /// An ID3 attached picture frame (APIC), containing image data and metadata.
     public struct PictureFrame: OutcastID3TagFrame {
         static let frameIdentifier = "APIC"
         
+        /// A platform-native image wrapper that supports Codable serialization.
         public struct Picture: Codable {
             #if canImport(UIKit)
             public typealias PictureImage = UIImage
@@ -22,8 +24,11 @@ extension OutcastID3.Frame {
             public typealias PictureImage = NSImage
             #endif
             
+            /// The decoded image (UIImage on iOS/tvOS, NSImage on macOS).
             public let image: PictureImage
 
+            /// Creates a new picture from a platform-native image.
+            /// - Parameter image: The image to wrap.
             public init(image: PictureImage) {
                 self.image = image
             }
@@ -46,6 +51,7 @@ extension OutcastID3.Frame {
             case decodingError
         }
 
+        /// The type of picture, as defined by the ID3v2 specification.
         public enum PictureType: UInt8, Codable {
             case other              = 0x00
             case fileIcon32x32Png   = 0x01
@@ -70,13 +76,25 @@ extension OutcastID3.Frame {
             case publisherLogotype  = 0x14
         }
 
+        /// The string encoding used for the description.
         public let encoding: String.Encoding
+        /// The MIME type of the image (e.g. "image/png").
         public let mimeType: String
+        /// The type of picture (e.g. front cover, artist).
         public let pictureType: PictureType
+        /// A text description of the picture.
         public let pictureDescription: String
-        
+
+        /// The image data.
         public let picture: Picture
         
+        /// Creates a new picture frame.
+        /// - Parameters:
+        ///   - encoding: The string encoding to use for the description.
+        ///   - mimeType: The MIME type of the image (e.g. "image/png").
+        ///   - pictureType: The type of picture (e.g. front cover).
+        ///   - pictureDescription: A text description of the picture.
+        ///   - picture: The image data.
         public init(encoding: String.Encoding, mimeType: String, pictureType: PictureType, pictureDescription: String, picture: Picture) {
             self.encoding = encoding
             self.mimeType = mimeType
@@ -84,14 +102,13 @@ extension OutcastID3.Frame {
             self.pictureDescription = pictureDescription
             self.picture = picture
         }
-        
-        public var debugDescription: String {
-            return "mimeType=\(self.mimeType) pictureType=\(self.pictureType.description) pictureDescription=\(String(describing: self.pictureDescription)) picture=\(self.picture)"
-        }
     }
 }
 
 extension OutcastID3.Frame.PictureFrame {
+    /// Serializes this picture frame to raw data suitable for writing to an ID3 tag.
+    /// - Parameter version: The ID3v2 tag version to encode for.
+    /// - Returns: The serialized frame data.
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
@@ -134,6 +151,12 @@ extension OutcastID3.Frame.PictureFrame {
 }
 
 extension OutcastID3.Frame.PictureFrame {
+    /// Parses a picture frame from raw ID3 tag data.
+    /// - Parameters:
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    ///   - useSynchSafeFrameSize: Whether to interpret the frame size as synch-safe.
+    /// - Returns: A parsed picture frame, or `nil` if the data does not match.
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
@@ -179,6 +202,8 @@ extension OutcastID3.Frame.PictureFrame.Picture {
         case image
     }
 
+    /// Creates a picture by decoding from the given decoder.
+    /// - Parameter decoder: The decoder to read data from.
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -208,6 +233,8 @@ extension OutcastID3.Frame.PictureFrame.Picture {
         #endif
     }
     
+    /// Encodes this picture into the given encoder.
+    /// - Parameter encoder: The encoder to write data to.
     public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
 
@@ -249,6 +276,12 @@ extension NSImage {
 #endif
 
 extension OutcastID3.Frame.PictureFrame.PictureType: Sendable {}
+
+extension OutcastID3.Frame.PictureFrame: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "mimeType=\(self.mimeType) pictureType=\(self.pictureType.description) pictureDescription=\(String(describing: self.pictureDescription)) picture=\(self.picture)"
+    }
+}
 
 extension OutcastID3.Frame.PictureFrame.PictureType: CustomStringConvertible {
     public var description: String {

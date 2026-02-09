@@ -8,6 +8,7 @@
 import Foundation
 
 extension OutcastID3.MP3File {
+    /// Errors that can occur when writing an ID3 tag to a file.
     public enum WriteError: Swift.Error {
         case versionMismatch
         case unsupportedTagVersion
@@ -16,6 +17,10 @@ extension OutcastID3.MP3File {
         case stringEncodingError
     }
     
+    /// Writes an ID3 tag to a new file, replacing any existing tag.
+    /// - Parameters:
+    ///   - tag: The ID3 tag to write.
+    ///   - outputUrl: The file URL where the tagged MP3 file will be written.
     public func writeID3Tag(tag: OutcastID3.ID3Tag, outputUrl: URL) throws {
         
         switch tag.version {

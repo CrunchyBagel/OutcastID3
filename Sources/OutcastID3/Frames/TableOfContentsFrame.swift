@@ -8,17 +8,30 @@
 import Foundation
 
 extension OutcastID3.Frame {
+    /// An ID3 table of contents frame (CTOC), listing chapter elements and their ordering.
     public struct TableOfContentsFrame: OutcastID3TagFrame {
         static let frameIdentifier = "CTOC"
         
+        /// A unique identifier for this table of contents element.
         public let elementId: String
+        /// Whether this is the root table of contents entry.
         public let isTopLevel: Bool
+        /// Whether the child elements are in a meaningful order.
         public let isOrdered: Bool
-        
+
+        /// The element IDs of child chapters or nested tables of contents.
         public let childElementIds: [String]
 
+        /// Additional frames embedded within this table of contents (e.g. title).
         public let subFrames: [OutcastID3TagFrame]
         
+        /// Creates a new table of contents frame.
+        /// - Parameters:
+        ///   - elementId: A unique identifier for this table of contents element.
+        ///   - isTopLevel: Whether this is the root table of contents entry.
+        ///   - isOrdered: Whether the child elements are in a meaningful order.
+        ///   - childElementIds: The element IDs of child chapters or nested tables of contents.
+        ///   - subFrames: Additional frames embedded within this table of contents.
         public init(elementId: String, isTopLevel: Bool, isOrdered: Bool, childElementIds: [String], subFrames: [OutcastID3TagFrame]) {
             self.elementId = elementId
             self.isTopLevel = isTopLevel
@@ -26,26 +39,13 @@ extension OutcastID3.Frame {
             self.childElementIds = childElementIds
             self.subFrames = subFrames
         }
-        
-        public var debugDescription: String {
-            var parts: [String] = [
-                "elementId=\(self.elementId)",
-                "isTopLevel=\(self.isTopLevel)",
-                "isOrdered=\(self.isOrdered)",
-                "childElementIds=\(self.childElementIds)"
-            ]
-            
-            if self.subFrames.count > 0 {
-                let str = subFrames.compactMap { $0.debugDescription }
-                parts.append("subFrames: \(str)")
-            }
-            
-            return parts.joined(separator: " ")
-        }
     }
 }
 
 extension OutcastID3.Frame.TableOfContentsFrame {
+    /// Serializes this table of contents frame to raw data suitable for writing to an ID3 tag.
+    /// - Parameter version: The ID3v2 tag version to encode for.
+    /// - Returns: The serialized frame data.
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
@@ -96,6 +96,12 @@ extension OutcastID3.Frame.TableOfContentsFrame {
 }
 
 extension OutcastID3.Frame.TableOfContentsFrame {
+    /// Parses a table of contents frame from raw ID3 tag data.
+    /// - Parameters:
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    ///   - useSynchSafeFrameSize: Whether to interpret the frame size as synch-safe.
+    /// - Returns: A parsed table of contents frame, or `nil` if the data does not match.
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         let encoding: String.Encoding = .isoLatin1
@@ -154,5 +160,23 @@ extension OutcastID3.Frame.TableOfContentsFrame {
             childElementIds: childElementIds,
             subFrames: subFrames
         )
+    }
+}
+
+extension OutcastID3.Frame.TableOfContentsFrame: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        var parts: [String] = [
+            "elementId=\(self.elementId)",
+            "isTopLevel=\(self.isTopLevel)",
+            "isOrdered=\(self.isOrdered)",
+            "childElementIds=\(self.childElementIds)"
+        ]
+
+        if self.subFrames.count > 0 {
+            let str = subFrames.compactMap { $0.debugDescription }
+            parts.append("subFrames: \(str)")
+        }
+
+        return parts.joined(separator: " ")
     }
 }

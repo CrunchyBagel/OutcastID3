@@ -8,6 +8,7 @@
 import Foundation
 
 public extension OutcastID3.MP3File {
+    /// Errors that can occur when reading an ID3 tag from a file.
     enum ReadError: Swift.Error {
         case tagNotFound
         case tagVersionNotFound
@@ -19,6 +20,8 @@ public extension OutcastID3.MP3File {
     
     // TODO: Handle extended header properly
     
+    /// Reads and parses the ID3 tag from the MP3 file.
+    /// - Returns: The parsed tag and its byte range within the file.
     func readID3Tag() throws -> TagProperties {
         let fileHandle = try FileHandle(forReadingFrom: self.localUrl)
         
@@ -30,6 +33,9 @@ public extension OutcastID3.MP3File {
         return try readID3Tag(fileHandle: fileHandle)
     }
     
+    /// Reads and parses the ID3 tag using the provided file handle.
+    /// - Parameter fileHandle: An open file handle to read from.
+    /// - Returns: The parsed tag and its byte range within the file.
     func readID3Tag(fileHandle: FileHandle) throws -> TagProperties {
         // Assumes the ID3 tag is at the start of the file.
         let startingByteOffset: UInt64 = 0

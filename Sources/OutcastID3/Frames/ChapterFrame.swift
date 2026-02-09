@@ -9,19 +9,34 @@
 import Foundation
 
 extension OutcastID3.Frame {
+    /// An ID3 chapter frame (CHAP), representing a chapter with time offsets and optional sub-frames.
     public struct ChapterFrame: OutcastID3TagFrame {
         static let frameIdentifier = "CHAP"
         
         static let nullValue: UInt32 = 0xFFFFFFFF
         
+        /// A unique identifier for this chapter element.
         public let elementId: String
+        /// The start time of the chapter in seconds.
         public let startTime: TimeInterval
+        /// The end time of the chapter in seconds.
         public let endTime: TimeInterval
+        /// The byte offset where the chapter's audio begins, or `nil` if not specified.
         public let startByteOffset: UInt32?
+        /// The byte offset where the chapter's audio ends, or `nil` if not specified.
         public let endByteOffset: UInt32?
-        
+
+        /// Additional frames embedded within this chapter (e.g. title, picture).
         public let subFrames: [OutcastID3TagFrame]
         
+        /// Creates a new chapter frame.
+        /// - Parameters:
+        ///   - elementId: A unique identifier for this chapter element.
+        ///   - startTime: The start time of the chapter in seconds.
+        ///   - endTime: The end time of the chapter in seconds.
+        ///   - startByteOffset: The byte offset where the chapter's audio begins, or `nil`.
+        ///   - endByteOffset: The byte offset where the chapter's audio ends, or `nil`.
+        ///   - subFrames: Additional frames embedded within this chapter.
         public init(elementId: String, startTime: TimeInterval, endTime: TimeInterval, startByteOffset: UInt32?, endByteOffset: UInt32?, subFrames: [OutcastID3TagFrame]) {
             self.elementId = elementId
             self.startTime = startTime
@@ -30,34 +45,13 @@ extension OutcastID3.Frame {
             self.endByteOffset = endByteOffset
             self.subFrames = subFrames
         }
-        
-        public var debugDescription: String {
-            
-            var parts: [String] = [
-                "elementId=\(self.elementId)",
-                "startTime=\(self.startTime)",
-                "endTime=\(self.endTime)"
-            ]
-            
-            if let count = self.startByteOffset {
-                parts.append("startByteOffset=\(count)")
-            }
-            
-            if let count = self.endByteOffset {
-                parts.append("endByteOffset=\(count)")
-            }
-            
-            if self.subFrames.count > 0 {
-                let str = subFrames.compactMap { $0.debugDescription }
-                parts.append("subFrames: \(str)")
-            }
-            
-            return parts.joined(separator: " ")
-        }
     }
 }
 
 extension OutcastID3.Frame.ChapterFrame {
+    /// Serializes this chapter frame to raw data suitable for writing to an ID3 tag.
+    /// - Parameter version: The ID3v2 tag version to encode for.
+    /// - Returns: The serialized frame data.
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
@@ -97,6 +91,12 @@ extension OutcastID3.Frame.ChapterFrame {
 }
 
 extension OutcastID3.Frame.ChapterFrame {
+    /// Parses a chapter frame from raw ID3 tag data.
+    /// - Parameters:
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    ///   - useSynchSafeFrameSize: Whether to interpret the frame size as synch-safe.
+    /// - Returns: A parsed chapter frame, or `nil` if the data does not match.
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         let d = data as NSData
@@ -157,5 +157,31 @@ extension OutcastID3.Frame.ChapterFrame {
             endByteOffset: endByteOffset.bigEndian == OutcastID3.Frame.ChapterFrame.nullValue ? nil : endByteOffset.bigEndian,
             subFrames: subFrames
         )
+    }
+}
+
+extension OutcastID3.Frame.ChapterFrame: CustomDebugStringConvertible {
+    public var debugDescription: String {
+
+        var parts: [String] = [
+            "elementId=\(self.elementId)",
+            "startTime=\(self.startTime)",
+            "endTime=\(self.endTime)"
+        ]
+
+        if let count = self.startByteOffset {
+            parts.append("startByteOffset=\(count)")
+        }
+
+        if let count = self.endByteOffset {
+            parts.append("endByteOffset=\(count)")
+        }
+
+        if self.subFrames.count > 0 {
+            let str = subFrames.compactMap { $0.debugDescription }
+            parts.append("subFrames: \(str)")
+        }
+
+        return parts.joined(separator: " ")
     }
 }

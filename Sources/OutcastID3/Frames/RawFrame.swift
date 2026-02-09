@@ -12,22 +12,28 @@ import Foundation
 // http://id3.org/id3v2-chapters-1.0
 
 extension OutcastID3.Frame {
+    /// A frame whose content is kept as raw unparsed data, used for unrecognized frame types.
     public struct RawFrame: OutcastID3TagFrame {
+        /// The ID3v2 version this raw data was read from.
         public let version: OutcastID3.TagVersion
+        /// The raw byte content of the frame, including its header.
         public let data: Data
         
+        /// Creates a new raw frame.
+        /// - Parameters:
+        ///   - version: The ID3v2 tag version this data was read from.
+        ///   - data: The raw byte content of the frame, including its header.
         public init(version: OutcastID3.TagVersion, data: Data) {
             self.version = version
             self.data = data
-        }
-        
-        public var debugDescription: String {
-            return "version=\(self.version.rawValue)"
         }
     }
 }
 
 extension OutcastID3.Frame.RawFrame {
+    /// Returns the raw frame data, throwing if the version does not match.
+    /// - Parameter version: The ID3v2 tag version to encode for.
+    /// - Returns: The raw frame data.
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         // Since this is raw data, it's likely not compatible with other versions.
         guard version == self.version else {
@@ -39,10 +45,17 @@ extension OutcastID3.Frame.RawFrame {
 }
 
 extension OutcastID3.Frame.RawFrame {
+    /// The frame identifier string extracted from the raw data, or `nil` if it cannot be read.
     public var frameIdentifier: String? {
         return self.data.frameIdentifier(version: self.version)
     }
 
+    /// Parses a frame from raw ID3 tag data, returning a typed frame if recognized or a raw frame otherwise.
+    /// - Parameters:
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    ///   - useSynchSafeFrameSize: Whether to interpret the frame size as synch-safe.
+    /// - Returns: A parsed frame (typed if recognized, raw otherwise), or `nil` on failure.
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         return self.parseKnownFrame(version: version, data: data, useSynchSafeFrameSize: useSynchSafeFrameSize) ?? OutcastID3.Frame.RawFrame(version: version, data: data)
     }
@@ -169,6 +182,12 @@ extension OutcastID3.Frame.RawFrame {
 }
 
 extension OutcastID3.Frame.RawFrame: Sendable {}
+
+extension OutcastID3.Frame.RawFrame: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "version=\(self.version.rawValue)"
+    }
+}
 
 extension Data {
     func frameIdentifier(version: OutcastID3.TagVersion) -> String? {

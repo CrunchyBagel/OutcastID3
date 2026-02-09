@@ -9,7 +9,9 @@
 import Foundation
 
 extension OutcastID3.Frame {
+    /// An ID3 text frame (e.g. title, artist, album).
     public struct StringFrame: OutcastID3TagFrame {
+        /// Identifies which text field this frame represents, mapped to its ID3 frame identifier.
         public enum StringType: String, Codable {
             case albumTitle                         = "TALB"
             case contentType                        = "TCON"
@@ -56,23 +58,30 @@ extension OutcastID3.Frame {
             case podcastDescription                 = "TDES"
         }
         
+        /// The type of text field this frame represents.
         public let type: StringType
+        /// The string encoding used for this frame's content.
         public let encoding: String.Encoding
+        /// The text value of this frame.
         public let str: String
         
+        /// Creates a new string frame.
+        /// - Parameters:
+        ///   - type: The type of text field.
+        ///   - encoding: The string encoding to use.
+        ///   - str: The text value.
         public init(type: StringType, encoding: String.Encoding, str: String) {
             self.type = type
             self.encoding = encoding
             self.str = str
         }
-        
-        public var debugDescription: String {
-            return "length=\(str.count) str=\(str)"
-        }
     }
 }
 
 extension OutcastID3.Frame.StringFrame {
+    /// Serializes this string frame to raw data suitable for writing to an ID3 tag.
+    /// - Parameter version: The ID3v2 tag version to encode for.
+    /// - Returns: The serialized frame data.
     public func frameData(version: OutcastID3.TagVersion) throws -> Data {
         switch version {
         case .v2_2:
@@ -89,18 +98,30 @@ extension OutcastID3.Frame.StringFrame {
 }
 
 extension OutcastID3.Frame.StringFrame {
+    /// Parses a string frame from raw ID3 tag data.
+    /// - Parameters:
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    ///   - useSynchSafeFrameSize: Whether to interpret the frame size as synch-safe.
+    /// - Returns: A parsed string frame, or `nil` if the data does not match.
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         guard let frameIdentifier = data.frameIdentifier(version: version) else {
             return nil
         }
-        
+
         guard let stringType = StringType(rawValue: frameIdentifier) else {
             return nil
         }
-        
+
         return self.parse(type: stringType, version: version, data: data)
     }
-    
+
+    /// Parses a string frame of a known type from raw ID3 tag data.
+    /// - Parameters:
+    ///   - type: The string type to parse as.
+    ///   - version: The ID3v2 tag version.
+    ///   - data: The raw data for this frame, including the frame header.
+    /// - Returns: A parsed string frame, or `nil` if parsing fails.
     public static func parse(type: OutcastID3.Frame.StringFrame.StringType, version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
@@ -127,6 +148,12 @@ extension OutcastID3.Frame.StringFrame {
 }
 
 extension OutcastID3.Frame.StringFrame: Sendable {}
+
+extension OutcastID3.Frame.StringFrame: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        return "length=\(str.count) str=\(str)"
+    }
+}
 
 extension OutcastID3.Frame.StringFrame.StringType: Sendable {}
 
