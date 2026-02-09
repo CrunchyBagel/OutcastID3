@@ -60,11 +60,14 @@ extension OutcastID3.Frame.UserUrlFrame {
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
-        
+
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
 
-        
         let description = data.readString(offset: &frameContentRangeStart, encoding: encoding, terminator: version.stringTerminator(encoding: encoding))
         
         guard frameContentRangeStart < data.count else {

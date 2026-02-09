@@ -61,11 +61,20 @@ extension OutcastID3.Frame.TranscriptionFrame {
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
-        
+
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
-        
+
         let languageLength = 3
+
+        guard frameContentRangeStart + languageLength <= data.count else {
+            return nil
+        }
+
         let languageBytes = data.subdata(in: frameContentRangeStart ..< frameContentRangeStart + languageLength)
         
         

@@ -187,12 +187,20 @@ extension OutcastID3.Frame.PictureFrame {
     public static func parse(version: OutcastID3.TagVersion, data: Data, useSynchSafeFrameSize: Bool) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
-        
+
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
-        
+
         let mimeType = data.readString(offset: &frameContentRangeStart, encoding: .isoLatin1, terminator: version.stringTerminator(encoding: .isoLatin1))
-        
+
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let pictureTypeByte = data[frameContentRangeStart]
         frameContentRangeStart += 1
         

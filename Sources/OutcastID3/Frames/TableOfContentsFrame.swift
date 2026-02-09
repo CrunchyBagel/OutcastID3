@@ -110,14 +110,22 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         
         var offset = 10
         let elementId = data.readString(offset: &offset, encoding: encoding, terminator: terminator)
-        
+
+        guard offset < data.count else {
+            return nil
+        }
+
         let flags = data[offset]
-        
+
         let isTopLevel = (flags & 0x2) > 0
         let isOrdered  = (flags & 0x1) > 0
-        
+
         offset += 1
-        
+
+        guard offset < data.count else {
+            return nil
+        }
+
         let numEntries = data[offset]
         offset += 1
         

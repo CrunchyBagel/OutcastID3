@@ -198,10 +198,14 @@ extension OutcastID3.Frame.StringFrame {
     public static func parse(type: OutcastID3.Frame.StringFrame.StringType, version: OutcastID3.TagVersion, data: Data) -> OutcastID3TagFrame? {
         
         var frameContentRangeStart = version.frameHeaderSizeInBytes
-        
+
+        guard frameContentRangeStart < data.count else {
+            return nil
+        }
+
         let encoding = String.Encoding.fromEncodingByte(byte: data[frameContentRangeStart], version: version)
         frameContentRangeStart += 1
-        
+
         guard frameContentRangeStart < data.count else {
             return nil
         }
