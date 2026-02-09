@@ -110,7 +110,7 @@ extension OutcastID3.Frame.ChapterFrame {
         
         let elementId = data.readString(offset: &offset, encoding: encoding, terminator: terminator)
         
-        guard offset + intSize * 4 < data.count else {
+        guard offset + intSize * 4 <= data.count else {
             return nil
         }
         
@@ -153,8 +153,8 @@ extension OutcastID3.Frame.ChapterFrame {
             elementId: elementId ?? "",
             startTime: TimeInterval(startTimeMilliseconds.bigEndian) / 1000,
             endTime: TimeInterval(endTimeMilliseconds.bigEndian) / 1000,
-            startByteOffset: startByteOffset == OutcastID3.Frame.ChapterFrame.nullValue ? nil : startByteOffset,
-            endByteOffset: endByteOffset == OutcastID3.Frame.ChapterFrame.nullValue ? nil : endByteOffset,
+            startByteOffset: startByteOffset.bigEndian == OutcastID3.Frame.ChapterFrame.nullValue ? nil : startByteOffset.bigEndian,
+            endByteOffset: endByteOffset.bigEndian == OutcastID3.Frame.ChapterFrame.nullValue ? nil : endByteOffset.bigEndian,
             subFrames: subFrames
         )
     }

@@ -50,14 +50,10 @@ extension OutcastID3.MP3File {
         var framesByteCount = 0
         
         for frame in tag.frames {
-            do {
-                let data = try frame.frameData(version: tag.version)
-                framesData.append(data)
-                
-                framesByteCount += data.count
-            }
-            catch {
-            }
+            let data = try frame.frameData(version: tag.version)
+            framesData.append(data)
+
+            framesByteCount += data.count
         }
         
         // 4 bytes, each of 7 bits

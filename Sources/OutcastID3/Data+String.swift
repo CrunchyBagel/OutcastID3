@@ -28,21 +28,16 @@ extension Data {
 
         switch terminator {
         case .double:
-            let start = offset
-
-            while offset < self.count {
-                let byte = self[offset]
-
-                if byte == 0x00, offset > start, self[offset - 1] == 0x00 {
-                    if !bytes.isEmpty { bytes.removeLast() }
+            while offset + 1 < self.count {
+                if self[offset] == 0x00 && self[offset + 1] == 0x00 {
+                    offset += 2
                     break
                 }
 
-                bytes.append(byte)
-                offset += 1
+                bytes.append(self[offset])
+                bytes.append(self[offset + 1])
+                offset += 2
             }
-
-            if offset < self.count { offset += 1 }
 
         case .single:
             while offset < self.count {

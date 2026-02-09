@@ -87,12 +87,8 @@ extension OutcastID3.Frame.TableOfContentsFrame {
         }
         
         for subFrame in self.subFrames {
-            do {
-                let subFrameData = try subFrame.frameData(version: version)
-                fb.append(data: subFrameData)
-            }
-            catch {
-            }
+            let subFrameData = try subFrame.frameData(version: version)
+            fb.append(data: subFrameData)
         }
 
         return try fb.data()
