@@ -95,3 +95,4 @@ extension OutcastID3.MP3File {
     }
 }
 
+extension OutcastID3.MP3File.WriteError: Sendable {}

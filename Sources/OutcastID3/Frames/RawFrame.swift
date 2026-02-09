@@ -168,6 +168,8 @@ extension OutcastID3.Frame.RawFrame {
     }
 }
 
+extension OutcastID3.Frame.RawFrame: Sendable {}
+
 extension Data {
     func frameIdentifier(version: OutcastID3.TagVersion) -> String? {
         let size = version.frameIdentifierSizeInBytes

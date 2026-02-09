@@ -85,3 +85,5 @@ extension OutcastID3.Frame.UserUrlFrame {
         )
     }
 }
+
+extension OutcastID3.Frame.UserUrlFrame: Sendable {}

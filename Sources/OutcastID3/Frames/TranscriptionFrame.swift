@@ -99,3 +99,5 @@ extension OutcastID3.Frame.TranscriptionFrame {
         )
     }
 }
+
+extension OutcastID3.Frame.TranscriptionFrame: Sendable {}

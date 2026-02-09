@@ -100,5 +100,6 @@ extension OutcastID3.Frame.CommentFrame {
             comment: comment ?? ""
         )
     }
-
 }
+
+extension OutcastID3.Frame.CommentFrame: Sendable {}

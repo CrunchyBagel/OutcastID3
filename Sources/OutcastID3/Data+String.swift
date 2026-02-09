@@ -53,3 +53,5 @@ extension Data {
         return String(bytes: bytes, encoding: encoding)
     }
 }
+
+extension Data.StringTerminator: Sendable {}

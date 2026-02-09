@@ -18,28 +18,6 @@ extension OutcastID3.Frame {
             case officialInternetRadioStationWebpage = "WORS"
             case payment                             = "WPAY"
             case officialPublisherWebpage            = "WPUB"
-            
-            public var description: String {
-                switch self {
-                    
-                case .commercialInformation:
-                    return "Commercial Information"
-                case .copyrightLegalInformation:
-                    return "Copyright/Legal Information"
-                case .officialAudioFileWebpage:
-                    return "Official Audio File Webpage"
-                case .officialArtistPerformerWebpage:
-                    return "Official Artist/Performer Webpage"
-                case .officialAudioSourceWebpage:
-                    return "Official Audio Source Webpage"
-                case .officialInternetRadioStationWebpage:
-                    return "Official Internet Radio Station Webpage"
-                case .officialPublisherWebpage:
-                    return "Official Publisher Webpage"
-                case .payment:
-                    return "Payment"
-                }
-            }
         }
         
         public let type: UrlType
@@ -104,5 +82,30 @@ extension OutcastID3.Frame.UrlFrame {
         }
         
         return OutcastID3.Frame.UrlFrame(type: type, urlString: str)
+    }
+}
+
+extension OutcastID3.Frame.UrlFrame: Sendable {}
+extension OutcastID3.Frame.UrlFrame.UrlType: Sendable {}
+extension OutcastID3.Frame.UrlFrame.UrlType: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .commercialInformation:
+            return "Commercial Information"
+        case .copyrightLegalInformation:
+            return "Copyright/Legal Information"
+        case .officialAudioFileWebpage:
+            return "Official Audio File Webpage"
+        case .officialArtistPerformerWebpage:
+            return "Official Artist/Performer Webpage"
+        case .officialAudioSourceWebpage:
+            return "Official Audio Source Webpage"
+        case .officialInternetRadioStationWebpage:
+            return "Official Internet Radio Station Webpage"
+        case .officialPublisherWebpage:
+            return "Official Publisher Webpage"
+        case .payment:
+            return "Payment"
+        }
     }
 }

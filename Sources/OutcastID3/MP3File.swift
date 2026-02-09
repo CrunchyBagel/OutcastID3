@@ -36,3 +36,5 @@ public class OutcastID3 {
 
     public struct Frame {}
 }
+
+extension OutcastID3.Frame: Sendable {}

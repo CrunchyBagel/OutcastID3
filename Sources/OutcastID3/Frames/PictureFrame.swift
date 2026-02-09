@@ -68,54 +68,6 @@ extension OutcastID3.Frame {
             case illustration       = 0x12
             case bandLogotype       = 0x13
             case publisherLogotype  = 0x14
-            
-            public var description: String {
-                switch self {
-                    
-                case .other:
-                    return "Other"
-                case .fileIcon32x32Png:
-                    return "File Icon 32x32 PNG"
-                case .fileIconOther:
-                    return "File Icon Other"
-                case .coverFront:
-                    return "Front Cover"
-                case .coverBack:
-                    return "Back Cover"
-                case .leafletPage:
-                    return "Leaflet Page"
-                case .mediaLabel:
-                    return "Media Label"
-                case .leadArtist:
-                    return "Lead Artist"
-                case .artist:
-                    return "Artist"
-                case .conductor:
-                    return "Conductor"
-                case .bandOrchestra:
-                    return "Band/Orchestra"
-                case .composer:
-                    return "Composer"
-                case .textWriter:
-                    return "Lyricist/Text Writer"
-                case .recordingLocation:
-                    return "Recording Location"
-                case .duringRecording:
-                    return "During Recording"
-                case .duringPerformance:
-                    return "During Performance"
-                case .movieScreenCapture:
-                    return "Movie Screen Capture"
-                case .brightColoredFish:
-                    return "Bright Colored Fish"
-                case .illustration:
-                    return "Illustration"
-                case .bandLogotype:
-                    return "Band Logotype"
-                case .publisherLogotype:
-                    return "Publisher Logotype"
-                }
-            }
         }
 
         public let encoding: String.Encoding
@@ -295,3 +247,54 @@ extension NSImage {
     }
 }
 #endif
+
+extension OutcastID3.Frame.PictureFrame.PictureType: Sendable {}
+
+extension OutcastID3.Frame.PictureFrame.PictureType: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .other:
+            return "Other"
+        case .fileIcon32x32Png:
+            return "File Icon 32x32 PNG"
+        case .fileIconOther:
+            return "File Icon Other"
+        case .coverFront:
+            return "Front Cover"
+        case .coverBack:
+            return "Back Cover"
+        case .leafletPage:
+            return "Leaflet Page"
+        case .mediaLabel:
+            return "Media Label"
+        case .leadArtist:
+            return "Lead Artist"
+        case .artist:
+            return "Artist"
+        case .conductor:
+            return "Conductor"
+        case .bandOrchestra:
+            return "Band/Orchestra"
+        case .composer:
+            return "Composer"
+        case .textWriter:
+            return "Lyricist/Text Writer"
+        case .recordingLocation:
+            return "Recording Location"
+        case .duringRecording:
+            return "During Recording"
+        case .duringPerformance:
+            return "During Performance"
+        case .movieScreenCapture:
+            return "Movie Screen Capture"
+        case .brightColoredFish:
+            return "Bright Colored Fish"
+        case .illustration:
+            return "Illustration"
+        case .bandLogotype:
+            return "Band Logotype"
+        case .publisherLogotype:
+            return "Publisher Logotype"
+        }
+    }
+}

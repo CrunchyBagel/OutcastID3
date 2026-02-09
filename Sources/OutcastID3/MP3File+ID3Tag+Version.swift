@@ -73,3 +73,5 @@ extension OutcastID3 {
     }
 }
 
+extension OutcastID3.TagVersion: Sendable {}
+
